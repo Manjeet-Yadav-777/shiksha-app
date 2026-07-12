@@ -94,3 +94,10 @@ export function queryToSearch(
 ): string {
 	return stringify(query, { addQueryPrefix: true, ...options })
 }
+
+
+export function useSearch<T extends TSearchParams = TSearchParams>(
+	initialValues: T | (() => T) = {} as T
+) {
+	return useState<T>(initialValues)
+}

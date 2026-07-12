@@ -1,8 +1,8 @@
 import React, { cloneElement } from "react";
-import { Drawer } from "@mantine/core";
+import { Drawer, type DrawerProps } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
-interface SideBarProps {
+interface SideBarProps extends Partial<DrawerProps> {
   action: React.ReactElement<{
     onClick?: React.MouseEventHandler;
   }>;
@@ -16,12 +16,19 @@ export function SideBar({
   title,
   children,
   position = "right",
+  ...props
 }: SideBarProps) {
   const [opened, { open, close }] = useDisclosure(false);
 
   return (
     <>
-      <Drawer position={position} opened={opened} onClose={close} title={title}>
+      <Drawer
+        {...props}
+        position={position}
+        opened={opened}
+        onClose={close}
+        title={title}
+      >
         <hr
           style={{
             backgroundColor: "#E5E7EB",
