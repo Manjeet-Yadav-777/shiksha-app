@@ -6,16 +6,16 @@ import {
 } from "@mantine/core";
 import { Field } from "react-final-form";
 
-interface InputBoxProps extends InputProps {
+interface InputFieldProps extends InputProps {
   bg?: string;
   pH?: string;
 }
 
-interface TextInputBoxProps extends TextInputProps {
+interface TextInputFieldProps extends TextInputProps {
   name: string;
 }
 
-export function InputBox({ bg = "#fff", pH, ...props }: InputBoxProps) {
+export function InputField({ bg = "#fff", pH, ...props }: InputFieldProps) {
   return (
     <Input
       placeholder={pH}
@@ -30,7 +30,7 @@ export function InputBox({ bg = "#fff", pH, ...props }: InputBoxProps) {
   );
 }
 
-export function TextInputBox({ ...props }: TextInputBoxProps) {
+export function TextInputField({ ...props }: TextInputFieldProps) {
   return (
     <Field name={props.name}>
       {({ input }) => <TextInput {...props} {...input} />}

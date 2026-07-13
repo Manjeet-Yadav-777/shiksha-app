@@ -2,7 +2,8 @@ import { Button, Stack } from "@mantine/core";
 import { Search, type TSearchParams } from "../libs/search/Search";
 import { useLocationQuery, useSearch } from "../utils/filterQuery";
 import { useEffect } from "react";
-import { TextInputBox } from "../libs/form/Input";
+import { TextInputField } from "../libs/form/Input";
+import { Table } from "../libs/basic/Table";
 
 interface TFilters extends TSearchParams {
   name?: string;
@@ -70,7 +71,11 @@ export default function Dashboard() {
           setParams({ ...newParams, page: 1 });
         }}
         actions={<Button>Add Student</Button>}
-      />
+      >
+        {({searchParams, setSearchParamValue, setSearchParams})=>(
+            <Button onClick={()=> setSearchParamValue("name" , "Ram Ram ji")}>Change</Button>
+        )}
+      </Search>
     </div>
   );
 }
@@ -78,7 +83,7 @@ export default function Dashboard() {
 function Filters() {
   return (
     <Stack>
-      <TextInputBox name="name" label="Name" />
+      <TextInputField name="name" label="Name" />
     </Stack>
   );
 }

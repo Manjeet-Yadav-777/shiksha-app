@@ -7,9 +7,7 @@ import App from "./App";
 import "./index.css"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <MantineProvider theme={{
-    white: "#E5E7EB",
-  }}>
+  <MantineProvider>
     <BrowserRouter>
       <App />
     </BrowserRouter>

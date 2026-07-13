@@ -1,11 +1,11 @@
-import { Button, Stack } from "@mantine/core";
+import { Box, Button, Stack } from "@mantine/core";
 import { Heading, Inline } from "../basic/Layout";
 import { IconAdjustmentsHorizontal, IconSearch } from "@tabler/icons-react";
 import type React from "react";
-import { Form, useForm, useFormState } from "react-final-form";
+import { Form, FormSpy, useForm, useFormState } from "react-final-form";
 import { useEffect, useRef } from "react";
 import { SideBar } from "../basic/SideBar";
-import { TextInputBox } from "../form/Input";
+import { TextInputField } from "../form/Input";
 import { useTimeout } from "../../utils/react-hooks";
 
 export type TSearchParams = {
@@ -26,6 +26,13 @@ interface SerachProps<T extends TSearchParams = TSearchParams> {
   initialParams?: T;
   filters?: () => React.ReactNode;
   onSearch: (params: T) => void;
+  children?: React.ReactNode | ((props: ChildrenProps<T>) => React.ReactNode)
+}
+
+interface ChildrenProps<T extends TSearchParams>{
+  searchParams : T
+  setSearchParams : (params : Partial<T>) => void
+	setSearchParamValue: <K extends keyof T>(param: K, value: T[K]) => void
 }
 
 export function Search<T extends TSearchParams = TSearchParams>({
@@ -34,7 +41,8 @@ export function Search<T extends TSearchParams = TSearchParams>({
   initialParams = defaultInitialParams as T,
   filters,
   onSearch,
-}: SerachProps) {
+  children
+}: SerachProps<T>) {
   const initialParamsRef = useRef(initialParams);
   return (
     <Form initialValues={initialParamsRef.current} onSubmit={onSearch}>
@@ -54,7 +62,7 @@ export function Search<T extends TSearchParams = TSearchParams>({
               <Heading as="h3">{title}</Heading>
 
               <Inline gap={"md"}>
-                <TextInputBox
+                <TextInputField
                   name="q"
                   placeholder="Search..."
                   leftSection={<IconSearch size={16} />}
@@ -92,6 +100,34 @@ export function Search<T extends TSearchParams = TSearchParams>({
                 {actions}
               </Inline>
             </Inline>
+            <Box display="flex" px={"lg"} py={"xl"}>
+								<Box flex="1" miw={"0"}>
+									{typeof children === "function" ? (
+										<FormSpy<T> subscription={{ values: true }}>
+											{(props) => (
+												<>
+													{children({
+														searchParams: props.values,
+														setSearchParams: (params) => {
+															props.form.batch(() => {
+																Object.keys(params).forEach((key) =>
+																	props.form.change(
+																		key as never as keyof T,
+																		params[key as never as keyof T]
+																	)
+																)
+															})
+														},
+														setSearchParamValue: props.form.change,
+													})}
+												</>
+											)}
+										</FormSpy>
+									) : (
+										children
+									)}
+								</Box>
+            </Box>
             <SearchOnChange<T> onChange={onSearch} />
           </form>
         );

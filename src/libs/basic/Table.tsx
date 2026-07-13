@@ -20,7 +20,7 @@ export function Table({
   rowBorder = true,
   colBorder,
   highlightOnHover,
-  striped
+  striped,
 }: TableProp) {
   return (
     <MaintineTable
