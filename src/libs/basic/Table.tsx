@@ -19,7 +19,7 @@ export function Table({
   tableBorder = true,
   rowBorder = true,
   colBorder,
-  highlightOnHover,
+  highlightOnHover =true,
   striped,
 }: TableProp) {
   return (
@@ -32,16 +32,16 @@ export function Table({
     >
       <MaintineTable.Thead>
         <MaintineTable.Tr>
-          {headers.map((header) => (
-            <MaintineTable.Th>{header}</MaintineTable.Th>
+          {headers.map((header, i) => (
+            <MaintineTable.Th key={i}>{header}</MaintineTable.Th>
           ))}
         </MaintineTable.Tr>
       </MaintineTable.Thead>
       <MaintineTable.Tbody>
-        {rows.map((row) => (
-          <MaintineTable.Tr>
-            {row.map((r) => (
-              <MaintineTable.Td>{r}</MaintineTable.Td>
+        {rows.map((row, i) => (
+          <MaintineTable.Tr key={i}>
+            {row.map((r, j) => (
+              <MaintineTable.Td key={j}>{r}</MaintineTable.Td>
             ))}
           </MaintineTable.Tr>
         ))}
