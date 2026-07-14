@@ -1,4 +1,4 @@
-import useSWR, { mutate, type SWRConfiguration } from "swr";
+import useSWR, { type SWRConfiguration } from "swr";
 import { useState, type ReactNode } from "react";
 import {
   IconArrowLeft,
@@ -6,9 +6,8 @@ import {
   IconRefresh,
 } from "@tabler/icons-react";
 import { Button, Stack, Text } from "@mantine/core";
-import type { IListResponse } from "../xhr";
+import type { IListResponse } from "../XHR/xhr";
 import { Inline } from "../basic/Layout";
-import { Paginate } from "./Pagination";
 
 type ListViewProps<T> = {
   swrKey: string | unknown[];
@@ -102,18 +101,6 @@ export function ListView<T>({
       ) : (
         <>
           {children(data.data, refresh, data?.meta)}
-
-          {/* <Paginate
-            currentPage={data.meta.current_page}
-            from={data.meta.from}
-            isFetching={isLoading}
-            lastPage={data.meta.last_page}
-            to={data.meta.to}
-            total={data.meta.total}
-            nextPageLabel="Next"
-            previousPageLabel="Prev"
-            onChange={()=> refresh()}
-          /> */}
           {!data.meta.total ||
           (data.meta.last_page <= 1 && data.meta.current_page <= 1) ? null : (
             <Inline justify="center" align="center" gap={20}>

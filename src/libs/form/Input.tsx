@@ -1,8 +1,10 @@
 import {
   Input,
+  PasswordInput,
   TextInput,
   type InputProps,
   type TextInputProps,
+  type PasswordInputProps,
 } from "@mantine/core";
 import { Field } from "react-final-form";
 
@@ -11,9 +13,15 @@ interface InputFieldProps extends InputProps {
   pH?: string;
 }
 
-interface TextInputFieldProps extends TextInputProps {
+type TextInputFieldProps =
+  | ({ type?: "text" } & TextInputProps)
+  | ({ type: "password" } & PasswordInputProps);
+
+interface BaseProps {
   name: string;
 }
+
+type Props = BaseProps & TextInputFieldProps;
 
 export function InputField({ bg = "#fff", pH, ...props }: InputFieldProps) {
   return (
@@ -30,10 +38,26 @@ export function InputField({ bg = "#fff", pH, ...props }: InputFieldProps) {
   );
 }
 
-export function TextInputField({ ...props }: TextInputFieldProps) {
+export function TextInputField({ ...props }: Props) {
   return (
     <Field name={props.name}>
-      {({ input }) => <TextInput {...props} {...input} />}
+      {({ input, meta }) =>
+        props.type === "password" ? (
+          <PasswordInput
+            {...props}
+            {...input}
+            error={meta.touched && meta.error ? meta.error : ""}
+            placeholder={meta.error && meta.touched ? "" : props.placeholder}
+          />
+        ) : (
+          <TextInput
+            {...props}
+            {...input}
+            error={meta.touched && meta.error ? meta.error : ""}
+            placeholder={meta.error && meta.touched ? "" : props.placeholder}
+          />
+        )
+      }
     </Field>
   );
 }

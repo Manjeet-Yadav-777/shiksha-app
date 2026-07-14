@@ -6,6 +6,7 @@ import { TextInputField } from "../libs/form/Input";
 import { ListView } from "../libs/List/List";
 import axios from "axios";
 import { Table } from "../libs/basic/Table";
+import { TabContent, TabItem, TabList, Tabs } from "../libs/Tabs/Tabs";
 
 interface TFilters extends TSearchParams {
   name?: string;
@@ -75,40 +76,56 @@ export default function Dashboard() {
         actions={<Button>Add Student</Button>}
       >
         {() => (
-          <ListView
-            swrKey={"Producrs"}
-            params={params}
-            onParamsChange={setParams}
-            fetchFn={async () => {
-              const res = await axios.get("https://fakestoreapi.com/products");
+          <>
+            <Tabs defaultValue="first">
+              <TabList>
+                <TabItem value="first">First</TabItem>
+                <TabItem value="second">Second</TabItem>
+              </TabList>
 
-              return {
-                data: res.data,
-                meta: {
-                  from: 1,
-                  to: res.data.length,
-                  total: res.data.length,
-                  current_page: 1,
-                  last_page: 1,
-                  per_page: res.data.length,
-                },
-              };
-            }}
-          >
-            {(items) => {
-              return (
-                <Table
-                  headers={["Image", "Name", "Price", "Category"]}
-                  rows={items.map((i: any) => [
-                    <Image src={i.image} h={"30px"} w={"30px"} />,
-                    <Text>{i.title.slice(0, 10) + "..."}</Text>,
-                    <Text>{i.price}</Text>,
-                    <Text>{i.category}</Text>,
-                  ])}
-                />
-              );
-            }}
-          </ListView>
+              <TabContent value="first">First Panel</TabContent>
+
+              <TabContent value="second">
+                {" "}
+                <ListView
+                  swrKey={"Producrs"}
+                  params={params}
+                  onParamsChange={setParams}
+                  fetchFn={async () => {
+                    const res = await axios.get(
+                      "https://fakestoreapi.com/products",
+                    );
+
+                    return {
+                      data: res.data,
+                      meta: {
+                        from: 1,
+                        to: res.data.length,
+                        total: res.data.length,
+                        current_page: 1,
+                        last_page: 1,
+                        per_page: res.data.length,
+                      },
+                    };
+                  }}
+                >
+                  {(items) => {
+                    return (
+                      <Table
+                        headers={["Image", "Name", "Price", "Category"]}
+                        rows={items.map((i: any) => [
+                          <Image src={i.image} h={"30px"} w={"30px"} />,
+                          <Text>{i.title.slice(0, 10) + "..."}</Text>,
+                          <Text>{i.price}</Text>,
+                          <Text>{i.category}</Text>,
+                        ])}
+                      />
+                    );
+                  }}
+                </ListView>
+              </TabContent>
+            </Tabs>
+          </>
         )}
       </Search>
     </div>
