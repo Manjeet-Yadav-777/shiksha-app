@@ -115,18 +115,22 @@ export const xhr = axios.create({
 
 xhr.interceptors.response.use(
   (response) => {
-    notifications.show({
-      title: "Success",
-      message: response.data.message,
-      color: "green",
-      withCloseButton: true,
-      autoClose: 3000,
-      position: "top-right",
-    });
-    return response.data.data;
+    console.log(response)
+    if (response.data.message) {
+      notifications.show({
+        title: "Success",
+        message: response.data.message,
+        color: "green",
+        withCloseButton: true,
+        autoClose: 3000,
+        position: "top-right",
+      });
+    }
+    return response.data;
   },
   (error: AxiosError<{ message?: string; error?: string }>) => {
     const data = error.response?.data;
+    console.log(error)
 
     const errorMessage =
       data?.error || data?.message || error.message || "Something went wrong";

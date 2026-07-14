@@ -24,7 +24,7 @@ export function Popover({ children, action, onHover = false }: PopoverProps) {
           onMouseLeave: close,
         })}
       >
-        <Button>{action}</Button>
+        <Text>{action}</Text>
       </MPopver.Target>
 
       <MPopver.Dropdown>{children}</MPopver.Dropdown>

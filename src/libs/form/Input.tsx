@@ -6,6 +6,7 @@ import {
   type TextInputProps,
   type PasswordInputProps,
 } from "@mantine/core";
+import { useEffect, useState } from "react";
 import { Field } from "react-final-form";
 
 interface InputFieldProps extends InputProps {
@@ -19,6 +20,7 @@ type TextInputFieldProps =
 
 interface BaseProps {
   name: string;
+  debounce?: number;
 }
 
 type Props = BaseProps & TextInputFieldProps;
@@ -38,26 +40,83 @@ export function InputField({ bg = "#fff", pH, ...props }: InputFieldProps) {
   );
 }
 
-export function TextInputField({ ...props }: Props) {
+// export function TextInputField({ ...props }: Props) {
+//   return (
+//     <Field name={props.name}>
+//       {({ input, meta }) =>
+//         props.type === "password" ? (
+//           <PasswordInput
+//             {...props}
+//             {...input}
+//             error={meta.touched && meta.error ? meta.error : ""}
+//             placeholder={meta.error && meta.touched ? "" : props.placeholder}
+//           />
+//         ) : (
+//           <TextInput
+//             {...props}
+//             {...input}
+//             error={meta.touched && meta.error ? meta.error : ""}
+//             placeholder={meta.error && meta.touched ? "" : props.placeholder}
+//           />
+//         )
+//       }
+//     </Field>
+//   );
+// }
+
+export function TextInputField({ debounce, ...props }: Props) {
   return (
     <Field name={props.name}>
-      {({ input, meta }) =>
-        props.type === "password" ? (
-          <PasswordInput
-            {...props}
-            {...input}
-            error={meta.touched && meta.error ? meta.error : ""}
-            placeholder={meta.error && meta.touched ? "" : props.placeholder}
-          />
-        ) : (
+      {({ input, meta }) => {
+        const [localValue, setLocalValue] = useState(input.value ?? "");
+
+        useEffect(() => {
+          setLocalValue(input.value ?? "");
+        }, [input.value]);
+
+        useEffect(() => {
+          if (!debounce) return;
+
+          const timer = setTimeout(() => {
+            if (localValue !== input.value) {
+              input.onChange(localValue);
+            }
+          }, debounce);
+
+          return () => clearTimeout(timer);
+        }, [localValue, debounce, input]);
+
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+          if (debounce) {
+            setLocalValue(e.currentTarget.value);
+          } else {
+            input.onChange(e);
+          }
+        };
+
+        if (props.type === "password") {
+          return (
+            <PasswordInput
+              {...props}
+              value={debounce ? localValue : input.value}
+              onChange={handleChange}
+              error={meta.touched ? meta.error : undefined}
+              placeholder={meta.touched && meta.error ? "" : props.placeholder}
+            />
+          );
+        }
+
+        return (
           <TextInput
             {...props}
-            {...input}
-            error={meta.touched && meta.error ? meta.error : ""}
-            placeholder={meta.error && meta.touched ? "" : props.placeholder}
+            type={props.type}
+            value={debounce ? localValue : input.value}
+            onChange={handleChange}
+            error={meta.touched ? meta.error : undefined}
+            placeholder={meta.touched && meta.error ? "" : props.placeholder}
           />
-        )
-      }
+        );
+      }}
     </Field>
   );
 }

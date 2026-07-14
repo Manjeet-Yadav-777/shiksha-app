@@ -27,6 +27,7 @@ interface SerachProps<T extends TSearchParams = TSearchParams> {
   filters?: () => React.ReactNode;
   onSearch: (params: T) => void;
   children?: React.ReactNode | ((props: ChildrenProps<T>) => React.ReactNode)
+  placeHolder? : string
 }
 
 interface ChildrenProps<T extends TSearchParams>{
@@ -41,7 +42,8 @@ export function Search<T extends TSearchParams = TSearchParams>({
   initialParams = defaultInitialParams as T,
   filters,
   onSearch,
-  children
+  children,
+  placeHolder = "Search..."
 }: SerachProps<T>) {
   const initialParamsRef = useRef(initialParams);
   return (
@@ -64,9 +66,10 @@ export function Search<T extends TSearchParams = TSearchParams>({
               <Inline gap={"md"}>
                 <TextInputField
                   name="q"
-                  placeholder="Search..."
+                  placeholder={placeHolder}
                   leftSection={<IconSearch size={16} />}
                   rightSectionPointerEvents="all"
+                  debounce={500}
                   styles={{
                     input: {
                       backgroundColor: "#fff",
@@ -128,7 +131,7 @@ export function Search<T extends TSearchParams = TSearchParams>({
 									)}
 								</Box>
             </Box>
-            <SearchOnChange<T> onChange={onSearch} />
+            <SearchOnChange<T>  />
           </form>
         );
       }}
@@ -136,41 +139,36 @@ export function Search<T extends TSearchParams = TSearchParams>({
   );
 }
 
-function SearchOnChange<T extends object>({
-  onChange,
-}: {
-  onChange: (params: T) => void;
-}) {
+function SearchOnChange<T extends TSearchParams>() {
   const { values } = useFormState<T>({
     subscription: { values: true },
   });
-  console.log({ values });
 
-  const previousValuesRef = useRef<T | null>(values);
   const form = useForm<T>();
-  const { set: setSubmitterTimeout, clear: clearSubmitterTimeout } =
-    useTimeout();
+  const previousValuesRef = useRef(values);
 
-  const onChangeRef = useRef(onChange);
-  onChangeRef.current = onChange;
+  const { set, clear } = useTimeout();
 
-  // fetch prices
   useEffect(() => {
-    const previousValues = { ...previousValuesRef.current };
-    setSubmitterTimeout(() => {
-      previousValuesRef.current = values;
-      const previousKeys = Object.keys(previousValues || ({} as T));
-      const newKeys = Object.keys(values || ({} as T));
-      if (
-        previousKeys.length !== newKeys.length ||
-        previousKeys.some(
-          (k) => !Object.is(previousValues[k as never], values[k as never]),
-        )
-      ) {
-        form.submit();
+    const previous = previousValuesRef.current;
+
+    const qChanged = previous.q !== values.q;
+
+    previousValuesRef.current = values;
+
+    clear();
+
+    set(() => {
+      // Search text change hui to page reset
+      if (qChanged && values.page !== 1) {
+        form.change("page" as keyof T, 1 as T[keyof T]);
       }
-    }, 1000);
-    return () => clearSubmitterTimeout();
-  }, [values, form, setSubmitterTimeout, clearSubmitterTimeout]);
+
+      form.submit();
+    }, 500);
+
+    return clear;
+  }, [values, form, set, clear]);
+
   return null;
 }

@@ -1,5 +1,5 @@
 import useSWR, { type SWRConfiguration } from "swr";
-import { useState, type ReactNode } from "react";
+import React, { useState, type ReactNode } from "react";
 import {
   IconArrowLeft,
   IconArrowRight,
@@ -21,6 +21,7 @@ type ListViewProps<T> = {
   sortOptions?: React.ReactNode;
   onParamsChange: (params: any) => void;
   swrConfig?: SWRConfiguration;
+  actions? : React.ReactNode
 };
 
 export function RefreshIcon({ refresh }: { refresh: () => void }) {
@@ -51,6 +52,7 @@ export function ListView<T>({
   swrConfig,
   onParamsChange,
   sortOptions,
+  actions
 }: ListViewProps<T>) {
   const {
     data,
@@ -85,6 +87,7 @@ export function ListView<T>({
           )}
         </Stack>
         {sortOptions && sortOptions}
+        {actions && actions}
       </Inline>
       {!data?.data?.length ? (
         <Stack
@@ -110,7 +113,7 @@ export function ListView<T>({
                 onClick={() => {
                   onParamsChange({
                     ...params,
-                    page: data?.meta.current_page - 1,
+                    page: Number(params.page) - 1,
                   });
                 }}
               >
@@ -120,10 +123,14 @@ export function ListView<T>({
                 disabled={data?.meta.current_page === data?.meta.last_page}
                 variant="default"
                 onClick={() => {
-                  onParamsChange({
+                  const newParams = {
                     ...params,
-                    page: data?.meta.current_page + 1,
-                  });
+                    page: Number(params.page ?? 1) + 1,
+                  };
+
+                  console.log("ListView ->", newParams);
+
+                  onParamsChange(newParams);
                 }}
               >
                 Next <IconArrowRight />

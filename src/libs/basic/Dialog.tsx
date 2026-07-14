@@ -1,5 +1,5 @@
 import { useDisclosure } from "@mantine/hooks";
-import { Modal, Title } from "@mantine/core";
+import { Modal, Text, Title } from "@mantine/core";
 import type { TSizes } from "../types";
 
 interface DialogProps {
@@ -30,7 +30,7 @@ export function Dialog({
       <Modal
         opened={isOpened}
         onClose={close}
-        title={<Title style={{fontSize : "22px"}}>{title}</Title>}
+        title={<Text fw={"bold"} fz={"h3"}>{title}</Text>}
         centered={center}
         withCloseButton={!removeHeader}
         size={sizes}
@@ -40,7 +40,7 @@ export function Dialog({
           blur: bgBlur ? 3 : undefined,
         }}
       >
-        <hr style={{backgroundColor : "#E5E7EB", height : '1px', border : 'none'}} />
+        <hr style={{backgroundColor : "#E5E7EB", height : '1px', border : 'none', marginBottom : "10px"}} />
         {children}
       </Modal>
     </>
