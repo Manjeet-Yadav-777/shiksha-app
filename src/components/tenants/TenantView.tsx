@@ -10,11 +10,10 @@ import {
   Stack,
   Text,
   Badge,
-  TextInput,
   Alert,
 } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
-import { api, xhr } from "../../libs/XHR/xhr";
+import { api } from "../../libs/XHR/xhr";
 import type { ITenant } from "./store";
 import { formatDate } from "../../helpers/Date";
 import { Inline } from "../../libs/basic/Layout";
