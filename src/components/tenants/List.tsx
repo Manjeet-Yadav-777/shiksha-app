@@ -1,11 +1,19 @@
 import { useEffect, useState } from "react";
 import { Search, type TSearchParams } from "../../libs/search/Search";
 import { useLocationQuery, useSearch } from "../../utils/filterQuery";
-import { Button, Divider, Grid, Stack, Text } from "@mantine/core";
+import {
+  Button,
+  Checkbox,
+  Divider,
+  Select,
+  Stack,
+  Text,
+  type ComboboxItem,
+} from "@mantine/core";
 import { Dialog, useDialog } from "../../libs/basic/Dialog";
 import { Inline } from "../../libs/basic/Layout";
 import { TextInputField } from "../../libs/form/Input";
-import { Form } from "react-final-form";
+import { Form, useField } from "react-final-form";
 import { xhr } from "../../libs/XHR/xhr";
 import { ListView } from "../../libs/List/List";
 import type { ITenant } from "./store";
@@ -13,15 +21,21 @@ import { Table } from "../../libs/basic/Table";
 import { mutate } from "swr";
 import { formatDate } from "../../helpers/Date";
 import { DropdownMenu } from "../../libs/basic/DropDown";
-import { IconDotsVertical, IconSettings } from "@tabler/icons-react";
+import { IconDotsVertical, IconPencil } from "@tabler/icons-react";
 import { downloadFile } from "../../libs/XHR/downloadFile";
+import { capitalize } from "../../helpers/Wording";
+import { SelectInputField } from "../../libs/basic/SelectInputField";
 
-interface TFilters extends TSearchParams {}
+interface TFilters extends TSearchParams {
+  status?: "active" | "suspended";
+}
 
-interface TLocationQuery extends TSearchParams {}
+interface TLocationQuery extends TSearchParams {
+  status?: "active" | "suspended";
+}
 
 function paramsToQuery(filters: TFilters): TLocationQuery {
-  const { q, page } = filters;
+  const { q, page, status = "active" } = filters;
   const query: TLocationQuery = {};
   if (q) {
     query.q = q;
@@ -29,12 +43,15 @@ function paramsToQuery(filters: TFilters): TLocationQuery {
   if (page) {
     query.page = page;
   }
+  if (status) {
+    query.status = status;
+  }
 
   return query;
 }
 
 function queryToFilter(query: TLocationQuery): TFilters {
-  const { q, page } = query;
+  const { q, page, status = "active" } = query;
   const params: TFilters = {};
 
   if (q) {
@@ -42,6 +59,10 @@ function queryToFilter(query: TLocationQuery): TFilters {
   }
   if (page) {
     params.page = page;
+  }
+
+  if (status) {
+    params.status = status;
   }
 
   return params;
@@ -63,6 +84,7 @@ export function TenantList() {
   return (
     <Search
       title="Tenant List"
+      filters={Filters}
       initialParams={params}
       onSearch={(params) => setparams({ ...params })}
       actions={
@@ -95,6 +117,7 @@ export function TenantList() {
           }}
           actions={
             <Button
+              variant="default"
               onClick={async () => {
                 await downloadFile(
                   "/tenant/export",
@@ -110,21 +133,40 @@ export function TenantList() {
           {(items) => (
             <>
               <Table
-                headers={["Name", "Slug", "Created At", "Actions"]}
+                headers={["Name", "Slug", "Created At", "Status", "Actions"]}
                 rows={items.map((i) => [
                   <Text>{i.name}</Text>,
                   <Text>{i.slug.toUpperCase()}</Text>,
                   <Text>{formatDate(i.createdAt)}</Text>,
+                  <Text c={i.status === "suspended" ? "red" : ""}>
+                    {capitalize(i.status)}
+                  </Text>,
                   <>
                     <DropdownMenu
                       trigger="hover"
                       width={140}
                       items={[
                         {
-                          label: "Edit",
+                          label: (
+                            <Inline gap="xs" align={""}>
+                              <IconPencil size={16} />
+                              Edit
+                            </Inline>
+                          ),
                           onClick: () => {
                             setSelectedTenant(i);
                             tenantUpdateDialog.open();
+                          },
+                        },
+                        {
+                          label: i.status === "active" ? "Suspend" : "Activate",
+                          onClick: async () => {
+                            let status =
+                              i.status === "active" ? "suspended" : "active";
+                            await xhr.patch(`/tenant/${i._id}/status`, {
+                              status,
+                            });
+                            mutate(["/tenants", params]);
                           },
                         },
                       ]}
@@ -255,6 +297,18 @@ export function EditTenant({
       onSubmit={async (values) => {
         onSubmit(values);
       }}
+    />
+  );
+}
+
+export function Filters() {
+  return (
+    <SelectInputField
+      name="status"
+      data={[
+        { value: "active", label: "Active" },
+        { value: "suspended", label: "Suspended" },
+      ]}
     />
   );
 }

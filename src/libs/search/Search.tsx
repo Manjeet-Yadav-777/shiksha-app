@@ -45,9 +45,8 @@ export function Search<T extends TSearchParams = TSearchParams>({
   children,
   placeHolder = "Search..."
 }: SerachProps<T>) {
-  const initialParamsRef = useRef(initialParams);
   return (
-    <Form initialValues={initialParamsRef.current} onSubmit={onSearch}>
+    <Form initialValues={initialParams} onSubmit={onSearch}>
       {({ handleSubmit, values }) => {
         console.log({ values }, "form");
         return (
@@ -93,7 +92,7 @@ export function Search<T extends TSearchParams = TSearchParams>({
                           {filters()}
                           <Inline gap={"md"}>
                             <Button type="submit">Apply Filters</Button>
-                            <Button variant="default">Clear Filters</Button>
+                            {/* <Button variant="default">Clear Filters</Button> */}
                           </Inline>
                         </Stack>
                       </SideBar>

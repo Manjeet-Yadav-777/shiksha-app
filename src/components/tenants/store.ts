@@ -5,6 +5,7 @@ export interface ITenant{
     address : string
     contactPhone : string
     contactEmail : string
+    status : "active" | "suspended"
     createdAt : string
     updatedAt : string
 }

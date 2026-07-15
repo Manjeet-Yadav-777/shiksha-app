@@ -24,6 +24,7 @@ export function SideBar({
     <>
       <Drawer
         {...props}
+        keepMounted
         position={position}
         opened={opened}
         onClose={close}

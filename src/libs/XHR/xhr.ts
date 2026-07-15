@@ -56,9 +56,7 @@
 import axios, {
   type AxiosInstance,
   type AxiosError,
-  type InternalAxiosRequestConfig,
 } from "axios";
-import { createContext, useContext } from "react";
 import { notifications } from "@mantine/notifications";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
