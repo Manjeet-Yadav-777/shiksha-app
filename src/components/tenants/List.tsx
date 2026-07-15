@@ -1,37 +1,31 @@
 import { useEffect, useState } from "react";
 import { Search, type TSearchParams } from "../../libs/search/Search";
 import { useLocationQuery, useSearch } from "../../utils/filterQuery";
-import {
-  Button,
-  Checkbox,
-  Divider,
-  Select,
-  Stack,
-  Text,
-  type ComboboxItem,
-} from "@mantine/core";
+import { Button, Divider, Stack, Text } from "@mantine/core";
 import { Dialog, useDialog } from "../../libs/basic/Dialog";
 import { Inline } from "../../libs/basic/Layout";
 import { TextInputField } from "../../libs/form/Input";
-import { Form, useField } from "react-final-form";
-import { xhr } from "../../libs/XHR/xhr";
+import { Form } from "react-final-form";
+import { api } from "../../libs/XHR/xhr";
 import { ListView } from "../../libs/List/List";
 import type { ITenant } from "./store";
 import { Table } from "../../libs/basic/Table";
 import { mutate } from "swr";
 import { formatDate } from "../../helpers/Date";
 import { DropdownMenu } from "../../libs/basic/DropDown";
-import { IconDotsVertical, IconPencil } from "@tabler/icons-react";
+import { IconBan, IconDotsVertical, IconPencil } from "@tabler/icons-react";
 import { downloadFile } from "../../libs/XHR/downloadFile";
 import { capitalize } from "../../helpers/Wording";
 import { SelectInputField } from "../../libs/basic/SelectInputField";
+import { NavLink } from "../../utils/Link";
+import { useAuthUser } from "../../hooks/auth";
 
 interface TFilters extends TSearchParams {
-  status?: "active" | "suspended";
+  status?: "active" | "suspended" | "all";
 }
 
 interface TLocationQuery extends TSearchParams {
-  status?: "active" | "suspended";
+  status?: "active" | "suspended" | "all";
 }
 
 function paramsToQuery(filters: TFilters): TLocationQuery {
@@ -73,6 +67,8 @@ export function TenantList() {
     toQuery: paramsToQuery,
     fromQuery: queryToFilter,
   });
+  const user = useAuthUser();
+  console.log(user);
   const [params, setparams] = useSearch(query);
   const tenantAddDialog = useDialog();
   useEffect(() => {
@@ -96,7 +92,7 @@ export function TenantList() {
             title="Add Tenant"
             params={params}
             onSubmit={async (values) => {
-              await xhr.post("/tenant/add", values);
+              await api.post("/tenant/add", values);
               mutate(["/tenants", params]);
               close();
             }}
@@ -113,7 +109,7 @@ export function TenantList() {
           }}
           swrKey={"/tenants"}
           fetchFn={async () => {
-            return await xhr.get("/tenant/getall", { params: params });
+            return await api.get("/tenant/getall", { params: params });
           }}
           actions={
             <Button
@@ -135,7 +131,13 @@ export function TenantList() {
               <Table
                 headers={["Name", "Slug", "Created At", "Status", "Actions"]}
                 rows={items.map((i) => [
-                  <Text>{i.name}</Text>,
+                  <NavLink
+                    fw="bold"
+                    color="blue"
+                    to={`/super-admin/tenants/${i._id}`}
+                  >
+                    {i.name}
+                  </NavLink>,
                   <Text>{i.slug.toUpperCase()}</Text>,
                   <Text>{formatDate(i.createdAt)}</Text>,
                   <Text c={i.status === "suspended" ? "red" : ""}>
@@ -148,7 +150,7 @@ export function TenantList() {
                       items={[
                         {
                           label: (
-                            <Inline gap="xs" align={""}>
+                            <Inline gap="xs" align={"center"}>
                               <IconPencil size={16} />
                               Edit
                             </Inline>
@@ -159,11 +161,22 @@ export function TenantList() {
                           },
                         },
                         {
-                          label: i.status === "active" ? "Suspend" : "Activate",
+                          label:
+                            i.status === "active" ? (
+                              <Inline c={"red"} gap="xs" align={"center"}>
+                                <IconBan size={16} />
+                                Suspend
+                              </Inline>
+                            ) : (
+                              <Inline c={"yellow"} gap="xs" align={"center"}>
+                                <IconBan size={16} />
+                                Activate
+                              </Inline>
+                            ),
                           onClick: async () => {
                             let status =
                               i.status === "active" ? "suspended" : "active";
-                            await xhr.patch(`/tenant/${i._id}/status`, {
+                            await api.patch(`/tenant/${i._id}/status`, {
                               status,
                             });
                             mutate(["/tenants", params]);
@@ -182,7 +195,7 @@ export function TenantList() {
                 initialValues={selectedTenant}
                 title="Edit Tenant"
                 onSubmit={async (values) => {
-                  await xhr.put(`/tenant/${selectedTenant?._id}`, values);
+                  await api.put(`/tenant/${selectedTenant?._id}`, values);
                   mutate(["/tenants", params]);
                   tenantUpdateDialog.close();
                 }}
@@ -305,9 +318,11 @@ export function Filters() {
   return (
     <SelectInputField
       name="status"
+      label="Status"
       data={[
         { value: "active", label: "Active" },
         { value: "suspended", label: "Suspended" },
+        { value: "all", label: "All" },
       ]}
     />
   );

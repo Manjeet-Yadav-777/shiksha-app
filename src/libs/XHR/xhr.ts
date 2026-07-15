@@ -56,6 +56,7 @@
 import axios, {
   type AxiosInstance,
   type AxiosError,
+  type AxiosRequestConfig,
 } from "axios";
 import { notifications } from "@mantine/notifications";
 import "@mantine/core/styles.css";
@@ -104,6 +105,44 @@ export type XHRInstance = AxiosInstance;
  * Access Token (Memory)
  * Login ke baad set karna hai.
  */
+
+
+export const api = {
+  get: async <T>(url: string, config?: AxiosRequestConfig): Promise<T> => {
+    return xhr.get(url, config);
+  },
+
+  post: async <T, B = unknown>(
+    url: string,
+    body?: B,
+    config?: AxiosRequestConfig
+  ): Promise<T> => {
+    return xhr.post(url, body, config);
+  },
+
+  put: async <T, B = unknown>(
+    url: string,
+    body?: B,
+    config?: AxiosRequestConfig
+  ): Promise<T> => {
+    return xhr.put(url, body, config);
+  },
+
+  patch: async <T, B = unknown>(
+    url: string,
+    body?: B,
+    config?: AxiosRequestConfig
+  ): Promise<T> => {
+    return xhr.patch(url, body, config);
+  },
+
+  delete: async <T>(
+    url: string,
+    config?: AxiosRequestConfig
+  ): Promise<T> => {
+    return xhr.delete(url, config);
+  },
+};
 
 export const xhr = axios.create({
   baseURL: import.meta.env.VITE_API_URL,

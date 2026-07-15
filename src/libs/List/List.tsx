@@ -21,10 +21,16 @@ type ListViewProps<T> = {
   sortOptions?: React.ReactNode;
   onParamsChange: (params: any) => void;
   swrConfig?: SWRConfiguration;
-  actions? : React.ReactNode
+  actions?: React.ReactNode;
 };
 
-export function RefreshIcon({ refresh }: { refresh: () => void }) {
+export function RefreshIcon({
+  refresh,
+  size,
+}: {
+  refresh: () => void;
+  size?: number;
+}) {
   const [rotated, setRotated] = useState(false);
 
   const handleClick = () => {
@@ -34,6 +40,8 @@ export function RefreshIcon({ refresh }: { refresh: () => void }) {
 
   return (
     <IconRefresh
+      size={size}
+      cursor={"pointer"}
       onClick={handleClick}
       className="!p-2 cursor-pointer Stack-Stack w-fit"
       style={{
@@ -52,7 +60,7 @@ export function ListView<T>({
   swrConfig,
   onParamsChange,
   sortOptions,
-  actions
+  actions,
 }: ListViewProps<T>) {
   const {
     data,
@@ -74,21 +82,33 @@ export function ListView<T>({
   if (error) {
     return <div className="p-4 text-red-500">Something went wrong</div>;
   }
+  console.log(data?.meta.current_page || 1 - 1, "Hello");
 
+  let end = (data?.data?.length || 10) * (data?.meta?.current_page || 1);
+  let start =
+    ((data?.meta.current_page || 1) - 1) * (data?.data?.length || 1) + 1;
+  let total = data?.meta.total;
   return (
     <Stack gap={10}>
-      <Inline justify="space-between" align="center" className="!px-0">
-        <Stack align="center" gap={5}>
-          {!data?.data?.length ? null : (
-            <Text fw={"inherit"}>
-              {data.meta.last_page} results • Page {data.meta.current_page} of{" "}
-              {data.meta.last_page}
-            </Text>
-          )}
-        </Stack>
-        {sortOptions && sortOptions}
-        {actions && actions}
-      </Inline>
+      {!data?.data.length ? null : (
+        <Inline justify="space-between" align="center" className="!px-0">
+          <Stack align="center" gap={5}>
+            <Inline
+              gap={"sm"}
+              align={"center"}
+              fw={"inherit"}
+              c={"gray"}
+              fz={"sm"}
+            >
+              showing {start} - {end} of {total} items{" "}
+              <RefreshIcon size={18} refresh={refresh} />
+            </Inline>
+          </Stack>
+          {sortOptions && sortOptions}
+          {actions && actions}
+        </Inline>
+      )}
+
       {!data?.data?.length ? (
         <Stack
           p={"4"}

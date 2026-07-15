@@ -1,7 +1,7 @@
 import { Flex, type FlexProps } from "@mantine/core";
 
 interface InlineProps extends FlexProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export function Inline({ children, ...props }: InlineProps) {

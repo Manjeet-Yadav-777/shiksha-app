@@ -92,7 +92,7 @@ export function Search<T extends TSearchParams = TSearchParams>({
                           {filters()}
                           <Inline gap={"md"}>
                             <Button type="submit">Apply Filters</Button>
-                            {/* <Button variant="default">Clear Filters</Button> */}
+                            <Button variant="default">Clear Filters</Button>
                           </Inline>
                         </Stack>
                       </SideBar>

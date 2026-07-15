@@ -1,9 +1,10 @@
 import useSWR from "swr";
-import { xhr } from "../libs/XHR/xhr";
+import { api } from "../libs/XHR/xhr";
+import type { IUser } from "../components/Auth/store";
 
 export async function getUser() {
-  const res = await xhr.get("/auth/me");
-  return res.data;
+  const res = await api.get<IUser>("/auth/me");
+  return res;
 }
 
 export function useAuthUser() {
@@ -11,8 +12,6 @@ export function useAuthUser() {
     "/auth/me",
     getUser
   );
-  console.log(data)
-
   return {
     user: data,
     error,
