@@ -7,20 +7,27 @@ import { Badge, Button, Text } from "@mantine/core";
 import { ListView } from "../../libs/List/List";
 import { Table } from "../../libs/basic/Table";
 import { NavLink } from "../../utils/Link";
-import { api } from "../../libs/XHR/xhr";
+import { api, xhr } from "../../libs/XHR/xhr";
 import type { IInstallment } from "./store";
 import { Inline } from "../../libs/basic/Layout";
 
 import { capitalize } from "../../helpers/Wording";
 import { formatDate } from "../../helpers/Date";
 import { LogPayment } from "./LogPayment";
+import { SelectInputField } from "../../libs/form/SelectInputField";
+import { downloadFile } from "../../libs/XHR/downloadFile";
+import { downloadPdf } from "../../libs/XHR/downloadPdf";
 
-interface TFilters extends TSearchParams {}
+interface TFilters extends TSearchParams {
+  status?: "pending" | "success" | "all";
+}
 
-interface TLocationQuery extends TSearchParams {}
+interface TLocationQuery extends TSearchParams {
+  status?: "pending" | "success" | "all";
+}
 
 function paramsToQuery(filters: TFilters): TLocationQuery {
-  const { q, page } = filters;
+  const { q, page, status = "pending" } = filters;
   const query: TLocationQuery = {};
   if (q) {
     query.q = q;
@@ -29,11 +36,15 @@ function paramsToQuery(filters: TFilters): TLocationQuery {
     query.page = page;
   }
 
+  if (status) {
+    query.status = status;
+  }
+
   return query;
 }
 
 function queryToFilter(query: TLocationQuery): TFilters {
-  const { q, page } = query;
+  const { q, page, status = "pending" } = query;
   const params: TFilters = {};
 
   if (q) {
@@ -41,6 +52,9 @@ function queryToFilter(query: TLocationQuery): TFilters {
   }
   if (page) {
     params.page = page;
+  }
+  if (status) {
+    params.status = status;
   }
 
   return params;
@@ -61,7 +75,7 @@ export function PaymentList() {
   return (
     <Search
       title="Payments List"
-      //   filters={Filters}
+      filters={Filters}
       initialParams={params}
       onSearch={(params) => setparams({ ...params })}
     >
@@ -113,20 +127,25 @@ export function PaymentList() {
                   <Text>{i.due_date ? formatDate(i.due_date) : "-"}</Text>,
 
                   <Badge
-                    color={
-                      Number(i.amount) - Number(i.paid_amount) === 0
-                        ? "green"
-                        : "red"
-                    }
+                    color={i.paid_amount ? "green" : "red"}
                     variant="light"
                   >
                     {capitalize(i.status)}
                   </Badge>,
 
                   //need to handle overdue here later
-                  i.amount === i.paid_amount ? (
-                    <Button variant="default" c={"green"} disabled>
-                      Payment Paid
+                  i.paid_amount ? (
+                    <Button
+                      variant="default"
+                      c={"green"}
+                      onClick={async () => {
+                        await downloadPdf(
+                          `/installment/${i._id}/invoice`,
+                          "invoice.pdf",
+                        );
+                      }}
+                    >
+                      Generate Invoice
                     </Button>
                   ) : (
                     <Button
@@ -155,5 +174,18 @@ export function PaymentList() {
         </ListView>
       )}
     </Search>
+  );
+}
+
+export function Filters() {
+  return (
+    <SelectInputField
+      name="status"
+      data={[
+        { label: "All", value: "all" },
+        { label: "Pending", value: "pending" },
+        { label: "Success", value: "success" },
+      ]}
+    />
   );
 }

@@ -1,6 +1,10 @@
 import { xhr } from "./xhr";
 
-export async function downloadFile(downloadUrl: string, body?: unknown, fileName?: string) {
+export async function downloadFile(
+  downloadUrl: string,
+  fileName?: string,
+  body?: unknown,
+) {
   const blob = (await xhr.post(downloadUrl, body, {
     responseType: "blob",
   })) as Blob;

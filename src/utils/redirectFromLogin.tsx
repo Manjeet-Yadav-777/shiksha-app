@@ -4,9 +4,10 @@ export function redirectFromLogin(
   res: any,
   navigate: NavigateFunction
 ) {
-  if (res.role === "super_admin") {
+ const role = res.data.role
+  if (role === "super_admin") {
     navigate("/super-admin");
-  } else if (res.role === "school_admin") {
+  } else if (role === "school_admin") {
     navigate("/school-admin");
   }
 }

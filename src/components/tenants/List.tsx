@@ -117,8 +117,8 @@ export function TenantList() {
               onClick={async () => {
                 await downloadFile(
                   "/tenant/export",
-                  { filters: params },
                   "tenants.xlsx",
+                  { filters: params },
                 );
               }}
             >
