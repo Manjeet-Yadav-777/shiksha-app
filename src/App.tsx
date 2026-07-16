@@ -1,10 +1,10 @@
 import { AppShell } from "@mantine/core";
-import { useRoutes } from "react-router-dom";
-import routes from "~react-pages";
+import { useLocation } from "react-router-dom";
+import { AppRoutes } from "./routes";
 import { Navbar } from "./components/Navbar";
 
 export default function App() {
-  const element = useRoutes(routes);
+  const location = useLocation();
   const hideHeader = location.pathname === "/auth/login";
 
   return (
@@ -13,7 +13,9 @@ export default function App() {
        {hideHeader ? null :  <Navbar />}
       </AppShell.Header>
 
-      <AppShell.Main>{element}</AppShell.Main>
+      <AppShell.Main>
+        <AppRoutes />
+      </AppShell.Main>
     </AppShell>
   );
 }
