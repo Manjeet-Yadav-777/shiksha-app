@@ -31,7 +31,7 @@ export function SingleTenant({ id }: { id?: string }) {
   const editDialog = useDialog();
   const editAdmin = useDialog();
   const editSub = useDialog();
-  const addSub = useDialog()
+  const addSub = useDialog();
 
   if (!tenant) return null;
 
@@ -122,7 +122,10 @@ export function SingleTenant({ id }: { id?: string }) {
                   label="Role"
                   value={getRole(tenant.admin?.role).toUpperCase()}
                 />
-                <InfoRow label="Status" value={capitalize(tenant.admin?.status)} />
+                <InfoRow
+                  label="Status"
+                  value={capitalize(tenant.admin?.status)}
+                />
               </>
             ) : (
               <Inline

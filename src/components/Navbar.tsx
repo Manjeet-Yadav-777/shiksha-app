@@ -30,7 +30,7 @@ export function Navbar() {
 
         <Inline gap={"lg"} fw={"bolder"}>
           <NavLink to="/super-admin/tenants">Tenants</NavLink>
-          <NavLink to="/super-admin/subscriptions">Subscriptions</NavLink>
+          <NavLink to="/super-admin/payments">Payments</NavLink>
         </Inline>
       </Inline>
 
