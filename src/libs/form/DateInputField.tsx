@@ -1,24 +1,24 @@
-import { Select, type SelectProps } from "@mantine/core";
 import { Field } from "react-final-form";
+import { DateInput, type DateInputProps } from "@mantine/dates";
 
-type SelectInputFieldProps = SelectProps & {
+type SelectInputFieldProps = DateInputProps & {
   name: string;
 };
 
-export function SelectInputField({
+export function DatenputField({
   name,
   label,
-  data,
   placeholder,
-  clearable = false
+  clearable = false,
+  ...props
 }: SelectInputFieldProps) {
   return (
     <Field name={name}>
       {({ input }) => (
-        <Select
+        <DateInput
+          {...props}
           label={label}
           placeholder={placeholder}
-          data={data}
           value={input.value}
           onChange={input.onChange}
           clearable={clearable}

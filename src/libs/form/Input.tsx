@@ -5,6 +5,8 @@ import {
   type InputProps,
   type TextInputProps,
   type PasswordInputProps,
+  Textarea,
+  type TextareaProps,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { Field } from "react-final-form";
@@ -15,8 +17,9 @@ interface InputFieldProps extends InputProps {
 }
 
 type TextInputFieldProps =
-  | ({ type?: "text" } & TextInputProps)
-  | ({ type: "password" } & PasswordInputProps);
+  | ({ type?: "text" | "number" } & TextInputProps)
+  | ({ type: "password" } & PasswordInputProps)
+  | ({ type: "textarea" } & TextareaProps);
 
 interface BaseProps {
   name: string;
@@ -86,7 +89,7 @@ export function TextInputField({ debounce, ...props }: Props) {
           return () => clearTimeout(timer);
         }, [localValue, debounce, input]);
 
-        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
           if (debounce) {
             setLocalValue(e.currentTarget.value);
           } else {
@@ -97,6 +100,18 @@ export function TextInputField({ debounce, ...props }: Props) {
         if (props.type === "password") {
           return (
             <PasswordInput
+              {...props}
+              value={debounce ? localValue : input.value}
+              onChange={handleChange}
+              error={meta.touched ? meta.error : undefined}
+              placeholder={meta.touched && meta.error ? "" : props.placeholder}
+            />
+          );
+        }
+
+        if (props.type === "textarea") {
+          return (
+            <Textarea
               {...props}
               value={debounce ? localValue : input.value}
               onChange={handleChange}

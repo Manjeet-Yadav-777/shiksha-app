@@ -16,7 +16,7 @@ import { DropdownMenu } from "../../libs/basic/DropDown";
 import { IconBan, IconDotsVertical, IconPencil } from "@tabler/icons-react";
 import { downloadFile } from "../../libs/XHR/downloadFile";
 import { capitalize } from "../../helpers/Wording";
-import { SelectInputField } from "../../libs/basic/SelectInputField";
+import { SelectInputField } from "../../libs/form/SelectInputField";
 import { NavLink } from "../../utils/Link";
 import { useAuthUser } from "../../hooks/auth";
 

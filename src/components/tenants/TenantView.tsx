@@ -13,7 +13,7 @@ import {
   Alert,
 } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
-import { api } from "../../libs/XHR/xhr";
+import { api, xhr } from "../../libs/XHR/xhr";
 import type { ITenant } from "./store";
 import { formatDate } from "../../helpers/Date";
 import { Inline } from "../../libs/basic/Layout";
@@ -21,7 +21,8 @@ import { EditTenant } from "./List";
 import { Dialog, useDialog } from "../../libs/basic/Dialog";
 import { Form } from "react-final-form";
 import { TextInputField } from "../../libs/form/Input";
-import { getRole } from "../../helpers/Wording";
+import { capitalize, getRole } from "../../helpers/Wording";
+import { AddSubscription } from "../subscriptions/AddSubscription";
 
 export function SingleTenant({ id }: { id?: string }) {
   const { data: tenant } = useSWR(`/tenant/${id}`, () =>
@@ -29,6 +30,8 @@ export function SingleTenant({ id }: { id?: string }) {
   );
   const editDialog = useDialog();
   const editAdmin = useDialog();
+  const editSub = useDialog();
+  const addSub = useDialog()
 
   if (!tenant) return null;
 
@@ -119,7 +122,7 @@ export function SingleTenant({ id }: { id?: string }) {
                   label="Role"
                   value={getRole(tenant.admin?.role).toUpperCase()}
                 />
-                <InfoRow label="Status" value={tenant.admin?.status} />
+                <InfoRow label="Status" value={capitalize(tenant.admin?.status)} />
               </>
             ) : (
               <Inline
@@ -127,7 +130,139 @@ export function SingleTenant({ id }: { id?: string }) {
                 justify={"center"}
                 c={"gray"}
                 fw={"bold"}
-                h={"17vh"}
+                h={"18vh"}
+              >
+                No Details Provided
+              </Inline>
+            )}
+          </InfoCard>
+        </Grid.Col>
+        <Grid.Col span={12}>
+          <InfoCard
+            title="Subscription Information"
+            actions={
+              tenant.subscription ? (
+                <>
+                  <Button size="xs" onClick={() => editSub.open()}>
+                    <Inline align={"center"} gap={"sm"}>
+                      <IconPencil size={16} />
+                      Edit Subcription
+                    </Inline>
+                  </Button>
+                  <AddSubscription
+                    isOpened={editSub.isOpened}
+                    close={editSub.close}
+                    title="Edit Subscription"
+                    propInitialValues={tenant.subscription}
+                    onSubmit={async (values) => {
+                      await xhr.put(`/subs/${tenant._id}/update`, values);
+                      mutate(`/tenant/${tenant._id}`);
+                      editSub.close();
+                    }}
+                  />
+                </>
+              ) : (
+                <>
+                  <Button size="xs" onClick={() => addSub.open()}>
+                    <Inline align={"center"} gap={"sm"}>
+                      <IconPencil size={16} />
+                      Add Subcription
+                    </Inline>
+                  </Button>
+                  <AddSubscription
+                    isOpened={addSub.isOpened}
+                    close={addSub.close}
+                    title="Add Subscription"
+                    onSubmit={async (values) => {
+                      await api.post(`/subs/${tenant._id}/add`, {
+                        ...values,
+                      });
+
+                      mutate(`/tenant/${tenant._id}`);
+                      addSub.close();
+                    }}
+                  />
+                </>
+              )
+            }
+          >
+            {tenant.subscription ? (
+              <>
+                <InfoRow
+                  label="Amount"
+                  value={`${tenant.subscription.currency} ${tenant.subscription.amount.toLocaleString()}`}
+                />
+
+                <InfoRow
+                  label="Billing Cycle"
+                  value={tenant.subscription.billing_cycle.toUpperCase()}
+                />
+
+                <InfoRow
+                  label="Status"
+                  value={
+                    <Badge
+                      color={
+                        tenant.subscription.status === "active"
+                          ? "green"
+                          : tenant.subscription.status === "expired"
+                            ? "red"
+                            : tenant.subscription.status === "trial"
+                              ? "blue"
+                              : "gray"
+                      }
+                      variant="light"
+                    >
+                      {tenant.subscription.status.toUpperCase()}
+                    </Badge>
+                  }
+                />
+
+                <InfoRow
+                  label="Start Date"
+                  value={formatDate(tenant.subscription.start_date)}
+                />
+
+                <InfoRow
+                  label="End Date"
+                  value={
+                    tenant.subscription.end_date
+                      ? formatDate(tenant.subscription.end_date)
+                      : "-"
+                  }
+                />
+
+                <InfoRow
+                  label="Next Billing"
+                  value={
+                    tenant.subscription.next_billing_date
+                      ? formatDate(tenant.subscription.next_billing_date)
+                      : "-"
+                  }
+                />
+
+                <InfoRow
+                  label="Auto Renew"
+                  value={tenant.subscription.auto_renew ? "Yes" : "No"}
+                />
+
+                <InfoRow
+                  label="Currency"
+                  value={tenant.subscription.currency}
+                />
+
+                <InfoRow
+                  label="Notes"
+                  value={tenant.subscription.notes || "-"}
+                />
+              </>
+            ) : (
+              <Inline
+                align="center"
+                justify="center"
+                c="gray"
+                fw="bold"
+                h="17vh"
               >
                 No Details Provided
               </Inline>

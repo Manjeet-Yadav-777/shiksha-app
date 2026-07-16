@@ -1,4 +1,5 @@
 import type { IUser } from "../Auth/store"
+import type { ISubscription } from "../subscriptions/store"
 
 export interface ITenant{
     name : string
@@ -9,6 +10,7 @@ export interface ITenant{
     contactEmail : string
     status : "active" | "suspended"
     admin : IUser
+    subscription? : ISubscription
     createdAt : string
     updatedAt : string
 }

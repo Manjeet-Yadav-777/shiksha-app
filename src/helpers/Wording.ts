@@ -15,7 +15,7 @@ export type IRole =
 export function getRole(role: IRole) {
   switch (role) {
     case "school_admin":
-      return "Super Admin";
+      return "School Admin";
     case "parent":
       return "Parent";
     case "student":
