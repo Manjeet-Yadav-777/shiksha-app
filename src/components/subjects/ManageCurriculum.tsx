@@ -17,7 +17,8 @@ import { Inline } from "../../libs/basic/Layout";
 import { api } from "../../libs/XHR/xhr";
 import type { IListResponse } from "../../libs/XHR/xhr";
 import { capitalize } from "../../helpers/Wording";
-import type { IClass, IClassSubject, ISubject } from "./store";
+import type { IClassSubject, ISubject } from "./store";
+import type { IClass } from "../classes/store";
 
 // Attach subjects to a class curriculum. Subjects are the tenant-wide catalog;
 // here we pick which of them this class actually studies.

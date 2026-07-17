@@ -7,7 +7,7 @@ import {
   IconPencil,
   IconTrash,
 } from "@tabler/icons-react";
-import { Search, type TSearchParams } from "../../libs/search/Search";
+import { Search } from "../../libs/search/Search";
 import { useLocationQuery, useSearch } from "../../utils/filterQuery";
 import { ListView } from "../../libs/List/List";
 import { Table } from "../../libs/basic/Table";

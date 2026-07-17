@@ -19,7 +19,7 @@ import { DatenputField } from "../../libs/form/DateInputField";
 import { api } from "../../libs/XHR/xhr";
 import { formatDate } from "../../helpers/Date";
 import type { ITeacher } from "./store";
-// import { ManageAssignments } from "./ManageAssignments";
+import { ManageAssignments } from "./ManageAssignments";
 
 interface ITeacherFormValues {
   name?: string;
@@ -122,14 +122,14 @@ export function TeacherList() {
                 ])}
               />
 
-              {/* <Dialog
+              <Dialog
                 sizes="70%"
                 isOpened={assignDialog.isOpened}
                 close={assignDialog.close}
                 title={`Assignments - ${selected?.user?.name ?? ""}`}
               >
-                {selected && <ManageAssignments teacher={selected} />}
-              </Dialog> */}
+                {selected && <ManageAssignments  teacher={selected} />}
+              </Dialog>
             </>
           )}
         </ListView>
