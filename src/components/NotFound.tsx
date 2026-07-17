@@ -9,8 +9,10 @@ import {
   } from "@mantine/core";
   import { IconHome, IconError404 } from "@tabler/icons-react";
   import { Link } from "react-router-dom";
+import { useAuthUser } from "../hooks/auth";
   
   export default function NotFound() {
+    const user = useAuthUser()
     return (
       <Container size="sm" h="100vh">
         <Stack

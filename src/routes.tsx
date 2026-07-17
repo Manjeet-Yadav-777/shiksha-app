@@ -7,20 +7,32 @@ import Tenants from "./pages/super-admin/tenants/index";
 import TenantView from "./pages/super-admin/tenants/[id]";
 import Subscription from "./pages/super-admin/subscriptions/index";
 import { ProtectedRoutes } from "./hooks/ProtectedRoutes";
-import { PaymentList } from "./components/payments/List";
 import NotFound from "./components/NotFound";
+import SchoolDashboard from "./pages/admin/Dashboard";
+import { StudentList } from "./components/students/StudentList";
+import Subjects from "./pages/subjects";
+import Classes from "./pages/classes";
+import Teachers from "./pages/teachers";
 
 export function AppRoutes() {
   return (
     <Routes>
       <Route path="/auth/login" element={<Login />} />
-      <Route element={<ProtectedRoutes />}>
-        <Route path="/" element={<Dashboard />} />
+      <Route element={<ProtectedRoutes allowedRoles={["super_admin"]} />}>
+        <Route path="/super_admin/dashboard" element={<Dashboard />} />
         <Route path="/super-admin" element={<SuperAdmin />} />
-        <Route path="/super-admin/payments" element={<PaymentList />} />
+        <Route path="/super-admin/payments" element={<Payments />} />
         <Route path="/super-admin/tenants" element={<Tenants />} />
         <Route path="/super-admin/tenants/:id" element={<TenantView />} />
         <Route path="/super-admin/subscriptions" element={<Subscription />} />
+      </Route>
+      <Route element={<ProtectedRoutes allowedRoles={["school_admin"]} />}>
+        <Route path="/school_admin/dashboard" element={<SchoolDashboard />} />
+        <Route path="/admin/students" element={<StudentList />} />
+        <Route path="/admin/subjects" element={<Subjects />} />
+        <Route path="/admin/classes" element={<Classes />} />
+        <Route path="/admin/teachers" element={<Teachers />} />
+
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

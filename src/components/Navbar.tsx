@@ -1,9 +1,49 @@
-import { Box } from "@mantine/core";
 import { Inline } from "../libs/basic/Layout";
 import { NavLink } from "../utils/Link";
-import { IconSettings } from "@tabler/icons-react";
+import {
+  IconBooks,
+  IconSchool,
+  IconSettings,
+  IconUser,
+} from "@tabler/icons-react";
+import { useAuthUser } from "../hooks/auth";
+import { DropdownMenu } from "../libs/basic/DropDown";
+import { useNavigate } from "react-router-dom";
 
 export function Navbar() {
+  const { user } = useAuthUser();
+  const navigate = useNavigate();
+
+  if (!user) {
+    return null;
+  }
+
+  const settingOptions = [
+    {
+      label: (
+        <Inline align={"center"} gap={"xs"}>
+          <IconUser size={16} /> Profile
+        </Inline>
+      ),
+      onClick: () => navigate("/admin/profile"),
+    },
+    {
+      label: (
+        <Inline align={"center"} gap={"xs"}>
+          <IconSchool size={16} /> Classes
+        </Inline>
+      ),
+      onClick: () => navigate("/admin/classes"),
+    },
+    {
+      label: (
+        <Inline align={"center"} gap={"xs"}>
+          <IconBooks size={16} /> Subjects
+        </Inline>
+      ),
+      onClick: () => navigate("/admin/subjects"),
+    },
+  ];
   return (
     <Inline
       bg={"#000"}
@@ -23,22 +63,82 @@ export function Navbar() {
           h={"30px"}
           w={"30px"}
         >
-          <NavLink to="/super-admin" color={"#000"}>
+          <NavLink to={`/${user.role}/dashboard`} color={"#000"}>
             MJ
           </NavLink>
         </Inline>
 
         <Inline gap={"lg"} fw={"bolder"}>
-          <NavLink to="/super-admin/tenants">Tenants</NavLink>
-          <NavLink to="/super-admin/payments">Payments</NavLink>
+          {navigation[user?.role].left.map((l) => (
+            <NavLink to={l.to}>{l.label}</NavLink>
+          ))}
         </Inline>
       </Inline>
 
-      <Inline align={"center"}>
-        <Box>
+      <Inline align={"center"} gap={"xl"}>
+        {navigation[user?.role].right.map((r) => (
+          <NavLink to={r.to}>{r.label}</NavLink>
+        ))}
+        <DropdownMenu
+          width={150}
+          trigger="hover"
+          items={settingOptions.map((s) => s)}
+        >
           <IconSettings cursor={"pointer"} size={20} color="white" />
-        </Box>
+        </DropdownMenu>
       </Inline>
     </Inline>
   );
 }
+
+// navigation.ts
+export const navigation = {
+  super_admin: {
+    left: [
+      { label: "Tenants", to: "/super-admin/tenants" },
+      { label: "Payments", to: "/super-admin/payments" },
+    ],
+    right: [
+      {
+        label: <IconSettings cursor={"pointer"} size={20} color="white" />,
+        to: "/super-admin/settings",
+      },
+    ],
+  },
+
+  school_admin: {
+    left: [
+      { label: "Students", to: "/admin/students" },
+      { label: "Teachers", to: "/admin/teachers" },
+    ],
+
+    right: [
+      { label: "Fees", to: "/admin/fees" },
+      { label: "Reports", to: "/admin/reports" },
+    ],
+  },
+
+  teacher: {
+    left: [{ label: "Dashboard", to: "/principal" }],
+    right: [
+      { label: "Teachers", to: "/principal/teachers" },
+      { label: "Reports", to: "/principal/reports" },
+    ],
+  },
+
+  student: {
+    left: [{ label: "Dashboard", to: "/principal" }],
+    right: [
+      { label: "Teachers", to: "/principal/teachers" },
+      { label: "Reports", to: "/principal/reports" },
+    ],
+  },
+
+  parent: {
+    left: [{ label: "Dashboard", to: "/principal" }],
+    right: [
+      { label: "Teachers", to: "/principal/teachers" },
+      { label: "Reports", to: "/principal/reports" },
+    ],
+  },
+};
