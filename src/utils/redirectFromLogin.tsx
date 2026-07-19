@@ -6,8 +6,8 @@ export function redirectFromLogin(
 ) {
  const role = res.data.role
   if (role === "super_admin") {
-    navigate("/super-admin/dashboard");
+    navigate("/super_admin/dashboard");
   } else if (role === "school_admin") {
-    navigate("/school-admin/dashboard");
+    navigate("/school_admin/dashboard");
   }
 }

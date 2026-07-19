@@ -7,6 +7,7 @@ import Tenants from "./pages/super-admin/tenants/index";
 import TenantView from "./pages/super-admin/tenants/TenantView";
 import Subscription from "./pages/super-admin/subscriptions/index";
 import { ProtectedRoutes } from "./hooks/ProtectedRoutes";
+import { RootRedirect } from "./hooks/RootRedirect";
 import NotFound from "./components/NotFound";
 import SchoolDashboard from "./pages/admin/Dashboard";
 import { StudentList } from "./components/students/StudentList";
@@ -18,6 +19,7 @@ import Fees from "./pages/fees";
 export function AppRoutes() {
   return (
     <Routes>
+      <Route path="/" element={<RootRedirect />} />
       <Route path="/auth/login" element={<Login />} />
       <Route element={<ProtectedRoutes allowedRoles={["super_admin"]} />}>
         <Route path="/super_admin/dashboard" element={<Dashboard />} />
