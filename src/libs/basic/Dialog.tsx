@@ -1,5 +1,5 @@
 import { useDisclosure } from "@mantine/hooks";
-import { Modal, Text, Title } from "@mantine/core";
+import { Modal, Text } from "@mantine/core";
 import type { TSizes } from "../types";
 
 interface DialogProps {
@@ -9,7 +9,7 @@ interface DialogProps {
   title?: string;
   center?: boolean;
   removeHeader?: boolean;
-  sizes?: TSizes | "70%" | "100%" | "55rem" | "auto";
+  sizes?: TSizes | "70%" | "100%" | "45rem" | "55rem" | "auto";
   fullScreen?: boolean;
   bgBlur? : boolean
 }

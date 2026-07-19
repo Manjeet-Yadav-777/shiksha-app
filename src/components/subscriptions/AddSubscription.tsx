@@ -1,10 +1,8 @@
-import { Alert, Button, Checkbox, Stack, Textarea } from "@mantine/core";
+import { Alert, Button, Checkbox, Stack } from "@mantine/core";
 import { Form } from "react-final-form";
 import { Dialog } from "../../libs/basic/Dialog";
-import { mutate } from "swr";
 import { BillingCycle, SubscriptionStatus, type ISubscription } from "./store";
 import { Inline } from "../../libs/basic/Layout";
-import { api } from "../../libs/XHR/xhr";
 import { SelectInputField } from "../../libs/form/SelectInputField";
 import { TextInputField } from "../../libs/form/Input";
 import { DatenputField } from "../../libs/form/DateInputField";

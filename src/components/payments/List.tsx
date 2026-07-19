@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useAuthUser } from "../../hooks/auth";
 import { useDialog } from "../../libs/basic/Dialog";
 import { Search, type TSearchParams } from "../../libs/search/Search";
 import { useLocationQuery, useSearch } from "../../utils/filterQuery";
@@ -7,7 +6,7 @@ import { Badge, Button, Text } from "@mantine/core";
 import { ListView } from "../../libs/List/List";
 import { Table } from "../../libs/basic/Table";
 import { NavLink } from "../../utils/Link";
-import { api, xhr } from "../../libs/XHR/xhr";
+import { api } from "../../libs/XHR/xhr";
 import type { IInstallment } from "./store";
 import { Inline } from "../../libs/basic/Layout";
 
@@ -15,7 +14,6 @@ import { capitalize } from "../../helpers/Wording";
 import { formatDate } from "../../helpers/Date";
 import { LogPayment } from "./LogPayment";
 import { SelectInputField } from "../../libs/form/SelectInputField";
-import { downloadFile } from "../../libs/XHR/downloadFile";
 import { downloadPdf } from "../../libs/XHR/downloadPdf";
 
 interface TFilters extends TSearchParams {
