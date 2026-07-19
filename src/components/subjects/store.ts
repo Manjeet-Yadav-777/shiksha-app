@@ -1,12 +1,19 @@
 import type { IClass } from "../classes/store";
 import type { ITenant } from "../tenants/store";
 
+export interface ISectionClassTeacher {
+  _id: string;
+  employeeId: string;
+  user?: { name?: string; email?: string };
+}
+
 export interface ISection {
   _id: string;
   tenant: string | ITenant;
   class: string | IClass;
   name: string;
   roomNumber?: string;
+  classTeacher?: ISectionClassTeacher | string | null;
   createdAt: string;
   updatedAt: string;
 }

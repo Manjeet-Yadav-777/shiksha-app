@@ -74,7 +74,7 @@ const STATUS_COLOR: Record<string, string> = {
 };
 
 export default function SchoolDashboard() {
-  const [period, setPeriod] = useState<Period>("monthly");
+  const [period, setPeriod] = useState<Period>("weekly");
 
   const { data: summary, isLoading: loadingSummary } = useSWR(
     ["/stats/summary", period],

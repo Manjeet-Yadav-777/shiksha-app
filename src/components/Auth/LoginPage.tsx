@@ -4,6 +4,7 @@ import { TextInputField } from "../../libs/form/Input";
 import { Form } from "react-final-form";
 import { ValidateSchema } from "../../helpers/ValidationSchema";
 import * as yup from "yup";
+import { mutate } from "swr";
 import { xhr } from "../../libs/XHR/xhr";
 import { useNavigate } from "react-router-dom";
 import { redirectFromLogin } from "../../utils/redirectFromLogin";
@@ -19,16 +20,24 @@ const LoginSchema = ValidateSchema(
 );
 
 export function LoginPage() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <Inline align="center" justify="center" h={"100vh"}>
       <Stack>
         <Container w={"500px"}>
-          <Form  validate={LoginSchema} onSubmit={async(values) => {
-           const res = await xhr.post("/auth/login", values)
-           redirectFromLogin(res, navigate)
-          }}>
-            {({ handleSubmit }) => (
+          <Form
+            validate={LoginSchema}
+            onSubmit={async (values) => {
+              const res = await xhr.post<any>("/auth/login", values);
+              // Seed the /auth/me SWR cache with the logged-in user so
+              // ProtectedRoutes reads the fresh user immediately instead of the
+              // stale "unauthenticated" entry from before login. Without this the
+              // guard bounces back to /login and only works on a second attempt.
+              await mutate("/auth/me", res.data, { revalidate: false });
+              redirectFromLogin(res, navigate);
+            }}
+          >
+            {({ handleSubmit, submitting }) => (
               <form onSubmit={handleSubmit}>
                 <Stack
                   gap={"lg"}
@@ -50,7 +59,9 @@ export function LoginPage() {
                     placeholder="********"
                     type="password"
                   />
-                  <Button type="submit">Login</Button>
+                  <Button type="submit" disabled={submitting} loading={submitting}>
+                    {submitting ? "Logging in..." : "Login"}
+                  </Button>
                   <Text>
                     forgot password{" "}
                     <span

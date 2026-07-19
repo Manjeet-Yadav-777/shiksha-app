@@ -147,7 +147,10 @@ export const api = {
 export const xhr = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
-  timeout: 10000,
+  // 30s taaki Render free-tier cold start (server so jaata hai, jagne me 30-60s)
+  // pe pehli request bina wajah fail na ho. 10s pe wo timeout hoke unauthorized
+  // jaisa behaviour deta tha.
+  timeout: 30000,
 });
 
 xhr.interceptors.response.use(

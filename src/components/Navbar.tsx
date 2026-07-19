@@ -67,6 +67,17 @@ export function Navbar() {
         ),
         onClick: () => navigate("/admin/profile"),
       },
+      {
+        label: (
+          <Inline c={"red"} align={"center"} gap={"xs"}>
+            <IconLogout size={16} /> Logout
+          </Inline>
+        ),
+        onClick: async () => {
+          await xhr.post("/auth/logout");
+          navigate("/auth/login");
+        },
+      },
     ],
     teacher: [
       {
@@ -76,6 +87,17 @@ export function Navbar() {
           </Inline>
         ),
         onClick: () => navigate("/admin/profile"),
+      },
+      {
+        label: (
+          <Inline c={"red"} align={"center"} gap={"xs"}>
+            <IconLogout size={16} /> Logout
+          </Inline>
+        ),
+        onClick: async () => {
+          await xhr.post("/auth/logout");
+          navigate("/auth/login");
+        },
       },
     ],
     student: [
@@ -87,6 +109,17 @@ export function Navbar() {
         ),
         onClick: () => navigate("/admin/profile"),
       },
+      {
+        label: (
+          <Inline c={"red"} align={"center"} gap={"xs"}>
+            <IconLogout size={16} /> Logout
+          </Inline>
+        ),
+        onClick: async () => {
+          await xhr.post("/auth/logout");
+          navigate("/auth/login");
+        },
+      },
     ],
     parent: [
       {
@@ -96,6 +129,17 @@ export function Navbar() {
           </Inline>
         ),
         onClick: () => navigate("/admin/profile"),
+      },
+      {
+        label: (
+          <Inline c={"red"} align={"center"} gap={"xs"}>
+            <IconLogout size={16} /> Logout
+          </Inline>
+        ),
+        onClick: async () => {
+          await xhr.post("/auth/logout");
+          navigate("/auth/login");
+        },
       },
     ],
   };
@@ -165,6 +209,7 @@ export const navigation = {
 
     right: [
       { label: "Fees", to: "/admin/fees" },
+      { label: "Time Table", to: "/admin/timetable" },
       { label: "Reports", to: "/admin/reports" },
     ],
   },
