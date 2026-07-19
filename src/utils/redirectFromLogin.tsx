@@ -9,5 +9,7 @@ export function redirectFromLogin(
     navigate("/super_admin/dashboard");
   } else if (role === "school_admin") {
     navigate("/school_admin/dashboard");
+  } else if (role === "teacher") {
+    navigate("/teacher/dashboard");
   }
 }
