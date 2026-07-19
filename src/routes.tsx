@@ -27,6 +27,7 @@ const Classes = lazy(() => import("./pages/classes"));
 const Teachers = lazy(() => import("./pages/teachers"));
 const Fees = lazy(() => import("./pages/fees"));
 const Timetable = lazy(() => import("./pages/timetable"));
+const TeacherDashboard = lazy(() => import("./pages/teacher"));
 
 function PageLoader() {
   return (
@@ -58,6 +59,9 @@ export function AppRoutes() {
           <Route path="/admin/teachers" element={<Teachers />} />
           <Route path="/admin/fees" element={<Fees />} />
           <Route path="/admin/timetable" element={<Timetable />} />
+        </Route>
+        <Route element={<ProtectedRoutes allowedRoles={["teacher"]} />}>
+          <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

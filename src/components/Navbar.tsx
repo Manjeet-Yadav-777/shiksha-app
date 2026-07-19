@@ -215,11 +215,8 @@ export const navigation = {
   },
 
   teacher: {
-    left: [{ label: "Dashboard", to: "/principal" }],
-    right: [
-      { label: "Teachers", to: "/principal/teachers" },
-      { label: "Reports", to: "/principal/reports" },
-    ],
+    left: [{ label: "Dashboard", to: "/teacher/dashboard" }],
+    right: [],
   },
 
   student: {

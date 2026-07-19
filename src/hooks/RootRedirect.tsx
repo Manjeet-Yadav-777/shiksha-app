@@ -22,6 +22,7 @@ export function RootRedirect() {
   const dashboardByRole: Record<string, string> = {
     super_admin: "/super_admin/dashboard",
     school_admin: "/school_admin/dashboard",
+    teacher: "/teacher/dashboard",
   };
 
   return <Navigate to={dashboardByRole[user.role] ?? "/auth/login"} replace />;
