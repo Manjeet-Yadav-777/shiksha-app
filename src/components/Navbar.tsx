@@ -20,43 +20,85 @@ export function Navbar() {
     return null;
   }
 
-  const settingOptions = [
-    {
-      label: (
-        <Inline align={"center"} gap={"xs"}>
-          <IconUser size={16} /> Profile
-        </Inline>
-      ),
-      onClick: () => navigate("/admin/profile"),
-    },
-    {
-      label: (
-        <Inline align={"center"} gap={"xs"}>
-          <IconSchool size={16} /> Classes
-        </Inline>
-      ),
-      onClick: () => navigate("/admin/classes"),
-    },
-    {
-      label: (
-        <Inline align={"center"} gap={"xs"}>
-          <IconBooks size={16} /> Subjects
-        </Inline>
-      ),
-      onClick: () => navigate("/admin/subjects"),
-    },
-    {
-      label: (
-        <Inline c={"red"} align={"center"} gap={"xs"}>
-          <IconLogout size={16} /> Logout
-        </Inline>
-      ),
-      onClick: async () => {
-        await xhr.post("/auth/logout");
-        navigate("/auth/login")
+  const settingOptions = {
+    school_admin: [
+      {
+        label: (
+          <Inline align={"center"} gap={"xs"}>
+            <IconUser size={16} /> Profile
+          </Inline>
+        ),
+        onClick: () => navigate("/admin/profile"),
       },
-    },
-  ];
+      {
+        label: (
+          <Inline align={"center"} gap={"xs"}>
+            <IconSchool size={16} /> Classes
+          </Inline>
+        ),
+        onClick: () => navigate("/admin/classes"),
+      },
+      {
+        label: (
+          <Inline align={"center"} gap={"xs"}>
+            <IconBooks size={16} /> Subjects
+          </Inline>
+        ),
+        onClick: () => navigate("/admin/subjects"),
+      },
+      {
+        label: (
+          <Inline c={"red"} align={"center"} gap={"xs"}>
+            <IconLogout size={16} /> Logout
+          </Inline>
+        ),
+        onClick: async () => {
+          await xhr.post("/auth/logout");
+          navigate("/auth/login");
+        },
+      },
+    ],
+    super_admin: [
+      {
+        label: (
+          <Inline align={"center"} gap={"xs"}>
+            <IconUser size={16} /> Profile
+          </Inline>
+        ),
+        onClick: () => navigate("/admin/profile"),
+      },
+    ],
+    teacher: [
+      {
+        label: (
+          <Inline align={"center"} gap={"xs"}>
+            <IconUser size={16} /> Profile
+          </Inline>
+        ),
+        onClick: () => navigate("/admin/profile"),
+      },
+    ],
+    student: [
+      {
+        label: (
+          <Inline align={"center"} gap={"xs"}>
+            <IconUser size={16} /> Profile
+          </Inline>
+        ),
+        onClick: () => navigate("/admin/profile"),
+      },
+    ],
+    parent: [
+      {
+        label: (
+          <Inline align={"center"} gap={"xs"}>
+            <IconUser size={16} /> Profile
+          </Inline>
+        ),
+        onClick: () => navigate("/admin/profile"),
+      },
+    ],
+  };
   return (
     <Inline
       bg={"#000"}
@@ -95,7 +137,7 @@ export function Navbar() {
         <DropdownMenu
           width={150}
           trigger="hover"
-          items={settingOptions.map((s) => s)}
+          items={settingOptions[user.role].map((s) => s)}
         >
           <IconSettings cursor={"pointer"} size={20} color="white" />
         </DropdownMenu>
