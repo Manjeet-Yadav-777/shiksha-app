@@ -145,6 +145,9 @@ function SearchOnChange<T extends TSearchParams>() {
 
   const form = useForm<T>();
   const previousValuesRef = useRef(values);
+  // Mount pe submit skip karo — warna fresh mount pe ek extra fetch trigger
+  // hota hai jo SWR key badal deta hai aur "Loading..." dobara flash karta hai.
+  const isMountRef = useRef(true);
 
   const { set, clear } = useTimeout();
 
@@ -154,6 +157,11 @@ function SearchOnChange<T extends TSearchParams>() {
     const qChanged = previous.q !== values.q;
 
     previousValuesRef.current = values;
+
+    if (isMountRef.current) {
+      isMountRef.current = false;
+      return;
+    }
 
     clear();
 

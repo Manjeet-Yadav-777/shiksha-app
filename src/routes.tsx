@@ -4,7 +4,7 @@ import Login from "./pages/auth/login";
 import SuperAdmin from "./pages/super-admin/index";
 import Payments from "./pages/super-admin/payments/index";
 import Tenants from "./pages/super-admin/tenants/index";
-import TenantView from "./pages/super-admin/tenants/[id]";
+import TenantView from "./pages/super-admin/tenants/TenantView";
 import Subscription from "./pages/super-admin/subscriptions/index";
 import { ProtectedRoutes } from "./hooks/ProtectedRoutes";
 import NotFound from "./components/NotFound";
@@ -13,6 +13,7 @@ import { StudentList } from "./components/students/StudentList";
 import Subjects from "./pages/subjects";
 import Classes from "./pages/classes";
 import Teachers from "./pages/teachers";
+import Fees from "./pages/fees";
 
 export function AppRoutes() {
   return (
@@ -32,6 +33,7 @@ export function AppRoutes() {
         <Route path="/admin/subjects" element={<Subjects />} />
         <Route path="/admin/classes" element={<Classes />} />
         <Route path="/admin/teachers" element={<Teachers />} />
+        <Route path="/admin/fees" element={<Fees />} />
 
       </Route>
       <Route path="*" element={<NotFound />} />

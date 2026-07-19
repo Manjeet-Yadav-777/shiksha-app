@@ -67,11 +67,15 @@ export function ListView<T>({
     error,
     isLoading,
     mutate: refresh,
-  } = useSWR([swrKey, params], fetchFn, swrConfig);
+  } = useSWR([swrKey, params], fetchFn, {
+    // Params badalne pe purana data screen pe rakho — spinner sirf pehli baar
+    // dikhe, har param change pe nahi. Yeh navlink pe aane wala flicker rokta hai.
+    keepPreviousData: true,
+    ...swrConfig,
+  });
 
-  console.log({ data, error, isLoading });
-
-  if (isLoading) {
+  // Sirf tab spinner dikhao jab abhi tak koi data hi nahi aaya.
+  if (isLoading && !data) {
     return (
       <Stack p={"4"} h={"60vh"} justify="center" align="center">
         <Text c={"gray"}>Loading...</Text>

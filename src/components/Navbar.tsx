@@ -2,6 +2,7 @@ import { Inline } from "../libs/basic/Layout";
 import { NavLink } from "../utils/Link";
 import {
   IconBooks,
+  IconLogout,
   IconSchool,
   IconSettings,
   IconUser,
@@ -9,6 +10,7 @@ import {
 import { useAuthUser } from "../hooks/auth";
 import { DropdownMenu } from "../libs/basic/DropDown";
 import { useNavigate } from "react-router-dom";
+import { xhr } from "../libs/XHR/xhr";
 
 export function Navbar() {
   const { user } = useAuthUser();
@@ -43,6 +45,17 @@ export function Navbar() {
       ),
       onClick: () => navigate("/admin/subjects"),
     },
+    {
+      label: (
+        <Inline c={"red"} align={"center"} gap={"xs"}>
+          <IconLogout size={16} /> Logout
+        </Inline>
+      ),
+      onClick: async () => {
+        await xhr.post("/auth/logout");
+        navigate("/auth/login")
+      },
+    },
   ];
   return (
     <Inline
@@ -76,7 +89,7 @@ export function Navbar() {
       </Inline>
 
       <Inline align={"center"} gap={"xl"}>
-        {navigation[user?.role].right.map((r) => (
+        {navigation[user?.role].right?.map((r) => (
           <NavLink to={r.to}>{r.label}</NavLink>
         ))}
         <DropdownMenu
@@ -98,16 +111,12 @@ export const navigation = {
       { label: "Tenants", to: "/super-admin/tenants" },
       { label: "Payments", to: "/super-admin/payments" },
     ],
-    right: [
-      {
-        label: <IconSettings cursor={"pointer"} size={20} color="white" />,
-        to: "/super-admin/settings",
-      },
-    ],
+    right: [],
   },
 
   school_admin: {
     left: [
+      { label: "Dashboard", to: "/school_admin/dashboard" },
       { label: "Students", to: "/admin/students" },
       { label: "Teachers", to: "/admin/teachers" },
     ],
