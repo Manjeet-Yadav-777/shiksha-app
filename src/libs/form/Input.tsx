@@ -43,30 +43,6 @@ export function InputField({ bg = "#fff", pH, ...props }: InputFieldProps) {
   );
 }
 
-// export function TextInputField({ ...props }: Props) {
-//   return (
-//     <Field name={props.name}>
-//       {({ input, meta }) =>
-//         props.type === "password" ? (
-//           <PasswordInput
-//             {...props}
-//             {...input}
-//             error={meta.touched && meta.error ? meta.error : ""}
-//             placeholder={meta.error && meta.touched ? "" : props.placeholder}
-//           />
-//         ) : (
-//           <TextInput
-//             {...props}
-//             {...input}
-//             error={meta.touched && meta.error ? meta.error : ""}
-//             placeholder={meta.error && meta.touched ? "" : props.placeholder}
-//           />
-//         )
-//       }
-//     </Field>
-//   );
-// }
-
 export function TextInputField({ debounce, ...props }: Props) {
   return (
     <Field name={props.name}>
