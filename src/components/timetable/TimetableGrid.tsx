@@ -49,18 +49,20 @@ export function TimetableGrid({ sectionId, academicSession }: Props) {
     async () =>
       api.get<{ data: ITimetableEntry[] }>(`/timetable/section/${sectionId}`, {
         params: { academicSession },
-      })
+      }),
   );
+  console.log(entriesRes, "Hello");
 
-  const { data: slotsRes, isLoading: slotsLoading } = useSWR(slotsKey, async () =>
-    api.get<{ data: IPeriodSlot[] }>(slotsKey)
+  const { data: slotsRes, isLoading: slotsLoading } = useSWR(
+    slotsKey,
+    async () => api.get<{ data: IPeriodSlot[] }>(slotsKey),
   );
 
   // Dropdowns: tenant-wide subjects + teachers.
   const { data: subjectsRes } = useSWR("/academic/subjects/all", async () =>
     api.get<IListResponse<ISubject>>("/academic/subjects", {
       params: { limit: 200 },
-    })
+    }),
   );
   const dialog = useDialog();
   const [active, setActive] = useState<{
@@ -70,8 +72,11 @@ export function TimetableGrid({ sectionId, academicSession }: Props) {
   } | null>(null);
 
   const slots = useMemo(
-    () => (slotsRes?.data ?? []).slice().sort((a, b) => a.periodNumber - b.periodNumber),
-    [slotsRes]
+    () =>
+      (slotsRes?.data ?? [])
+        .slice()
+        .sort((a, b) => a.periodNumber - b.periodNumber),
+    [slotsRes],
   );
   const entries = entriesRes?.data ?? [];
 
@@ -79,7 +84,8 @@ export function TimetableGrid({ sectionId, academicSession }: Props) {
   const cellMap = useMemo(() => {
     const map = new Map<string, ITimetableEntry>();
     for (const e of entries) {
-      const slotId = typeof e.periodSlot === "string" ? e.periodSlot : e.periodSlot._id;
+      const slotId =
+        typeof e.periodSlot === "string" ? e.periodSlot : e.periodSlot._id;
       map.set(`${e.dayOfWeek}-${slotId}`, e);
     }
     return map;
@@ -93,7 +99,11 @@ export function TimetableGrid({ sectionId, academicSession }: Props) {
 
   const refresh = () => mutate(entriesKey);
 
-  const openCell = (day: number, slot: IPeriodSlot, entry?: ITimetableEntry) => {
+  const openCell = (
+    day: number,
+    slot: IPeriodSlot,
+    entry?: ITimetableEntry,
+  ) => {
     setActive({ day, slot, entry });
     dialog.open();
   };
@@ -152,7 +162,7 @@ export function TimetableGrid({ sectionId, academicSession }: Props) {
   const subjName = (e: ITimetableEntry) =>
     typeof e.subject === "string" ? "" : e.subject.name;
   const teacherName = (e: ITimetableEntry) =>
-    typeof e.teacher === "string" ? "" : e.teacher.user?.name ?? "";
+    typeof e.teacher === "string" ? "" : (e.teacher.user?.name ?? "");
 
   return (
     <Stack gap="md">
@@ -334,7 +344,7 @@ function EligibleTeacherField({ sectionId }: { sectionId: string }) {
     async () =>
       api.get<{ data: ITeacher[] }>("/timetable/eligible-teachers", {
         params: { sectionId, subjectId },
-      })
+      }),
   );
 
   const teachers = data?.data ?? [];
@@ -362,10 +372,10 @@ function EligibleTeacherField({ sectionId }: { sectionId: string }) {
             !subjectId
               ? "Select a subject first"
               : isLoading
-              ? "Loading teachers..."
-              : options.length
-              ? "Select teacher"
-              : "No teacher assigned to this subject"
+                ? "Loading teachers..."
+                : options.length
+                  ? "Select teacher"
+                  : "No teacher assigned to this subject"
           }
           data={options}
           value={input.value || null}

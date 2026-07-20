@@ -100,7 +100,7 @@ export function StudentList() {
       filters={Filters}
       placeHolder="Search by name, email or admission no..."
       initialParams={params}
-      onSearch={(p) => setParams({ ...p, page: 1 })}
+      onSearch={(p) => setParams(p)}
       actions={
         <>
           <Button onClick={() => addDialog.open()}>Add Student</Button>
@@ -183,7 +183,6 @@ export function StudentList() {
                             await api.delete(`/students/${s._id}`);
                           }
 
-                          mutate([SWR_KEY, params]);
                           mutate([SWR_KEY, params]);
                         },
                       },

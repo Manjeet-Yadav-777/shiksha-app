@@ -23,6 +23,7 @@ export function RootRedirect() {
     super_admin: "/super_admin/dashboard",
     school_admin: "/school_admin/dashboard",
     teacher: "/teacher/dashboard",
+    student: "/student/dashboard",
   };
 
   return <Navigate to={dashboardByRole[user.role] ?? "/auth/login"} replace />;

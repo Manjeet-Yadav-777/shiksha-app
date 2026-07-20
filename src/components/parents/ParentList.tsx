@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { mutate } from "swr";
-import { Button, Stack, Text } from "@mantine/core";
+import { Button, Stack, Text, Badge, Group } from "@mantine/core";
 import { Form } from "react-final-form";
 import {
   IconDotsVertical,
   IconTrash,
-  IconClipboardList,
+  IconRestore,
+  IconUsersGroup,
 } from "@tabler/icons-react";
 import { Search } from "../../libs/search/Search";
 import { useLocationQuery, useSearch } from "../../utils/filterQuery";
@@ -15,47 +16,45 @@ import { Dialog, useDialog } from "../../libs/basic/Dialog";
 import { Inline } from "../../libs/basic/Layout";
 import { DropdownMenu } from "../../libs/basic/DropDown";
 import { TextInputField } from "../../libs/form/Input";
-import { DatenputField } from "../../libs/form/DateInputField";
 import { api } from "../../libs/XHR/xhr";
-import { formatDate } from "../../helpers/Date";
-import type { ITeacher } from "./store";
-import { ManageAssignments } from "./ManageAssignments";
+import type { IParent } from "./store";
+import { ManageChildren } from "./ManageChildren";
 
-interface ITeacherFormValues {
+interface IParentFormValues {
   name?: string;
   email?: string;
   password?: string;
-  employeeId?: string;
-  qualification?: string;
-  joiningDate?: string | Date;
+  occupation?: string;
 }
 
-const SWR_KEY = "/teachers";
+const SWR_KEY = "/parents";
 
-export function TeacherList() {
+export function ParentList() {
   const [query, setQuery] = useLocationQuery();
   const [params, setParams] = useSearch(query);
   const addDialog = useDialog();
-  const assignDialog = useDialog();
-  const [selected, setSelected] = useState<ITeacher>();
+  const childrenDialog = useDialog();
+  const [selected, setSelected] = useState<IParent>();
 
   useEffect(() => {
     setQuery(params);
   }, [params, setQuery]);
 
+  const archived = (params as { archived?: boolean }).archived;
+
   return (
     <Search
-      title="Teachers"
-      placeHolder="Search by name, email or employee ID..."
+      title="Parents"
+      placeHolder="Search by name or email..."
       onSearch={(p) => setParams(p)}
       actions={
         <>
-          <Button onClick={() => addDialog.open()}>Add Teacher</Button>
-          <TeacherForm
+          <Button onClick={() => addDialog.open()}>Add Parent</Button>
+          <ParentForm
             isOpened={addDialog.isOpened}
             close={addDialog.close}
             onSubmit={async (values) => {
-              await api.post("/teachers", values);
+              await api.post("/parents", values);
               mutate([SWR_KEY, params]);
               addDialog.close();
             }}
@@ -64,7 +63,7 @@ export function TeacherList() {
       }
     >
       {({ setSearchParams }) => (
-        <ListView<ITeacher>
+        <ListView<IParent>
           params={params}
           onParamsChange={(newParams) => setSearchParams(newParams)}
           swrKey={SWR_KEY}
@@ -76,17 +75,27 @@ export function TeacherList() {
                 headers={[
                   "Name",
                   "Email",
-                  "Employee ID",
-                  "Qualification",
-                  "Joined",
+                  "Occupation",
+                  "Children",
                   "Actions",
                 ]}
-                rows={items.map((t) => [
-                  <Text fw="bold">{t.user?.name}</Text>,
-                  <Text>{t.user?.email}</Text>,
-                  <Text>{t.employeeId}</Text>,
-                  <Text>{t.qualification || "-"}</Text>,
-                  <Text>{t.joiningDate ? formatDate(t.joiningDate) : "-"}</Text>,
+                rows={items.map((p) => [
+                  <Text fw="bold">{p.user?.name}</Text>,
+                  <Text>{p.user?.email}</Text>,
+                  <Text>{p.occupation || "-"}</Text>,
+                  p.students?.length ? (
+                    <Group gap={4}>
+                      {p.students.map((s) => (
+                        <Badge key={s._id} variant="light" size="sm">
+                          {s.user?.name ?? "Student"}
+                        </Badge>
+                      ))}
+                    </Group>
+                  ) : (
+                    <Text c="dimmed" fz="sm">
+                      None
+                    </Text>
+                  ),
                   <DropdownMenu
                     trigger="hover"
                     width={190}
@@ -94,27 +103,40 @@ export function TeacherList() {
                       {
                         label: (
                           <Inline gap="xs" align="center">
-                            <IconClipboardList size={16} />
-                            Assignments
+                            <IconUsersGroup size={16} />
+                            Manage Children
                           </Inline>
                         ),
                         onClick: () => {
-                          setSelected(t);
-                          assignDialog.open();
+                          setSelected(p);
+                          childrenDialog.open();
                         },
                       },
-                      {
-                        label: (
-                          <Inline c="red" gap="xs" align="center">
-                            <IconTrash size={16} />
-                            Delete
-                          </Inline>
-                        ),
-                        onClick: async () => {
-                          await api.delete(`/teachers/${t._id}`);
-                          mutate([SWR_KEY, params]);
-                        },
-                      },
+                      archived
+                        ? {
+                            label: (
+                              <Inline c="orange" gap="xs" align="center">
+                                <IconRestore size={16} />
+                                Restore
+                              </Inline>
+                            ),
+                            onClick: async () => {
+                              await api.patch(`/parents/${p._id}/restore`);
+                              mutate([SWR_KEY, params]);
+                            },
+                          }
+                        : {
+                            label: (
+                              <Inline c="red" gap="xs" align="center">
+                                <IconTrash size={16} />
+                                Archive
+                              </Inline>
+                            ),
+                            onClick: async () => {
+                              await api.delete(`/parents/${p._id}`);
+                              mutate([SWR_KEY, params]);
+                            },
+                          },
                     ]}
                   >
                     <IconDotsVertical cursor="pointer" size={18} />
@@ -123,12 +145,17 @@ export function TeacherList() {
               />
 
               <Dialog
-                sizes="70%"
-                isOpened={assignDialog.isOpened}
-                close={assignDialog.close}
-                title={`Assignments - ${selected?.user?.name ?? ""}`}
+                sizes="55rem"
+                isOpened={childrenDialog.isOpened}
+                close={childrenDialog.close}
+                title={`Children - ${selected?.user?.name ?? ""}`}
               >
-                {selected && <ManageAssignments  teacher={selected} />}
+                {selected && (
+                  <ManageChildren
+                    parent={selected}
+                    onChanged={() => mutate([SWR_KEY, params])}
+                  />
+                )}
               </Dialog>
             </>
           )}
@@ -138,21 +165,18 @@ export function TeacherList() {
   );
 }
 
-function TeacherForm({
+function ParentForm({
   isOpened,
   close,
   onSubmit,
 }: {
   isOpened: boolean;
   close: () => void;
-  onSubmit: (values: ITeacherFormValues) => void;
+  onSubmit: (values: IParentFormValues) => void;
 }) {
   return (
-    <Dialog sizes="55rem" isOpened={isOpened} close={close} title="Add Teacher">
-      <Form<ITeacherFormValues>
-        initialValues={{ joiningDate: new Date() }}
-        onSubmit={(v) => onSubmit(v)}
-      >
+    <Dialog sizes="45rem" isOpened={isOpened} close={close} title="Add Parent">
+      <Form<IParentFormValues> onSubmit={(v) => onSubmit(v)}>
         {({ handleSubmit, submitting }) => (
           <form onSubmit={handleSubmit}>
             <Stack gap="lg">
@@ -161,13 +185,13 @@ function TeacherForm({
                   w="50%"
                   name="name"
                   label="Full Name"
-                  placeholder="Ramesh Sharma"
+                  placeholder="Sunita Verma"
                 />
                 <TextInputField
                   w="50%"
-                  name="employeeId"
-                  label="Employee ID"
-                  placeholder="EMP-001"
+                  name="occupation"
+                  label="Occupation (optional)"
+                  placeholder="Engineer"
                 />
               </Inline>
               <Inline gap="lg">
@@ -175,7 +199,7 @@ function TeacherForm({
                   w="50%"
                   name="email"
                   label="Email"
-                  placeholder="ramesh@school.com"
+                  placeholder="sunita@example.com"
                 />
                 <TextInputField
                   w="50%"
@@ -185,21 +209,9 @@ function TeacherForm({
                   placeholder="Min 6 characters"
                 />
               </Inline>
-              <Inline gap="lg">
-                <TextInputField
-                  w="50%"
-                  name="qualification"
-                  label="Qualification (optional)"
-                  placeholder="M.Sc, B.Ed"
-                />
-                <DatenputField
-                  name="joiningDate"
-                  label="Joining Date"
-                />
-              </Inline>
               <Inline justify="end" gap="md">
                 <Button type="submit" disabled={submitting}>
-                  {submitting ? "Adding..." : "Add Teacher"}
+                  {submitting ? "Adding..." : "Add Parent"}
                 </Button>
                 <Button variant="default" onClick={close}>
                   Cancel

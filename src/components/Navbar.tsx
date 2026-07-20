@@ -205,6 +205,7 @@ export const navigation = {
       { label: "Dashboard", to: "/school_admin/dashboard" },
       { label: "Students", to: "/admin/students" },
       { label: "Teachers", to: "/admin/teachers" },
+      { label: "Parents", to: "/admin/parents" },
     ],
 
     right: [
@@ -215,23 +216,20 @@ export const navigation = {
   },
 
   teacher: {
-    left: [{ label: "Dashboard", to: "/teacher/dashboard" }],
+    left: [
+      { label: "Dashboard", to: "/teacher/dashboard" },
+      { label: "Attendance", to: "/teacher/attendance" },
+    ],
     right: [],
   },
 
   student: {
-    left: [{ label: "Dashboard", to: "/principal" }],
-    right: [
-      { label: "Teachers", to: "/principal/teachers" },
-      { label: "Reports", to: "/principal/reports" },
-    ],
+    left: [{ label: "Dashboard", to: "/student/dashboard" }],
+    right: [],
   },
 
   parent: {
-    left: [{ label: "Dashboard", to: "/principal" }],
-    right: [
-      { label: "Teachers", to: "/principal/teachers" },
-      { label: "Reports", to: "/principal/reports" },
-    ],
+    left: [{ label: "Dashboard", to: "/parent/dashboard" }],
+    right: [],
   },
 };

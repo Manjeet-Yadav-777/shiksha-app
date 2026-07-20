@@ -75,7 +75,7 @@ export function PaymentList() {
       title="Payments List"
       filters={Filters}
       initialParams={params}
-      onSearch={(params) => setparams({ ...params, page : 1 })}
+      onSearch={(params) => setparams({ ...params })}
     >
       {({ setSearchParams }) => (
         <ListView<IInstallment>

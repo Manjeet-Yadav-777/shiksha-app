@@ -28,6 +28,10 @@ const Teachers = lazy(() => import("./pages/teachers"));
 const Fees = lazy(() => import("./pages/fees"));
 const Timetable = lazy(() => import("./pages/timetable"));
 const TeacherDashboard = lazy(() => import("./pages/teacher"));
+const Attendance = lazy(() => import("./pages/attendance"));
+const StudentDashboard = lazy(() => import("./pages/student"));
+const Parents = lazy(() => import("./pages/parents"));
+const ParentPortal = lazy(() => import("./pages/parent"));
 
 function PageLoader() {
   return (
@@ -59,9 +63,17 @@ export function AppRoutes() {
           <Route path="/admin/teachers" element={<Teachers />} />
           <Route path="/admin/fees" element={<Fees />} />
           <Route path="/admin/timetable" element={<Timetable />} />
+          <Route path="/admin/parents" element={<Parents />} />
         </Route>
         <Route element={<ProtectedRoutes allowedRoles={["teacher"]} />}>
           <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
+          <Route path="/teacher/attendance" element={<Attendance />} />
+        </Route>
+        <Route element={<ProtectedRoutes allowedRoles={["student"]} />}>
+          <Route path="/student/dashboard" element={<StudentDashboard />} />
+        </Route>
+        <Route element={<ProtectedRoutes allowedRoles={["parent"]} />}>
+          <Route path="/parent/dashboard" element={<ParentPortal />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -137,7 +137,9 @@ export function ListView<T>({
                 onClick={() => {
                   onParamsChange({
                     ...params,
-                    page: Number(params.page) - 1,
+                    // Server ke reported current_page se chalo — params.page
+                    // pehli load pe undefined ho sakta hai (NaN se bachne ke liye).
+                    page: (data?.meta.current_page || 1) - 1,
                   });
                 }}
               >
@@ -147,14 +149,10 @@ export function ListView<T>({
                 disabled={data?.meta.current_page === data?.meta.last_page}
                 variant="default"
                 onClick={() => {
-                  const newParams = {
+                  onParamsChange({
                     ...params,
-                    page: Number(params.page ?? 1) + 1,
-                  };
-
-                  console.log("ListView ->", newParams);
-
-                  onParamsChange(newParams);
+                    page: (data?.meta.current_page || 1) + 1,
+                  });
                 }}
               >
                 Next <IconArrowRight />

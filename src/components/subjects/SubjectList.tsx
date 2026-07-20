@@ -44,7 +44,7 @@ export function SubjectList() {
     <Search
       title="Subjects"
       placeHolder="Search subjects..."
-      onSearch={(p) => setParams({ ...p, page: 1 })}
+      onSearch={(p) => setParams(p)}
       actions={
         <>
           <Button onClick={() => addDialog.open()}>Add Subject</Button>

@@ -44,7 +44,7 @@ export function StudentFeeList() {
     <Search
       title="Student Fees"
       placeHolder="Search student fees..."
-      onSearch={(p) => setParams({ ...p, page: 1 })}
+      onSearch={(p) => setParams(p)}
     >
       {({ setSearchParams }) => (
         <ListView<IStudentFee>

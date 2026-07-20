@@ -67,7 +67,7 @@ export function FeeStructureList() {
     <Search
       title="Fee Structures"
       placeHolder="Search fee structures..."
-      onSearch={(p) => setParams({ ...p, page: 1 })}
+      onSearch={(p) => setParams(p)}
       actions={
         <>
           <Button onClick={() => addDialog.open()}>Add Fee Structure</Button>

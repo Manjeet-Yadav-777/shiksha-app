@@ -82,7 +82,7 @@ export function TenantList() {
       title="Tenant List"
       filters={Filters}
       initialParams={params}
-      onSearch={(params) => setparams({ ...params, page : 1 })}
+      onSearch={(params) => setparams({ ...params })}
       actions={
         <>
           <Button onClick={() => tenantAddDialog.open()}>Add Tenant</Button>

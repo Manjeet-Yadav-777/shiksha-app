@@ -48,7 +48,7 @@ export function ClassList() {
     <Search
       title="Classes"
       placeHolder="Search classes..."
-      onSearch={(p) => setParams({ ...p, page: 1 })}
+      onSearch={(p) => setParams(p)}
       actions={
         <>
           <Button onClick={() => addDialog.open()}>Add Class</Button>
