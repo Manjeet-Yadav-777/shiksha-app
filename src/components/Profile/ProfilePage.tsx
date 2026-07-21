@@ -17,7 +17,6 @@ import { Form } from "react-final-form";
 import { Dialog, useDialog } from "../../libs/basic/Dialog";
 import { Inline } from "../../libs/basic/Layout";
 import { xhr } from "../../libs/XHR/xhr";
-import { mutate } from "swr";
 
 function Row({ label, value }: { label: string; value: React.ReactNode }) {
   return (
