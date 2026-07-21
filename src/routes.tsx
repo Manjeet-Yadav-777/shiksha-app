@@ -7,6 +7,7 @@ import { RootRedirect } from "./hooks/RootRedirect";
 // Route-level code splitting: har page apne alag chunk me jaata hai, taaki pehli
 // load pe pura app (849KB) ek saath download na ho. Login sabse chhota entry hai.
 const Login = lazy(() => import("./pages/auth/login"));
+const Profile = lazy(() => import("./pages/profile/index"));
 const Dashboard = lazy(() => import("./pages/index"));
 const SuperAdmin = lazy(() => import("./pages/super-admin/index"));
 const Payments = lazy(() => import("./pages/super-admin/payments/index"));
@@ -47,6 +48,9 @@ export function AppRoutes() {
       <Routes>
         <Route path="/" element={<RootRedirect />} />
         <Route path="/auth/login" element={<Login />} />
+        <Route>
+          <Route path="/profile" element={<Profile/>}/>
+        </Route>
         <Route element={<ProtectedRoutes allowedRoles={["super_admin"]} />}>
           <Route path="/super_admin/dashboard" element={<Dashboard />} />
           <Route path="/super-admin" element={<SuperAdmin />} />

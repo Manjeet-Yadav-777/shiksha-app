@@ -28,7 +28,7 @@ export function Navbar() {
             <IconUser size={16} /> Profile
           </Inline>
         ),
-        onClick: () => navigate("/admin/profile"),
+        onClick: () => navigate("/profile"),
       },
       {
         label: (
@@ -65,7 +65,7 @@ export function Navbar() {
             <IconUser size={16} /> Profile
           </Inline>
         ),
-        onClick: () => navigate("/admin/profile"),
+        onClick: () => navigate("/profile"),
       },
       {
         label: (
@@ -86,7 +86,7 @@ export function Navbar() {
             <IconUser size={16} /> Profile
           </Inline>
         ),
-        onClick: () => navigate("/admin/profile"),
+        onClick: () => navigate("/profile"),
       },
       {
         label: (
@@ -107,7 +107,7 @@ export function Navbar() {
             <IconUser size={16} /> Profile
           </Inline>
         ),
-        onClick: () => navigate("/admin/profile"),
+        onClick: () => navigate("/profile"),
       },
       {
         label: (
@@ -128,7 +128,7 @@ export function Navbar() {
             <IconUser size={16} /> Profile
           </Inline>
         ),
-        onClick: () => navigate("/admin/profile"),
+        onClick: () => navigate("/profile"),
       },
       {
         label: (
