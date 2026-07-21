@@ -17,6 +17,7 @@ import { Form } from "react-final-form";
 import { Dialog, useDialog } from "../../libs/basic/Dialog";
 import { Inline } from "../../libs/basic/Layout";
 import { xhr } from "../../libs/XHR/xhr";
+import { getRole } from "./store";
 
 function Row({ label, value }: { label: string; value: React.ReactNode }) {
   return (
@@ -60,7 +61,7 @@ export default function ProfilePage() {
 
             <Text c="dimmed">{user?.email}</Text>
 
-            <Badge variant="light">{user?.role}</Badge>
+            <Badge variant="light">{getRole(user?.role)}</Badge>
           </Stack>
         </Card>
 
@@ -81,7 +82,7 @@ export default function ProfilePage() {
                 Role
               </Text>
 
-              <Text fw={500}>{user?.role}</Text>
+              <Text fw={500}>{getRole(user?.role)}</Text>
             </Group>
           </Box>
         </Card>
