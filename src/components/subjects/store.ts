@@ -21,9 +21,27 @@ export interface ISection {
 export const SubjectType = {
   THEORY: "theory",
   PRACTICAL: "practical",
+  BOTH: "both",
 } as const;
 
 export type SubjectType = (typeof SubjectType)[keyof typeof SubjectType];
+
+export const SUBJECT_TYPE_OPTIONS = [
+  { value: SubjectType.THEORY, label: "Theory" },
+  { value: SubjectType.PRACTICAL, label: "Practical" },
+  { value: SubjectType.BOTH, label: "Both" },
+] as const;
+
+export function getSubjectTypeColor(type: SubjectType) {
+  switch (type) {
+    case SubjectType.PRACTICAL:
+      return "grape";
+    case SubjectType.BOTH:
+      return "teal";
+    default:
+      return "blue";
+  }
+}
 
 export interface ISubject {
   _id: string;
