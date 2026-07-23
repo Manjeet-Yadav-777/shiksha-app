@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+printf '\n✨ Polishing the frontend code...\n'
+npx lint-staged
+printf '🚀 Frontend is formatted and ready to ship.\n\n'
