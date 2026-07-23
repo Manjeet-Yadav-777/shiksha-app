@@ -1,18 +1,18 @@
-import type { ISubscription } from "../subscriptions/store";
-import type { ITenant } from "../tenants/store";
+import type { ISubscription } from '../subscriptions/store';
+import type { ITenant } from '../tenants/store';
 
 export const InstallmentStatus = {
-  PENDING: "pending",
-  PARTIAL: "partial",
-  PAID: "paid",
-  OVERDUE: "overdue",
+  PENDING: 'pending',
+  PARTIAL: 'partial',
+  PAID: 'paid',
+  OVERDUE: 'overdue',
 } as const;
 
 export type InstallmentStatus =
-    (typeof InstallmentStatus)[keyof typeof InstallmentStatus];
+  (typeof InstallmentStatus)[keyof typeof InstallmentStatus];
 
 export interface IInstallment {
-  _id : string
+  _id: string;
   tenant: ITenant;
   subscription: ISubscription;
 

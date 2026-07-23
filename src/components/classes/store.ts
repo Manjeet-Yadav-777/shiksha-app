@@ -1,4 +1,4 @@
-import type { ITenant } from "../tenants/store";
+import type { ITenant } from '../tenants/store';
 
 export interface IClass {
   _id: string;

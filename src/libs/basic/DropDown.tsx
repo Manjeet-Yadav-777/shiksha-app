@@ -1,6 +1,5 @@
-import type { ReactNode } from "react";
-import { Menu } from "@mantine/core";
-
+import type { ReactNode } from 'react';
+import { Menu } from '@mantine/core';
 
 export interface MenuOption {
   label: ReactNode;
@@ -14,23 +13,22 @@ export interface MenuOption {
   children?: MenuOption[];
 }
 
-
 export interface DropdownMenuProps {
   children: ReactNode;
   items: MenuOption[];
 
   width?: number;
   position?:
-    | "bottom"
-    | "bottom-start"
-    | "bottom-end"
-    | "top"
-    | "top-start"
-    | "top-end"
-    | "left"
-    | "right";
+    | 'bottom'
+    | 'bottom-start'
+    | 'bottom-end'
+    | 'top'
+    | 'top-start'
+    | 'top-end'
+    | 'left'
+    | 'right';
 
-  trigger?: "click" | "hover";
+  trigger?: 'click' | 'hover';
 }
 
 function renderItems(items: MenuOption[]) {
@@ -72,8 +70,8 @@ export function DropdownMenu({
   children,
   items,
   width = 220,
-  position = "bottom-start",
-  trigger = "click",
+  position = 'bottom-start',
+  trigger = 'click',
 }: DropdownMenuProps) {
   return (
     <Menu

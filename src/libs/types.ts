@@ -1,1 +1,1 @@
-export type TSizes =  "xs" | "sm" | "lg" | "md" | "xl"
+export type TSizes = 'xs' | 'sm' | 'lg' | 'md' | 'xl';

@@ -1,35 +1,35 @@
-import { useEffect } from "react";
-import { mutate } from "swr";
-import { Button, Stack, Text, Badge } from "@mantine/core";
-import { Form } from "react-final-form";
-import useSWR from "swr";
+import { useEffect } from 'react';
+import { mutate } from 'swr';
+import { Button, Stack, Text, Badge } from '@mantine/core';
+import { Form } from 'react-final-form';
+import useSWR from 'swr';
 import {
   IconDotsVertical,
   IconPencil,
   IconTrash,
   IconUsersPlus,
-} from "@tabler/icons-react";
-import { Search } from "../../libs/search/Search";
-import { useLocationQuery, useSearch } from "../../utils/filterQuery";
-import { ListView } from "../../libs/List/List";
-import { Table } from "../../libs/basic/Table";
-import { Dialog, useDialog } from "../../libs/basic/Dialog";
-import { Inline } from "../../libs/basic/Layout";
-import { DropdownMenu } from "../../libs/basic/DropDown";
-import { TextInputField } from "../../libs/form/Input";
-import { SelectInputField } from "../../libs/form/SelectInputField";
-import { DatenputField } from "../../libs/form/DateInputField";
-import { api } from "../../libs/XHR/xhr";
-import type { IListResponse } from "../../libs/XHR/xhr";
-import { formatDate } from "../../helpers/Date";
-import type { IClass } from "../classes/store";
-import { useState } from "react";
+} from '@tabler/icons-react';
+import { Search } from '../../libs/search/Search';
+import { useLocationQuery, useSearch } from '../../utils/filterQuery';
+import { ListView } from '../../libs/List/List';
+import { Table } from '../../libs/basic/Table';
+import { Dialog, useDialog } from '../../libs/basic/Dialog';
+import { Inline } from '../../libs/basic/Layout';
+import { DropdownMenu } from '../../libs/basic/DropDown';
+import { TextInputField } from '../../libs/form/Input';
+import { SelectInputField } from '../../libs/form/SelectInputField';
+import { DatenputField } from '../../libs/form/DateInputField';
+import { api } from '../../libs/XHR/xhr';
+import type { IListResponse } from '../../libs/XHR/xhr';
+import { formatDate } from '../../helpers/Date';
+import type { IClass } from '../classes/store';
+import { useState } from 'react';
 import {
   FREQUENCY_OPTIONS,
   sessionOptions,
   defaultSession,
   type IFeeStructure,
-} from "./store";
+} from './store';
 
 interface IStructureFormValues {
   name?: string;
@@ -40,7 +40,7 @@ interface IStructureFormValues {
   academicSession?: string;
 }
 
-const SWR_KEY = "/fees/structures";
+const SWR_KEY = '/fees/structures';
 
 export function FeeStructureList() {
   const [query, setQuery] = useLocationQuery();
@@ -50,10 +50,10 @@ export function FeeStructureList() {
   const [selected, setSelected] = useState<IFeeStructure>();
 
   // Class catalog for the structure form's class picker.
-  const { data: classes } = useSWR("/academic/classes/all", async () =>
-    api.get<IListResponse<IClass>>("/academic/classes", {
+  const { data: classes } = useSWR('/academic/classes/all', async () =>
+    api.get<IListResponse<IClass>>('/academic/classes', {
       params: { limit: 200 },
-    })
+    }),
   );
 
   const classOptions =
@@ -77,7 +77,7 @@ export function FeeStructureList() {
             isOpened={addDialog.isOpened}
             close={addDialog.close}
             onSubmit={async (values) => {
-              await api.post("/fees/structures", {
+              await api.post('/fees/structures', {
                 ...values,
                 amount: Number(values.amount),
               });
@@ -99,23 +99,23 @@ export function FeeStructureList() {
             <>
               <Table
                 headers={[
-                  "Name",
-                  "Amount",
-                  "Frequency",
-                  "Class",
-                  "Session",
-                  "Due Date",
-                  "Actions",
+                  'Name',
+                  'Amount',
+                  'Frequency',
+                  'Class',
+                  'Session',
+                  'Due Date',
+                  'Actions',
                 ]}
                 rows={items.map((s) => [
                   <Text fw="bold">{s.name}</Text>,
-                  <Text>₹{s.amount.toLocaleString("en-IN")}</Text>,
+                  <Text>₹{s.amount.toLocaleString('en-IN')}</Text>,
                   <Badge variant="light" color="blue">
-                    {s.frequency.replace("_", " ")}
+                    {s.frequency.replace('_', ' ')}
                   </Badge>,
-                  <Text>{s.class?.name ?? "-"}</Text>,
+                  <Text>{s.class?.name ?? '-'}</Text>,
                   <Text>{s.academicSession}</Text>,
-                  <Text>{s.dueDate ? formatDate(s.dueDate) : "-"}</Text>,
+                  <Text>{s.dueDate ? formatDate(s.dueDate) : '-'}</Text>,
                   <DropdownMenu
                     trigger="hover"
                     width={200}
@@ -173,7 +173,9 @@ export function FeeStructureList() {
                   selected && {
                     name: selected.name,
                     amount: selected.amount,
-                    dueDate: selected.dueDate ? new Date(selected.dueDate) : undefined,
+                    dueDate: selected.dueDate
+                      ? new Date(selected.dueDate)
+                      : undefined,
                     classId: selected.class?._id,
                     frequency: selected.frequency,
                     academicSession: selected.academicSession,
@@ -218,7 +220,7 @@ function StructureForm({
         initialValues={
           initialValues ?? {
             dueDate: new Date(),
-            frequency: "one_time",
+            frequency: 'one_time',
             academicSession: defaultSession(),
           }
         }
@@ -272,7 +274,7 @@ function StructureForm({
               </Inline>
               <Inline justify="end" gap="md">
                 <Button type="submit" disabled={submitting}>
-                  {submitting ? "Saving..." : "Save"}
+                  {submitting ? 'Saving...' : 'Save'}
                 </Button>
                 <Button variant="default" onClick={close}>
                   Cancel

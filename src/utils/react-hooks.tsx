@@ -4,7 +4,7 @@ import {
   useMemo,
   useRef,
   type MutableRefObject,
-} from "react";
+} from 'react';
 
 export function useUpdatedRef<T>(value: T) {
   const valueRef = useRef<T>(value);
@@ -31,7 +31,9 @@ export function useMounted(): () => boolean {
 
 export function useTimeout() {
   const isMounted = useMounted();
-  const handleRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const handleRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
   useWillUnmount(() => {
     if (handleRef.current) clearTimeout(handleRef.current);
   });

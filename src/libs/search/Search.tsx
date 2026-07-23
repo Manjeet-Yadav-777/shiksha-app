@@ -1,12 +1,12 @@
-import { Box, Button, Stack } from "@mantine/core";
-import { Heading, Inline } from "../basic/Layout";
-import { IconAdjustmentsHorizontal, IconSearch } from "@tabler/icons-react";
-import type React from "react";
-import { Form, FormSpy, useForm, useFormState } from "react-final-form";
-import { useEffect, useRef } from "react";
-import { SideBar } from "../basic/SideBar";
-import { TextInputField } from "../form/Input";
-import { useTimeout } from "../../utils/react-hooks";
+import { Box, Button, Stack } from '@mantine/core';
+import { Heading, Inline } from '../basic/Layout';
+import { IconAdjustmentsHorizontal, IconSearch } from '@tabler/icons-react';
+import type React from 'react';
+import { Form, FormSpy, useForm, useFormState } from 'react-final-form';
+import { useEffect, useRef } from 'react';
+import { SideBar } from '../basic/SideBar';
+import { TextInputField } from '../form/Input';
+import { useTimeout } from '../../utils/react-hooks';
 
 export type TSearchParams = {
   q?: string;
@@ -17,7 +17,7 @@ export type TSearchParams = {
 };
 
 const defaultInitialParams: TSearchParams = {
-  q: "",
+  q: '',
 };
 
 interface SerachProps<T extends TSearchParams = TSearchParams> {
@@ -26,14 +26,14 @@ interface SerachProps<T extends TSearchParams = TSearchParams> {
   initialParams?: T;
   filters?: () => React.ReactNode;
   onSearch: (params: T) => void;
-  children?: React.ReactNode | ((props: ChildrenProps<T>) => React.ReactNode)
-  placeHolder? : string
+  children?: React.ReactNode | ((props: ChildrenProps<T>) => React.ReactNode);
+  placeHolder?: string;
 }
 
-interface ChildrenProps<T extends TSearchParams>{
-  searchParams : T
-  setSearchParams : (params : Partial<T>) => void
-	setSearchParamValue: <K extends keyof T>(param: K, value: T[K]) => void
+interface ChildrenProps<T extends TSearchParams> {
+  searchParams: T;
+  setSearchParams: (params: Partial<T>) => void;
+  setSearchParamValue: <K extends keyof T>(param: K, value: T[K]) => void;
 }
 
 export function Search<T extends TSearchParams = TSearchParams>({
@@ -43,26 +43,26 @@ export function Search<T extends TSearchParams = TSearchParams>({
   filters,
   onSearch,
   children,
-  placeHolder = "Search..."
+  placeHolder = 'Search...',
 }: SerachProps<T>) {
   return (
     <Form initialValues={initialParams} onSubmit={onSearch}>
       {({ handleSubmit, values }) => {
-        console.log({ values }, "form");
+        console.log({ values }, 'form');
         return (
           <form onSubmit={handleSubmit}>
             <Inline
-              px={"lg"}
-              align={"center"}
-              py={"sm"}
-              justify={"space-between"}
+              px={'lg'}
+              align={'center'}
+              py={'sm'}
+              justify={'space-between'}
               style={{
-                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.08)",
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
               }}
             >
               <Heading as="h3">{title}</Heading>
 
-              <Inline gap={"md"}>
+              <Inline gap={'md'}>
                 <TextInputField
                   name="q"
                   placeholder={placeHolder}
@@ -71,26 +71,26 @@ export function Search<T extends TSearchParams = TSearchParams>({
                   debounce={500}
                   styles={{
                     input: {
-                      backgroundColor: "#fff",
+                      backgroundColor: '#fff',
                     },
                   }}
                   w={400}
                   rightSection={
                     filters ? (
                       <SideBar
-                        size={"xs"}
+                        size={'xs'}
                         title={<Heading>Filters</Heading>}
                         action={
                           <IconAdjustmentsHorizontal
-                            cursor={"pointer"}
+                            cursor={'pointer'}
                             size={18}
                             stroke={1.8}
                           />
                         }
                       >
-                        <Stack gap={"lg"}>
+                        <Stack gap={'lg'}>
                           {filters()}
-                          <Inline gap={"md"}>
+                          <Inline gap={'md'}>
                             <Button type="submit">Apply Filters</Button>
                             <Button variant="default">Clear Filters</Button>
                           </Inline>
@@ -102,35 +102,35 @@ export function Search<T extends TSearchParams = TSearchParams>({
                 {actions}
               </Inline>
             </Inline>
-            <Box display="flex" px={"lg"} py={"xl"}>
-								<Box flex="1" miw={"0"}>
-									{typeof children === "function" ? (
-										<FormSpy<T> subscription={{ values: true }}>
-											{(props) => (
-												<>
-													{children({
-														searchParams: props.values,
-														setSearchParams: (params) => {
-															props.form.batch(() => {
-																Object.keys(params).forEach((key) =>
-																	props.form.change(
-																		key as never as keyof T,
-																		params[key as never as keyof T]
-																	)
-																)
-															})
-														},
-														setSearchParamValue: props.form.change,
-													})}
-												</>
-											)}
-										</FormSpy>
-									) : (
-										children
-									)}
-								</Box>
+            <Box display="flex" px={'lg'} py={'xl'}>
+              <Box flex="1" miw={'0'}>
+                {typeof children === 'function' ? (
+                  <FormSpy<T> subscription={{ values: true }}>
+                    {(props) => (
+                      <>
+                        {children({
+                          searchParams: props.values,
+                          setSearchParams: (params) => {
+                            props.form.batch(() => {
+                              Object.keys(params).forEach((key) =>
+                                props.form.change(
+                                  key as never as keyof T,
+                                  params[key as never as keyof T],
+                                ),
+                              );
+                            });
+                          },
+                          setSearchParamValue: props.form.change,
+                        })}
+                      </>
+                    )}
+                  </FormSpy>
+                ) : (
+                  children
+                )}
+              </Box>
             </Box>
-            <SearchOnChange<T>  />
+            <SearchOnChange<T> />
           </form>
         );
       }}
@@ -168,7 +168,7 @@ function SearchOnChange<T extends TSearchParams>() {
     set(() => {
       // Search text change hui to page reset
       if (qChanged && values.page !== 1) {
-        form.change("page" as keyof T, 1 as T[keyof T]);
+        form.change('page' as keyof T, 1 as T[keyof T]);
       }
 
       form.submit();

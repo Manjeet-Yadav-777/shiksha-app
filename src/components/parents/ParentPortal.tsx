@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import useSWR from "swr";
+import { useEffect, useState } from 'react';
+import useSWR from 'swr';
 import {
   Stack,
   Text,
@@ -14,27 +14,27 @@ import {
   RingProgress,
   Select,
   SimpleGrid,
-} from "@mantine/core";
+} from '@mantine/core';
 import {
   IconCalendarEvent,
   IconChartBar,
   IconReceipt2,
   IconUser,
-} from "@tabler/icons-react";
-import { Heading } from "../../libs/basic/Layout";
-import { api } from "../../libs/XHR/xhr";
-import { useAuthUser } from "../../hooks/auth";
-import { DAYS } from "../timetable/store";
-import type { IPeriodSlot } from "../timetable/store";
-import type { ISubject } from "../subjects/store";
+} from '@tabler/icons-react';
+import { Heading } from '../../libs/basic/Layout';
+import { api } from '../../libs/XHR/xhr';
+import { useAuthUser } from '../../hooks/auth';
+import { DAYS } from '../timetable/store';
+import type { IPeriodSlot } from '../timetable/store';
+import type { ISubject } from '../subjects/store';
 import type {
   AttendanceStatus,
   IChild,
   IChildAttendance,
   IChildFees,
   IChildTimetableEntry,
-} from "./store";
-import { STATUS_META, FEE_STATUS_COLOR } from "./store";
+} from './store';
+import { STATUS_META, FEE_STATUS_COLOR } from './store';
 
 // Session rule backend/dashboards jaisa hi — July+ me naya session.
 function currentSession(): string {
@@ -44,24 +44,24 @@ function currentSession(): string {
 }
 
 const SUBJECT_COLOR: Record<string, string> = {
-  core: "blue",
-  elective: "grape",
-  activity: "teal",
+  core: 'blue',
+  elective: 'grape',
+  activity: 'teal',
 };
 
 function subjectName(s?: ISubject): string {
-  return s?.name ?? "—";
+  return s?.name ?? '—';
 }
 
 function timeRange(slot?: IPeriodSlot): string {
-  if (!slot) return "";
+  if (!slot) return '';
   return `${slot.startTime} - ${slot.endTime}`;
 }
 
 function attendanceColor(pct: number): string {
-  if (pct >= 75) return "green";
-  if (pct >= 60) return "yellow";
-  return "red";
+  if (pct >= 75) return 'green';
+  if (pct >= 60) return 'yellow';
+  return 'red';
 }
 
 export function ParentPortal() {
@@ -70,9 +70,12 @@ export function ParentPortal() {
   const [childId, setChildId] = useState<string | null>(null);
 
   // 1. Apne bachche — child selector isi se banta hai.
-  const { data: childrenRes, isLoading: loadingChildren, error } = useSWR(
-    `/parents/me/children/${user?._id}`,
-    async () => api.get<{ data: IChild[] }>("/parents/me/children"),
+  const {
+    data: childrenRes,
+    isLoading: loadingChildren,
+    error,
+  } = useSWR(`/parents/me/children/${user?._id}`, async () =>
+    api.get<{ data: IChild[] }>('/parents/me/children'),
   );
   const children = childrenRes?.data ?? [];
 
@@ -82,9 +85,9 @@ export function ParentPortal() {
       setChildId(null);
       return;
     }
-  
-    const exists = children.some(c => c._id === childId);
-  
+
+    const exists = children.some((c) => c._id === childId);
+
     if (!exists) {
       setChildId(children[0]._id);
     }
@@ -94,7 +97,7 @@ export function ParentPortal() {
 
   // 2. Selected child ki attendance.
   const { data: attRes, isLoading: loadingAtt } = useSWR(
-    childId ? ["/parents/attendance", childId, session] : null,
+    childId ? ['/parents/attendance', childId, session] : null,
     async () =>
       api.get<{ data: IChildAttendance }>(
         `/parents/me/children/${childId}/attendance`,
@@ -105,7 +108,7 @@ export function ParentPortal() {
 
   // 3. Timetable.
   const { data: ttRes, isLoading: loadingTt } = useSWR(
-    childId ? ["/parents/timetable", childId, session] : null,
+    childId ? ['/parents/timetable', childId, session] : null,
     async () =>
       api.get<{ data: IChildTimetableEntry[] }>(
         `/parents/me/children/${childId}/timetable`,
@@ -116,7 +119,7 @@ export function ParentPortal() {
 
   // 4. Fees.
   const { data: feesRes, isLoading: loadingFees } = useSWR(
-    childId ? ["/parents/fees", childId] : null,
+    childId ? ['/parents/fees', childId] : null,
     async () =>
       api.get<{ data: IChildFees }>(`/parents/me/children/${childId}/fees`),
   );
@@ -163,7 +166,7 @@ export function ParentPortal() {
             label="Child"
             data={children.map((c) => ({
               value: c._id,
-              label: c.user?.name ?? "Student",
+              label: c.user?.name ?? 'Student',
             }))}
             value={childId}
             onChange={setChildId}
@@ -187,13 +190,13 @@ export function ParentPortal() {
         <Divider mb="md" />
         {selectedChild && (
           <SimpleGrid cols={{ base: 2, sm: 4 }} spacing="lg">
-            <Detail label="Name" value={selectedChild.user?.name ?? "—"} />
+            <Detail label="Name" value={selectedChild.user?.name ?? '—'} />
             <Detail
               label="Class"
               value={
                 [selectedChild.class?.name, selectedChild.section?.name]
                   .filter(Boolean)
-                  .join(" - ") || "—"
+                  .join(' - ') || '—'
               }
             />
             <Detail label="Roll No" value={selectedChild.rollNumber} />
@@ -305,7 +308,7 @@ export function ParentPortal() {
                 <SummaryStat
                   label="Outstanding"
                   value={fees.summary.outstanding}
-                  color={fees.summary.outstanding > 0 ? "red" : "green"}
+                  color={fees.summary.outstanding > 0 ? 'red' : 'green'}
                 />
               </Group>
               <MantineTable withTableBorder>
@@ -321,18 +324,18 @@ export function ParentPortal() {
                   {fees.fees.map((f) => (
                     <MantineTable.Tr key={f._id}>
                       <MantineTable.Td>
-                        {f.feeStructure?.name ?? "—"}
+                        {f.feeStructure?.name ?? '—'}
                       </MantineTable.Td>
                       <MantineTable.Td>
-                        ₹{f.netAmount.toLocaleString("en-IN")}
+                        ₹{f.netAmount.toLocaleString('en-IN')}
                       </MantineTable.Td>
                       <MantineTable.Td>
-                        ₹{f.amountPaid.toLocaleString("en-IN")}
+                        ₹{f.amountPaid.toLocaleString('en-IN')}
                       </MantineTable.Td>
                       <MantineTable.Td>
                         <Badge
                           variant="light"
-                          color={FEE_STATUS_COLOR[f.status] ?? "gray"}
+                          color={FEE_STATUS_COLOR[f.status] ?? 'gray'}
                         >
                           {f.status}
                         </Badge>
@@ -365,7 +368,7 @@ export function ParentPortal() {
           <Stack gap="lg">
             {byDay.map(({ day, rows }) => (
               <Stack key={day.value} gap="xs">
-                <Text fw={600} c={day.value === todayDow ? "blue" : undefined}>
+                <Text fw={600} c={day.value === todayDow ? 'blue' : undefined}>
                   {day.label}
                 </Text>
                 {rows.length === 0 ? (
@@ -391,7 +394,7 @@ export function ParentPortal() {
                           <MantineTable.Td>
                             <Badge
                               color={
-                                SUBJECT_COLOR[e.subject?.type ?? ""] ?? "gray"
+                                SUBJECT_COLOR[e.subject?.type ?? ''] ?? 'gray'
                               }
                               variant="light"
                             >
@@ -399,9 +402,9 @@ export function ParentPortal() {
                             </Badge>
                           </MantineTable.Td>
                           <MantineTable.Td>
-                            {e.teacher?.user?.name ?? "—"}
+                            {e.teacher?.user?.name ?? '—'}
                           </MantineTable.Td>
-                          <MantineTable.Td>{e.room ?? "—"}</MantineTable.Td>
+                          <MantineTable.Td>{e.room ?? '—'}</MantineTable.Td>
                         </MantineTable.Tr>
                       ))}
                     </MantineTable.Tbody>
@@ -442,7 +445,7 @@ function SummaryStat({
         {label}
       </Text>
       <Text fw={700} c={color}>
-        ₹{value.toLocaleString("en-IN")}
+        ₹{value.toLocaleString('en-IN')}
       </Text>
     </Stack>
   );

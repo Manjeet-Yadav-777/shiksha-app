@@ -1,5 +1,5 @@
-import { useState } from "react";
-import useSWR from "swr";
+import { useState } from 'react';
+import useSWR from 'swr';
 import {
   SegmentedControl,
   SimpleGrid,
@@ -11,7 +11,7 @@ import {
   Loader,
   Center,
   Divider,
-} from "@mantine/core";
+} from '@mantine/core';
 import {
   IconUsers,
   IconSchool,
@@ -20,14 +20,14 @@ import {
   IconCash,
   IconAlertTriangle,
   IconUserPlus,
-} from "@tabler/icons-react";
-import { StatCard } from "../../libs/basic/StatCard";
-import { Table } from "../../libs/basic/Table";
-import { Heading } from "../../libs/basic/Layout";
-import { api } from "../../libs/XHR/xhr";
-import { capitalize } from "../../helpers/Wording";
+} from '@tabler/icons-react';
+import { StatCard } from '../../libs/basic/StatCard';
+import { Table } from '../../libs/basic/Table';
+import { Heading } from '../../libs/basic/Layout';
+import { api } from '../../libs/XHR/xhr';
+import { capitalize } from '../../helpers/Wording';
 
-type Period = "weekly" | "monthly" | "yearly";
+type Period = 'weekly' | 'monthly' | 'yearly';
 
 interface ISummary {
   period: Period;
@@ -47,7 +47,7 @@ interface ISummary {
 
 interface ICollections {
   period: Period;
-  unit: "day" | "month";
+  unit: 'day' | 'month';
   series: Array<{ label: string; total: number }>;
 }
 
@@ -59,39 +59,39 @@ interface IStudentsByClass {
   breakdown: Array<{ classId: string; class: string; count: number }>;
 }
 
-const inr = (n: number) => `₹${(n ?? 0).toLocaleString("en-IN")}`;
+const inr = (n: number) => `₹${(n ?? 0).toLocaleString('en-IN')}`;
 
 const PERIOD_LABEL: Record<Period, string> = {
-  weekly: "last 7 days",
-  monthly: "last 30 days",
-  yearly: "last 12 months",
+  weekly: 'last 7 days',
+  monthly: 'last 30 days',
+  yearly: 'last 12 months',
 };
 
 const STATUS_COLOR: Record<string, string> = {
-  paid: "green",
-  pending: "orange",
-  partial: "blue",
+  paid: 'green',
+  pending: 'orange',
+  partial: 'blue',
 };
 
 export default function SchoolDashboard() {
-  const [period, setPeriod] = useState<Period>("weekly");
+  const [period, setPeriod] = useState<Period>('weekly');
 
   const { data: summary, isLoading: loadingSummary } = useSWR(
-    ["/stats/summary", period],
-    () => api.get<ISummary>("/stats/summary", { params: { period } }),
+    ['/stats/summary', period],
+    () => api.get<ISummary>('/stats/summary', { params: { period } }),
   );
 
-  const { data: collections } = useSWR(["/stats/collections", period], () =>
-    api.get<ICollections>("/stats/collections", { params: { period } }),
+  const { data: collections } = useSWR(['/stats/collections', period], () =>
+    api.get<ICollections>('/stats/collections', { params: { period } }),
   );
 
   // These two aren't period-scoped on the backend, so no period in the key.
-  const { data: feeStatus } = useSWR("/stats/fee-status", () =>
-    api.get<IFeeStatus>("/stats/fee-status"),
+  const { data: feeStatus } = useSWR('/stats/fee-status', () =>
+    api.get<IFeeStatus>('/stats/fee-status'),
   );
 
-  const { data: studentsByClass } = useSWR("/stats/students-by-class", () =>
-    api.get<IStudentsByClass>("/stats/students-by-class"),
+  const { data: studentsByClass } = useSWR('/stats/students-by-class', () =>
+    api.get<IStudentsByClass>('/stats/students-by-class'),
   );
 
   const windowLabel = PERIOD_LABEL[period];
@@ -104,9 +104,9 @@ export default function SchoolDashboard() {
           value={period}
           onChange={(v) => setPeriod(v as Period)}
           data={[
-            { label: "Weekly", value: "weekly" },
-            { label: "Monthly", value: "monthly" },
-            { label: "Yearly", value: "yearly" },
+            { label: 'Weekly', value: 'weekly' },
+            { label: 'Monthly', value: 'monthly' },
+            { label: 'Yearly', value: 'yearly' },
           ]}
         />
       </Group>
@@ -189,9 +189,12 @@ export default function SchoolDashboard() {
               </Center>
             ) : (
               <Table
-                headers={["Status", "Fees", "Outstanding"]}
+                headers={['Status', 'Fees', 'Outstanding']}
                 rows={feeStatus.breakdown.map((b) => [
-                  <Badge variant="light" color={STATUS_COLOR[b.status] ?? "gray"}>
+                  <Badge
+                    variant="light"
+                    color={STATUS_COLOR[b.status] ?? 'gray'}
+                  >
                     {capitalize(b.status)}
                   </Badge>,
                   <Text>{b.count}</Text>,
@@ -218,7 +221,7 @@ export default function SchoolDashboard() {
               </Text>
             ) : (
               <Table
-                headers={["Class", "Students"]}
+                headers={['Class', 'Students']}
                 rows={studentsByClass.breakdown.map((b) => [
                   <Text fw={500}>{b.class}</Text>,
                   <Text>{b.count}</Text>,
@@ -246,7 +249,10 @@ export default function SchoolDashboard() {
             </Center>
           ) : (
             <Table
-              headers={[collections.unit === "month" ? "Month" : "Day", "Collected"]}
+              headers={[
+                collections.unit === 'month' ? 'Month' : 'Day',
+                'Collected',
+              ]}
               rows={collections.series.map((s) => [
                 <Text>{s.label}</Text>,
                 <Text>{inr(s.total)}</Text>,

@@ -1,5 +1,5 @@
-import { useDisclosure } from "@mantine/hooks";
-import { Popover as MPopver, Text } from "@mantine/core";
+import { useDisclosure } from '@mantine/hooks';
+import { Popover as MPopver, Text } from '@mantine/core';
 
 interface PopoverProps {
   children: React.ReactNode;
@@ -31,5 +31,3 @@ export function Popover({ children, action, onHover = false }: PopoverProps) {
     </MPopver>
   );
 }
-
-

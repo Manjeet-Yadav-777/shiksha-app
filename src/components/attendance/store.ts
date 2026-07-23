@@ -1,14 +1,14 @@
-import type { ITenant } from "../tenants/store";
-import type { IClass } from "../classes/store";
+import type { ITenant } from '../tenants/store';
+import type { IClass } from '../classes/store';
 
 // Backend ke ATTENDANCE_STATUSES ke saath in-sync rehna chahiye. Naya status
 // backend me add karne ke baad yahan bhi add karo — UI isi list se derive hota hai.
 export const ATTENDANCE_STATUSES = [
-  "present",
-  "absent",
-  "late",
-  "excused",
-  "half_day",
+  'present',
+  'absent',
+  'late',
+  'excused',
+  'half_day',
 ] as const;
 export type AttendanceStatus = (typeof ATTENDANCE_STATUSES)[number];
 
@@ -18,19 +18,19 @@ export const STATUS_META: Record<
   AttendanceStatus,
   { label: string; color: string }
 > = {
-  present: { label: "Present", color: "green" },
-  absent: { label: "Absent", color: "red" },
-  late: { label: "Late", color: "yellow" },
-  excused: { label: "Excused", color: "blue" },
-  half_day: { label: "Half Day", color: "grape" },
+  present: { label: 'Present', color: 'green' },
+  absent: { label: 'Absent', color: 'red' },
+  late: { label: 'Late', color: 'yellow' },
+  excused: { label: 'Excused', color: 'blue' },
+  half_day: { label: 'Half Day', color: 'grape' },
 };
 
 export const STATUS_SHORT_LABEL: Record<AttendanceStatus, string> = {
-  present: "P",
-  absent: "A",
-  late: "L",
-  excused: "E",
-  half_day: "H",
+  present: 'P',
+  absent: 'A',
+  late: 'L',
+  excused: 'E',
+  half_day: 'H',
 };
 
 // getMySections / classTeacher populated section.
@@ -87,5 +87,9 @@ export interface IMarkAttendanceBody {
   academicSession: string;
   periodSlotId?: string | null;
   subjectId?: string | null;
-  entries: Array<{ studentId: string; status: AttendanceStatus; remark?: string }>;
+  entries: Array<{
+    studentId: string;
+    status: AttendanceStatus;
+    remark?: string;
+  }>;
 }

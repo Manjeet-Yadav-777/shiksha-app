@@ -1,4 +1,4 @@
-import useSWR, { mutate } from "swr";
+import useSWR, { mutate } from 'swr';
 import {
   Button,
   Stack,
@@ -9,37 +9,37 @@ import {
   Loader,
   Center,
   MultiSelect,
-} from "@mantine/core";
-import { useState } from "react";
-import { IconTrash } from "@tabler/icons-react";
-import { Table } from "../../libs/basic/Table";
-import { Inline } from "../../libs/basic/Layout";
-import { api } from "../../libs/XHR/xhr";
-import type { IListResponse } from "../../libs/XHR/xhr";
-import { capitalize } from "../../helpers/Wording";
+} from '@mantine/core';
+import { useState } from 'react';
+import { IconTrash } from '@tabler/icons-react';
+import { Table } from '../../libs/basic/Table';
+import { Inline } from '../../libs/basic/Layout';
+import { api } from '../../libs/XHR/xhr';
+import type { IListResponse } from '../../libs/XHR/xhr';
+import { capitalize } from '../../helpers/Wording';
 import {
   getSubjectTypeColor,
   type IClassSubject,
   type ISubject,
-} from "./store";
-import type { IClass } from "../classes/store";
+} from './store';
+import type { IClass } from '../classes/store';
 
 // Attach subjects to a class curriculum. Subjects are the tenant-wide catalog;
 // here we pick which of them this class actually studies.
 export function ManageCurriculum({ classItem }: { classItem: IClass }) {
-  const curriculumKey = ["/academic/class-subjects", classItem._id];
+  const curriculumKey = ['/academic/class-subjects', classItem._id];
 
   const { data: curriculum, isLoading } = useSWR(curriculumKey, async () =>
     api.get<{ data: IClassSubject[] }>(
-      `/academic/classes/${classItem._id}/subjects`
-    )
+      `/academic/classes/${classItem._id}/subjects`,
+    ),
   );
 
   // Full subject catalog to choose from (high limit so all show in the picker)
-  const { data: allSubjects } = useSWR("/academic/subjects/all", async () =>
-    api.get<IListResponse<ISubject>>("/academic/subjects", {
+  const { data: allSubjects } = useSWR('/academic/subjects/all', async () =>
+    api.get<IListResponse<ISubject>>('/academic/subjects', {
       params: { limit: 200 },
-    })
+    }),
   );
 
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -75,7 +75,9 @@ export function ManageCurriculum({ classItem }: { classItem: IClass }) {
         <MultiSelect
           flex={1}
           label="Add subjects to this class"
-          placeholder={options.length ? "Select subjects" : "All subjects added"}
+          placeholder={
+            options.length ? 'Select subjects' : 'All subjects added'
+          }
           data={options}
           value={selectedIds}
           onChange={setSelectedIds}
@@ -84,7 +86,7 @@ export function ManageCurriculum({ classItem }: { classItem: IClass }) {
           disabled={!options.length}
         />
         <Button onClick={handleAssign} disabled={!selectedIds.length || saving}>
-          {saving ? "Adding..." : "Add"}
+          {saving ? 'Adding...' : 'Add'}
         </Button>
       </Group>
 
@@ -100,14 +102,11 @@ export function ManageCurriculum({ classItem }: { classItem: IClass }) {
         </Text>
       ) : (
         <Table
-          headers={["Subject", "Code", "Type", "Actions"]}
+          headers={['Subject', 'Code', 'Type', 'Actions']}
           rows={curriculum.data.map((cs) => [
             <Text fw="bold">{cs.subject.name}</Text>,
             <Text>{cs.subject.code?.toUpperCase()}</Text>,
-            <Badge
-              variant="light"
-              color={getSubjectTypeColor(cs.subject.type)}
-            >
+            <Badge variant="light" color={getSubjectTypeColor(cs.subject.type)}>
               {capitalize(cs.subject.type)}
             </Badge>,
             <Button
@@ -117,7 +116,7 @@ export function ManageCurriculum({ classItem }: { classItem: IClass }) {
               leftSection={<IconTrash size={14} />}
               onClick={async () => {
                 await api.delete(
-                  `/academic/classes/${classItem._id}/subjects/${cs.subject._id}`
+                  `/academic/classes/${classItem._id}/subjects/${cs.subject._id}`,
                 );
                 refresh();
               }}

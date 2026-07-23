@@ -1,6 +1,6 @@
-import { useDisclosure } from "@mantine/hooks";
-import { Modal, Text } from "@mantine/core";
-import type { TSizes } from "../types";
+import { useDisclosure } from '@mantine/hooks';
+import { Modal, Text } from '@mantine/core';
+import type { TSizes } from '../types';
 
 interface DialogProps {
   children: React.ReactNode;
@@ -9,9 +9,9 @@ interface DialogProps {
   title?: string;
   center?: boolean;
   removeHeader?: boolean;
-  sizes?: TSizes | "70%" | "100%" | "45rem" | "55rem" | "auto";
+  sizes?: TSizes | '70%' | '100%' | '45rem' | '55rem' | 'auto';
   fullScreen?: boolean;
-  bgBlur? : boolean
+  bgBlur?: boolean;
 }
 
 export function Dialog({
@@ -23,14 +23,18 @@ export function Dialog({
   removeHeader,
   fullScreen,
   bgBlur,
-  sizes = "lg",
+  sizes = 'lg',
 }: DialogProps) {
   return (
     <>
       <Modal
         opened={isOpened}
         onClose={close}
-        title={<Text fw={"bold"} fz={"h3"}>{title}</Text>}
+        title={
+          <Text fw={'bold'} fz={'h3'}>
+            {title}
+          </Text>
+        }
         centered={center}
         withCloseButton={!removeHeader}
         size={sizes}
@@ -40,7 +44,14 @@ export function Dialog({
           blur: bgBlur ? 3 : undefined,
         }}
       >
-        <hr style={{backgroundColor : "#E5E7EB", height : '1px', border : 'none', marginBottom : "10px"}} />
+        <hr
+          style={{
+            backgroundColor: '#E5E7EB',
+            height: '1px',
+            border: 'none',
+            marginBottom: '10px',
+          }}
+        />
         {children}
       </Modal>
     </>

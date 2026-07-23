@@ -1,5 +1,5 @@
-import { useState } from "react";
-import useSWR, { mutate } from "swr";
+import { useState } from 'react';
+import useSWR, { mutate } from 'swr';
 import {
   Button,
   Stack,
@@ -11,16 +11,16 @@ import {
   Badge,
   Loader,
   Center,
-} from "@mantine/core";
-import { IconClockHour4, IconUserStar } from "@tabler/icons-react";
-import { Dialog, useDialog } from "../../libs/basic/Dialog";
-import { api } from "../../libs/XHR/xhr";
-import type { IListResponse } from "../../libs/XHR/xhr";
-import type { IClass } from "../classes/store";
-import type { ISection } from "../subjects/store";
-import type { ITeacher } from "../teachers/store";
-import { ManagePeriodSlots } from "./ManagePeriodSlots";
-import { TimetableGrid } from "./TimetableGrid";
+} from '@mantine/core';
+import { IconClockHour4, IconUserStar } from '@tabler/icons-react';
+import { Dialog, useDialog } from '../../libs/basic/Dialog';
+import { api } from '../../libs/XHR/xhr';
+import type { IListResponse } from '../../libs/XHR/xhr';
+import type { IClass } from '../classes/store';
+import type { ISection } from '../subjects/store';
+import type { ITeacher } from '../teachers/store';
+import { ManagePeriodSlots } from './ManagePeriodSlots';
+import { TimetableGrid } from './TimetableGrid';
 
 // Current academic session ka default — "2025-2026" jaisa. School July me naya
 // session shuru karti hai, isliye July+ me year se agla year jodo.
@@ -38,19 +38,19 @@ export function TimetableManager() {
   const periodsDialog = useDialog();
   const classTeacherDialog = useDialog();
 
-  const { data: classesRes } = useSWR("/academic/classes/all", async () =>
-    api.get<IListResponse<IClass>>("/academic/classes", {
+  const { data: classesRes } = useSWR('/academic/classes/all', async () =>
+    api.get<IListResponse<IClass>>('/academic/classes', {
       params: { limit: 200 },
-    })
+    }),
   );
 
   // Selected class ki sections.
   const { data: sectionsRes } = useSWR(
-    classId ? ["/academic/sections", classId] : null,
+    classId ? ['/academic/sections', classId] : null,
     async () =>
-      api.get<{ data: ISection[] }>("/academic/sections", {
+      api.get<{ data: ISection[] }>('/academic/sections', {
         params: { classId },
-      })
+      }),
   );
 
   const classOptions =
@@ -60,7 +60,7 @@ export function TimetableManager() {
 
   const selectedSection = sectionsRes?.data.find((s) => s._id === sectionId);
   const classTeacher =
-    selectedSection && typeof selectedSection.classTeacher === "object"
+    selectedSection && typeof selectedSection.classTeacher === 'object'
       ? selectedSection.classTeacher
       : null;
 
@@ -98,7 +98,7 @@ export function TimetableManager() {
           />
           <Select
             label="Section"
-            placeholder={classId ? "Select section" : "Pick a class first"}
+            placeholder={classId ? 'Select section' : 'Pick a class first'}
             data={sectionOptions}
             value={sectionId}
             onChange={setSectionId}
@@ -113,7 +113,7 @@ export function TimetableManager() {
               leftSection={<IconUserStar size={16} />}
               onClick={classTeacherDialog.open}
             >
-              {classTeacher ? "Change Class Teacher" : "Set Class Teacher"}
+              {classTeacher ? 'Change Class Teacher' : 'Set Class Teacher'}
             </Button>
           )}
         </Group>
@@ -130,7 +130,8 @@ export function TimetableManager() {
                 size="lg"
                 leftSection={<IconUserStar size={13} />}
               >
-                {classTeacher.user?.name ?? "Teacher"} ({classTeacher.employeeId})
+                {classTeacher.user?.name ?? 'Teacher'} (
+                {classTeacher.employeeId})
               </Badge>
             ) : (
               <Text fz="sm" c="dimmed" fs="italic">
@@ -169,7 +170,7 @@ export function TimetableManager() {
             sectionId={sectionId}
             currentTeacherId={classTeacher?._id ?? null}
             onDone={classTeacherDialog.close}
-            onSaved={() => mutate(["/academic/sections", classId])}
+            onSaved={() => mutate(['/academic/sections', classId])}
           />
         )}
       </Dialog>
@@ -189,8 +190,8 @@ function ClassTeacherForm({
   onDone: () => void;
   onSaved: () => void;
 }) {
-  const { data: teachersRes, isLoading } = useSWR("/teachers/all", async () =>
-    api.get<IListResponse<ITeacher>>("/teachers", { params: { limit: 200 } })
+  const { data: teachersRes, isLoading } = useSWR('/teachers/all', async () =>
+    api.get<IListResponse<ITeacher>>('/teachers', { params: { limit: 200 } }),
   );
   // Current class teacher pre-selected — user ko dikhe abhi kaun set hai.
   const [teacherId, setTeacherId] = useState<string | null>(currentTeacherId);
@@ -199,7 +200,7 @@ function ClassTeacherForm({
   const options =
     teachersRes?.data.map((t) => ({
       value: t._id,
-      label: `${t.user?.name ?? "Teacher"} (${t.employeeId})`,
+      label: `${t.user?.name ?? 'Teacher'} (${t.employeeId})`,
     })) ?? [];
 
   const save = async () => {
@@ -239,7 +240,7 @@ function ClassTeacherForm({
       </Text>
       <Group justify="end" gap="md">
         <Button onClick={save} disabled={saving}>
-          {saving ? "Saving..." : "Save"}
+          {saving ? 'Saving...' : 'Save'}
         </Button>
         <Button variant="default" onClick={onDone}>
           Cancel

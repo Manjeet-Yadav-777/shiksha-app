@@ -1,13 +1,13 @@
-import useSWR, { type SWRConfiguration } from "swr";
-import React, { useState, type ReactNode } from "react";
+import useSWR, { type SWRConfiguration } from 'swr';
+import React, { useState, type ReactNode } from 'react';
 import {
   IconArrowLeft,
   IconArrowRight,
   IconRefresh,
-} from "@tabler/icons-react";
-import { Button, Stack, Text } from "@mantine/core";
-import type { IListResponse } from "../XHR/xhr";
-import { Inline } from "../basic/Layout";
+} from '@tabler/icons-react';
+import { Button, Stack, Text } from '@mantine/core';
+import type { IListResponse } from '../XHR/xhr';
+import { Inline } from '../basic/Layout';
 
 type ListViewProps<T> = {
   swrKey: string | unknown[];
@@ -15,7 +15,7 @@ type ListViewProps<T> = {
   children: (
     data: T[],
     refresh: () => void,
-    meta: IListResponse<T>["meta"],
+    meta: IListResponse<T>['meta'],
   ) => ReactNode;
   params: any;
   sortOptions?: React.ReactNode;
@@ -41,11 +41,11 @@ export function RefreshIcon({
   return (
     <IconRefresh
       size={size}
-      cursor={"pointer"}
+      cursor={'pointer'}
       onClick={handleClick}
       className="!p-2 cursor-pointer Stack-Stack w-fit"
       style={{
-        transition: "transform 0.3s ease",
+        transition: 'transform 0.3s ease',
         transform: `rotate(${rotated ? 360 : 0}deg)`,
       }}
     />
@@ -77,8 +77,8 @@ export function ListView<T>({
   // Sirf tab spinner dikhao jab abhi tak koi data hi nahi aaya.
   if (isLoading && !data) {
     return (
-      <Stack p={"4"} h={"60vh"} justify="center" align="center">
-        <Text c={"gray"}>Loading...</Text>
+      <Stack p={'4'} h={'60vh'} justify="center" align="center">
+        <Text c={'gray'}>Loading...</Text>
       </Stack>
     );
   }
@@ -86,7 +86,7 @@ export function ListView<T>({
   if (error) {
     return <div className="p-4 text-red-500">Something went wrong</div>;
   }
-  console.log(data?.meta.current_page || 1 - 1, "Hello");
+  console.log(data?.meta.current_page || 1 - 1, 'Hello');
 
   let end = (data?.data?.length || 10) * (data?.meta?.current_page || 1);
   let start =
@@ -98,13 +98,13 @@ export function ListView<T>({
         <Inline justify="space-between" align="center" className="!px-0">
           <Stack align="center" gap={5}>
             <Inline
-              gap={"sm"}
-              align={"center"}
-              fw={"inherit"}
-              c={"gray"}
-              fz={"sm"}
+              gap={'sm'}
+              align={'center'}
+              fw={'inherit'}
+              c={'gray'}
+              fz={'sm'}
             >
-              showing {start} - {end} of {total} items{" "}
+              showing {start} - {end} of {total} items{' '}
               <RefreshIcon size={18} refresh={refresh} />
             </Inline>
           </Stack>
@@ -115,13 +115,13 @@ export function ListView<T>({
 
       {!data?.data?.length ? (
         <Stack
-          p={"4"}
-          fz={"h3"}
-          c={"gray"}
-          h={"60vh"}
-          justify={"center"}
-          align={"center"}
-          gap={"2"}
+          p={'4'}
+          fz={'h3'}
+          c={'gray'}
+          h={'60vh'}
+          justify={'center'}
+          align={'center'}
+          gap={'2'}
         >
           <RefreshIcon refresh={refresh} /> <Text>No data found</Text>
         </Stack>

@@ -1,5 +1,5 @@
-import { TenantList } from "../../../components/tenants/List";
+import { TenantList } from '../../../components/tenants/List';
 
-export default function Tenants(){
-    return <TenantList/>
+export default function Tenants() {
+  return <TenantList />;
 }

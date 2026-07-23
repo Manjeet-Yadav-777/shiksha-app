@@ -1,5 +1,5 @@
-import { Select, type SelectProps } from "@mantine/core";
-import { Field } from "react-final-form";
+import { Select, type SelectProps } from '@mantine/core';
+import { Field } from 'react-final-form';
 
 type SelectInputFieldProps = SelectProps & {
   name: string;

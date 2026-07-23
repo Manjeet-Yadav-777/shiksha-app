@@ -1,4 +1,4 @@
-import { xhr } from "./xhr";
+import { xhr } from './xhr';
 
 export async function downloadFile(
   downloadUrl: string,
@@ -6,16 +6,16 @@ export async function downloadFile(
   body?: unknown,
 ) {
   const blob = (await xhr.post(downloadUrl, body, {
-    responseType: "blob",
+    responseType: 'blob',
   })) as Blob;
 
   const url = window.URL.createObjectURL(blob);
 
-  const a = document.createElement("a");
+  const a = document.createElement('a');
 
   a.href = url;
 
-  a.download = fileName || "data.xlsx";
+  a.download = fileName || 'data.xlsx';
 
   document.body.appendChild(a);
 
