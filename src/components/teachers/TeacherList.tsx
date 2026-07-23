@@ -1,25 +1,25 @@
-import { useEffect, useState } from "react";
-import { mutate } from "swr";
-import { Button, Stack, Text } from "@mantine/core";
-import { Form } from "react-final-form";
+import { useEffect, useState } from 'react';
+import { mutate } from 'swr';
+import { Button, Stack, Text } from '@mantine/core';
+import { Form } from 'react-final-form';
 import {
   IconDotsVertical,
   IconTrash,
   IconClipboardList,
-} from "@tabler/icons-react";
-import { Search } from "../../libs/search/Search";
-import { useLocationQuery, useSearch } from "../../utils/filterQuery";
-import { ListView } from "../../libs/List/List";
-import { Table } from "../../libs/basic/Table";
-import { Dialog, useDialog } from "../../libs/basic/Dialog";
-import { Inline } from "../../libs/basic/Layout";
-import { DropdownMenu } from "../../libs/basic/DropDown";
-import { TextInputField } from "../../libs/form/Input";
-import { DatenputField } from "../../libs/form/DateInputField";
-import { api } from "../../libs/XHR/xhr";
-import { formatDate } from "../../helpers/Date";
-import type { ITeacher } from "./store";
-import { ManageAssignments } from "./ManageAssignments";
+} from '@tabler/icons-react';
+import { Search } from '../../libs/search/Search';
+import { useLocationQuery, useSearch } from '../../utils/filterQuery';
+import { ListView } from '../../libs/List/List';
+import { Table } from '../../libs/basic/Table';
+import { Dialog, useDialog } from '../../libs/basic/Dialog';
+import { Inline } from '../../libs/basic/Layout';
+import { DropdownMenu } from '../../libs/basic/DropDown';
+import { TextInputField } from '../../libs/form/Input';
+import { DatenputField } from '../../libs/form/DateInputField';
+import { api } from '../../libs/XHR/xhr';
+import { formatDate } from '../../helpers/Date';
+import type { ITeacher } from './store';
+import { ManageAssignments } from './ManageAssignments';
 
 interface ITeacherFormValues {
   name?: string;
@@ -30,7 +30,7 @@ interface ITeacherFormValues {
   joiningDate?: string | Date;
 }
 
-const SWR_KEY = "/teachers";
+const SWR_KEY = '/teachers';
 
 export function TeacherList() {
   const [query, setQuery] = useLocationQuery();
@@ -55,7 +55,7 @@ export function TeacherList() {
             isOpened={addDialog.isOpened}
             close={addDialog.close}
             onSubmit={async (values) => {
-              await api.post("/teachers", values);
+              await api.post('/teachers', values);
               mutate([SWR_KEY, params]);
               addDialog.close();
             }}
@@ -74,19 +74,21 @@ export function TeacherList() {
             <>
               <Table
                 headers={[
-                  "Name",
-                  "Email",
-                  "Employee ID",
-                  "Qualification",
-                  "Joined",
-                  "Actions",
+                  'Name',
+                  'Email',
+                  'Employee ID',
+                  'Qualification',
+                  'Joined',
+                  'Actions',
                 ]}
                 rows={items.map((t) => [
                   <Text fw="bold">{t.user?.name}</Text>,
                   <Text>{t.user?.email}</Text>,
                   <Text>{t.employeeId}</Text>,
-                  <Text>{t.qualification || "-"}</Text>,
-                  <Text>{t.joiningDate ? formatDate(t.joiningDate) : "-"}</Text>,
+                  <Text>{t.qualification || '-'}</Text>,
+                  <Text>
+                    {t.joiningDate ? formatDate(t.joiningDate) : '-'}
+                  </Text>,
                   <DropdownMenu
                     trigger="hover"
                     width={190}
@@ -126,9 +128,9 @@ export function TeacherList() {
                 sizes="70%"
                 isOpened={assignDialog.isOpened}
                 close={assignDialog.close}
-                title={`Assignments - ${selected?.user?.name ?? ""}`}
+                title={`Assignments - ${selected?.user?.name ?? ''}`}
               >
-                {selected && <ManageAssignments  teacher={selected} />}
+                {selected && <ManageAssignments teacher={selected} />}
               </Dialog>
             </>
           )}
@@ -192,14 +194,11 @@ function TeacherForm({
                   label="Qualification (optional)"
                   placeholder="M.Sc, B.Ed"
                 />
-                <DatenputField
-                  name="joiningDate"
-                  label="Joining Date"
-                />
+                <DatenputField name="joiningDate" label="Joining Date" />
               </Inline>
               <Inline justify="end" gap="md">
                 <Button type="submit" disabled={submitting}>
-                  {submitting ? "Adding..." : "Add Teacher"}
+                  {submitting ? 'Adding...' : 'Add Teacher'}
                 </Button>
                 <Button variant="default" onClick={close}>
                   Cancel

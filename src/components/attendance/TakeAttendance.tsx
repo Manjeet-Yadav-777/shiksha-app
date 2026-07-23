@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import useSWR, { mutate } from "swr";
+import { useEffect, useMemo, useState } from 'react';
+import useSWR, { mutate } from 'swr';
 import {
   Stack,
   Group,
@@ -13,17 +13,17 @@ import {
   Divider,
   TextInput,
   Tooltip,
-} from "@mantine/core";
-import { DateInput } from "@mantine/dates";
+} from '@mantine/core';
+import { DateInput } from '@mantine/dates';
 import {
   IconClipboardCheck,
   IconLock,
   IconUsers,
   IconCircleCheck,
-} from "@tabler/icons-react";
-import { Heading } from "../../libs/basic/Layout";
-import { Table } from "../../libs/basic/Table";
-import { api } from "../../libs/XHR/xhr";
+} from '@tabler/icons-react';
+import { Heading } from '../../libs/basic/Layout';
+import { Table } from '../../libs/basic/Table';
+import { api } from '../../libs/XHR/xhr';
 import type {
   AttendanceStatus,
   IAttendanceRecord,
@@ -31,8 +31,8 @@ import type {
   IMarkAttendanceBody,
   IMySection,
   IRosterStudent,
-} from "./store";
-import { ATTENDANCE_STATUSES, STATUS_META, STATUS_SHORT_LABEL } from "./store";
+} from './store';
+import { ATTENDANCE_STATUSES, STATUS_META, STATUS_SHORT_LABEL } from './store';
 
 // Current academic session — "2025-2026" jaisa. School July me naya session
 // shuru karti hai (TeacherDashboard/TimetableManager jaisa hi rule).
@@ -46,18 +46,18 @@ function currentSession(): string {
 // shift kar deta hai isliye local getFullYear/Month/Date se banaya hai.
 function toDateKey(d: Date): string {
   const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
   return `${y}-${m}-${day}`;
 }
 
 function sectionLabel(s: IMySection): string {
-  const cls = s.class?.name ?? "";
-  return [cls, s.name].filter(Boolean).join(" - ") || s.name;
+  const cls = s.class?.name ?? '';
+  return [cls, s.name].filter(Boolean).join(' - ') || s.name;
 }
 
 function studentName(s: IRosterStudent): string {
-  return s.user?.name ?? "—";
+  return s.user?.name ?? '—';
 }
 
 // Ek student ki current draft state — status + optional remark.
@@ -75,14 +75,14 @@ export function TakeAttendance() {
 
   // 1. Sirf wahi sections jinka caller class teacher hai.
   const { data: sectionsRes, isLoading: loadingSections } = useSWR(
-    "/attendance/my-sections",
-    async () => api.get<{ data: IMySection[] }>("/attendance/my-sections"),
+    '/attendance/my-sections',
+    async () => api.get<{ data: IMySection[] }>('/attendance/my-sections'),
   );
   const sections = sectionsRes?.data ?? [];
 
   // 2. Selected section ka roster (students to mark).
   const { data: rosterRes, isLoading: loadingRoster } = useSWR(
-    sectionId ? ["/attendance/roster", sectionId] : null,
+    sectionId ? ['/attendance/roster', sectionId] : null,
     async () =>
       api.get<{ data: IRosterStudent[] }>(
         `/attendance/section/${sectionId}/roster`,
@@ -93,13 +93,16 @@ export function TakeAttendance() {
   // 3. Us din ka existing register (agar pehle se mark hai) — edit/prefill ke liye.
   const attendanceKey =
     sectionId && dateKey
-      ? ["/attendance/section", sectionId, dateKey, session]
+      ? ['/attendance/section', sectionId, dateKey, session]
       : null;
   const { data: existingRes, isLoading: loadingExisting } = useSWR(
     attendanceKey,
     async () =>
       api.get<{
-        data: { session: IAttendanceSession | null; records: IAttendanceRecord[] };
+        data: {
+          session: IAttendanceSession | null;
+          records: IAttendanceRecord[];
+        };
       }>(`/attendance/section/${sectionId}`, {
         params: { date: dateKey, academicSession: session },
       }),
@@ -119,7 +122,7 @@ export function TakeAttendance() {
 
     const byStudent: Record<string, IAttendanceRecord> = {};
     for (const r of existingRecords) {
-      const sid = typeof r.student === "string" ? r.student : r.student?._id;
+      const sid = typeof r.student === 'string' ? r.student : r.student?._id;
       if (sid) byStudent[sid] = r;
     }
 
@@ -127,8 +130,8 @@ export function TakeAttendance() {
     for (const stu of roster) {
       const rec = byStudent[stu._id];
       next[stu._id] = {
-        status: rec?.status ?? "present",
-        remark: rec?.remark ?? "",
+        status: rec?.status ?? 'present',
+        remark: rec?.remark ?? '',
       };
     }
     setDraft(next);
@@ -145,7 +148,8 @@ export function TakeAttendance() {
   const markAllPresent = () => {
     setDraft((d) => {
       const next = { ...d };
-      for (const stu of roster) next[stu._id] = { ...next[stu._id], status: "present" };
+      for (const stu of roster)
+        next[stu._id] = { ...next[stu._id], status: 'present' };
       return next;
     });
   };
@@ -176,11 +180,11 @@ export function TakeAttendance() {
         academicSession: session,
         entries: roster.map((stu) => ({
           studentId: stu._id,
-          status: draft[stu._id]?.status ?? "present",
+          status: draft[stu._id]?.status ?? 'present',
           remark: draft[stu._id]?.remark?.trim() || undefined,
         })),
       };
-      await api.post("/attendance", body);
+      await api.post('/attendance', body);
       // Register refresh — counts/finalize state dobara load.
       await mutate(attendanceKey);
     } finally {
@@ -237,7 +241,9 @@ export function TakeAttendance() {
               placeholder="Select section"
               data={sectionOptions}
               value={sectionId}
-              onChange={(value) => setSectionId(typeof value === "string" ? value : null)}
+              onChange={(value) =>
+                setSectionId(typeof value === 'string' ? value : null)
+              }
               searchable
               w={260}
             />
@@ -263,7 +269,11 @@ export function TakeAttendance() {
                   Students
                 </Text>
                 {isFinalized && (
-                  <Badge color="gray" variant="light" leftSection={<IconLock size={12} />}>
+                  <Badge
+                    color="gray"
+                    variant="light"
+                    leftSection={<IconLock size={12} />}
+                  >
                     Finalized
                   </Badge>
                 )}
@@ -294,7 +304,7 @@ export function TakeAttendance() {
               <Text c="dimmed">No students in this section yet.</Text>
             ) : (
               <Table
-                headers={["Roll", "Name", "Status", "Remark"]}
+                headers={['Roll', 'Name', 'Status', 'Remark']}
                 rows={roster.map((stu) => [
                   stu.rollNumber,
                   studentName(stu),
@@ -320,10 +330,14 @@ export function TakeAttendance() {
                       {ATTENDANCE_STATUSES.map((st) => {
                         const active = draft[stu._id]?.status === st;
                         return (
-                          <Tooltip label={STATUS_META[st].label} key={st} withArrow>
+                          <Tooltip
+                            label={STATUS_META[st].label}
+                            key={st}
+                            withArrow
+                          >
                             <Button
                               size="compact-xs"
-                              variant={active ? "filled" : "light"}
+                              variant={active ? 'filled' : 'light'}
                               color={STATUS_META[st].color}
                               onClick={() => setStatus(stu._id, st)}
                             >
@@ -338,7 +352,7 @@ export function TakeAttendance() {
                     key={`r-${stu._id}`}
                     placeholder="—"
                     size="xs"
-                    value={draft[stu._id]?.remark ?? ""}
+                    value={draft[stu._id]?.remark ?? ''}
                     disabled={isFinalized}
                     onChange={(e) => setRemark(stu._id, e.currentTarget.value)}
                   />,

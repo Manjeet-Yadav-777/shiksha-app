@@ -1,4 +1,4 @@
-import { ParentList } from "../../components/parents/ParentList";
+import { ParentList } from '../../components/parents/ParentList';
 
 export default function Parents() {
   return <ParentList />;

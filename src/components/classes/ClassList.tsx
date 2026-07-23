@@ -1,35 +1,44 @@
-import { useEffect, useState } from "react";
-import useSWR, { mutate } from "swr";
-import { Button, Stack, Text, Badge, Group, Divider, Loader, Center } from "@mantine/core";
-import { Form } from "react-final-form";
+import { useEffect, useState } from 'react';
+import useSWR, { mutate } from 'swr';
+import {
+  Button,
+  Stack,
+  Text,
+  Badge,
+  Group,
+  Divider,
+  Loader,
+  Center,
+} from '@mantine/core';
+import { Form } from 'react-final-form';
 import {
   IconDotsVertical,
   IconPencil,
   IconTrash,
   IconLayoutGrid,
   IconBooks,
-} from "@tabler/icons-react";
-import { Search } from "../../libs/search/Search";
-import { useLocationQuery, useSearch } from "../../utils/filterQuery";
-import { ListView } from "../../libs/List/List";
-import { Table } from "../../libs/basic/Table";
-import { Dialog, useDialog } from "../../libs/basic/Dialog";
-import { Inline } from "../../libs/basic/Layout";
-import { DropdownMenu } from "../../libs/basic/DropDown";
-import { TextInputField } from "../../libs/form/Input";
-import { api } from "../../libs/XHR/xhr";
-import type { IListResponse } from "../../libs/XHR/xhr";
-import { formatDate } from "../../helpers/Date";
-import type { IClass } from "./store";
-import { ManageCurriculum } from "../subjects/ManageCurriculum";
-import type { ISection } from "../subjects/store";
+} from '@tabler/icons-react';
+import { Search } from '../../libs/search/Search';
+import { useLocationQuery, useSearch } from '../../utils/filterQuery';
+import { ListView } from '../../libs/List/List';
+import { Table } from '../../libs/basic/Table';
+import { Dialog, useDialog } from '../../libs/basic/Dialog';
+import { Inline } from '../../libs/basic/Layout';
+import { DropdownMenu } from '../../libs/basic/DropDown';
+import { TextInputField } from '../../libs/form/Input';
+import { api } from '../../libs/XHR/xhr';
+import type { IListResponse } from '../../libs/XHR/xhr';
+import { formatDate } from '../../helpers/Date';
+import type { IClass } from './store';
+import { ManageCurriculum } from '../subjects/ManageCurriculum';
+import type { ISection } from '../subjects/store';
 
 interface IClassFormValues {
   name?: string;
   code?: string;
 }
 
-const SWR_KEY = "/academic/classes";
+const SWR_KEY = '/academic/classes';
 
 export function ClassList() {
   const [query, setQuery] = useLocationQuery();
@@ -57,7 +66,7 @@ export function ClassList() {
             close={addDialog.close}
             title="Add Class"
             onSubmit={async (values) => {
-              await api.post("/academic/classes", values);
+              await api.post('/academic/classes', values);
               mutate([SWR_KEY, params]);
               addDialog.close();
             }}
@@ -75,10 +84,10 @@ export function ClassList() {
           {(items) => (
             <>
               <Table
-                headers={["Name", "Code", "Created At", "Actions"]}
+                headers={['Name', 'Code', 'Created At', 'Actions']}
                 rows={items.map((c) => [
                   <Text fw="bold">{c.name}</Text>,
-                  <Text>{c.code || "-"}</Text>,
+                  <Text>{c.code || '-'}</Text>,
                   <Text>{formatDate(c.createdAt)}</Text>,
                   <DropdownMenu
                     trigger="hover"
@@ -155,7 +164,7 @@ export function ClassList() {
                 sizes="55rem"
                 isOpened={sectionDialog.isOpened}
                 close={sectionDialog.close}
-                title={`Sections - ${selected?.name ?? ""}`}
+                title={`Sections - ${selected?.name ?? ''}`}
               >
                 {selected && <ManageSections classItem={selected} />}
               </Dialog>
@@ -164,7 +173,7 @@ export function ClassList() {
                 sizes="55rem"
                 isOpened={curriculumDialog.isOpened}
                 close={curriculumDialog.close}
-                title={`Curriculum - ${selected?.name ?? ""}`}
+                title={`Curriculum - ${selected?.name ?? ''}`}
               >
                 {selected && <ManageCurriculum classItem={selected} />}
               </Dialog>
@@ -196,7 +205,10 @@ function ClassForm({
 
   return (
     <Dialog sizes="55rem" isOpened={isOpened} close={close} title={title}>
-      <Form<IClassFormValues> initialValues={values} onSubmit={(v) => onSubmit(v)}>
+      <Form<IClassFormValues>
+        initialValues={values}
+        onSubmit={(v) => onSubmit(v)}
+      >
         {({ handleSubmit, submitting }) => (
           <form onSubmit={handleSubmit}>
             <Stack gap="lg">
@@ -238,11 +250,11 @@ interface ISectionFormValues {
 // Sections are nested under a class (e.g. Class 10 -> A, B). Managed inline
 // in a dialog rather than a separate page since they only make sense per class.
 function ManageSections({ classItem }: { classItem: IClass }) {
-  const key = ["/academic/sections", classItem._id];
+  const key = ['/academic/sections', classItem._id];
   const { data, isLoading } = useSWR(key, async () =>
-    api.get<IListResponse<ISection>>("/academic/sections", {
+    api.get<IListResponse<ISection>>('/academic/sections', {
       params: { classId: classItem._id },
-    })
+    }),
   );
 
   const refresh = () => mutate(key);
@@ -252,7 +264,7 @@ function ManageSections({ classItem }: { classItem: IClass }) {
       <Form<ISectionFormValues>
         initialValues={{}}
         onSubmit={async (values, form) => {
-          await api.post("/academic/sections", {
+          await api.post('/academic/sections', {
             classId: classItem._id,
             name: values.name,
             roomNumber: values.roomNumber,
@@ -296,13 +308,13 @@ function ManageSections({ classItem }: { classItem: IClass }) {
         </Text>
       ) : (
         <Table
-          headers={["Section", "Room No.", "Actions"]}
+          headers={['Section', 'Room No.', 'Actions']}
           rows={data.data.map((sec) => [
             <Badge variant="light">
               {classItem.name}
               {sec.name}
             </Badge>,
-            <Text>{sec.roomNumber || "-"}</Text>,
+            <Text>{sec.roomNumber || '-'}</Text>,
             <Button
               variant="subtle"
               color="red"

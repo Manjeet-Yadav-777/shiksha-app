@@ -1,5 +1,5 @@
-import { ValidationError } from "yup";
-import type { AnyObjectSchema } from "yup";
+import { ValidationError } from 'yup';
+import type { AnyObjectSchema } from 'yup';
 
 type FormErrors = {
   [key: string]: any;
@@ -30,7 +30,7 @@ export const ValidateSchema =
 
 // 👇 nested object support (like user.email etc)
 const setIn = (obj: any, path: string, value: any) => {
-  const keys = path.split(".");
+  const keys = path.split('.');
   let current = obj;
 
   keys.forEach((key, index) => {

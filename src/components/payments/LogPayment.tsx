@@ -1,25 +1,25 @@
-import { Alert, Button, Stack } from "@mantine/core";
-import { Dialog } from "../../libs/basic/Dialog";
-import type { IInstallment } from "./store";
-import { Inline } from "../../libs/basic/Layout";
-import { TextInputField } from "../../libs/form/Input";
-import { Form } from "react-final-form";
-import { mutate } from "swr";
-import { api } from "../../libs/XHR/xhr";
-import { DatenputField } from "../../libs/form/DateInputField";
+import { Alert, Button, Stack } from '@mantine/core';
+import { Dialog } from '../../libs/basic/Dialog';
+import type { IInstallment } from './store';
+import { Inline } from '../../libs/basic/Layout';
+import { TextInputField } from '../../libs/form/Input';
+import { Form } from 'react-final-form';
+import { mutate } from 'swr';
+import { api } from '../../libs/XHR/xhr';
+import { DatenputField } from '../../libs/form/DateInputField';
 
 export function LogPayment({
   isOpen,
   close,
   title,
   installment,
-  params
+  params,
 }: {
   isOpen: boolean;
   close: () => void;
   title: string;
   installment?: IInstallment;
-  params : any
+  params: any;
 }) {
   console.log(installment);
   return (
@@ -32,7 +32,7 @@ export function LogPayment({
         onSubmit={async (values) => {
           await api.post(`/installment/${installment?._id}/payments`, values);
 
-          mutate(["/installment/getall", params]);
+          mutate(['/installment/getall', params]);
           close();
         }}
       >
@@ -65,7 +65,7 @@ export function LogPayment({
                 placeholder="Optional notes"
               />
 
-              <Alert color="orange" fw={"bold"}>
+              <Alert color="orange" fw={'bold'}>
                 Remaining amount will automatically create a new installment.
               </Alert>
 

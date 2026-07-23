@@ -1,4 +1,4 @@
-import useSWR, { mutate } from "swr";
+import useSWR, { mutate } from 'swr';
 import {
   Avatar,
   Button,
@@ -11,18 +11,18 @@ import {
   Text,
   Badge,
   Alert,
-} from "@mantine/core";
-import { IconPencil } from "@tabler/icons-react";
-import { api, xhr } from "../../libs/XHR/xhr";
-import type { ITenant } from "./store";
-import { formatDate } from "../../helpers/Date";
-import { Inline } from "../../libs/basic/Layout";
-import { EditTenant } from "./List";
-import { Dialog, useDialog } from "../../libs/basic/Dialog";
-import { Form } from "react-final-form";
-import { TextInputField } from "../../libs/form/Input";
-import { capitalize, getRole } from "../../helpers/Wording";
-import { AddSubscription } from "../subscriptions/AddSubscription";
+} from '@mantine/core';
+import { IconPencil } from '@tabler/icons-react';
+import { api, xhr } from '../../libs/XHR/xhr';
+import type { ITenant } from './store';
+import { formatDate } from '../../helpers/Date';
+import { Inline } from '../../libs/basic/Layout';
+import { EditTenant } from './List';
+import { Dialog, useDialog } from '../../libs/basic/Dialog';
+import { Form } from 'react-final-form';
+import { TextInputField } from '../../libs/form/Input';
+import { capitalize, getRole } from '../../helpers/Wording';
+import { AddSubscription } from '../subscriptions/AddSubscription';
 
 export function SingleTenant({ id }: { id?: string }) {
   const { data: tenant } = useSWR(`/tenant/${id}`, () =>
@@ -52,7 +52,7 @@ export function SingleTenant({ id }: { id?: string }) {
 
             <Badge
               mt={6}
-              color={tenant.status === "active" ? "green" : "red"}
+              color={tenant.status === 'active' ? 'green' : 'red'}
               variant="light"
               w="fit-content"
             >
@@ -99,7 +99,7 @@ export function SingleTenant({ id }: { id?: string }) {
               <>
                 {tenant.admin ? null : (
                   <Button size="xs" onClick={() => editAdmin.open()}>
-                    <Inline align={"center"} gap={"sm"}>
+                    <Inline align={'center'} gap={'sm'}>
                       <IconPencil size={16} />
                       Add Admin
                     </Inline>
@@ -129,11 +129,11 @@ export function SingleTenant({ id }: { id?: string }) {
               </>
             ) : (
               <Inline
-                align={"center"}
-                justify={"center"}
-                c={"gray"}
-                fw={"bold"}
-                h={"18vh"}
+                align={'center'}
+                justify={'center'}
+                c={'gray'}
+                fw={'bold'}
+                h={'18vh'}
               >
                 No Details Provided
               </Inline>
@@ -147,7 +147,7 @@ export function SingleTenant({ id }: { id?: string }) {
               tenant.subscription ? (
                 <>
                   <Button size="xs" onClick={() => editSub.open()}>
-                    <Inline align={"center"} gap={"sm"}>
+                    <Inline align={'center'} gap={'sm'}>
                       <IconPencil size={16} />
                       Edit Subcription
                     </Inline>
@@ -167,7 +167,7 @@ export function SingleTenant({ id }: { id?: string }) {
               ) : (
                 <>
                   <Button size="xs" onClick={() => addSub.open()}>
-                    <Inline align={"center"} gap={"sm"}>
+                    <Inline align={'center'} gap={'sm'}>
                       <IconPencil size={16} />
                       Add Subcription
                     </Inline>
@@ -206,13 +206,13 @@ export function SingleTenant({ id }: { id?: string }) {
                   value={
                     <Badge
                       color={
-                        tenant.subscription.status === "active"
-                          ? "green"
-                          : tenant.subscription.status === "expired"
-                            ? "red"
-                            : tenant.subscription.status === "trial"
-                              ? "blue"
-                              : "gray"
+                        tenant.subscription.status === 'active'
+                          ? 'green'
+                          : tenant.subscription.status === 'expired'
+                            ? 'red'
+                            : tenant.subscription.status === 'trial'
+                              ? 'blue'
+                              : 'gray'
                       }
                       variant="light"
                     >
@@ -231,7 +231,7 @@ export function SingleTenant({ id }: { id?: string }) {
                   value={
                     tenant.subscription.end_date
                       ? formatDate(tenant.subscription.end_date)
-                      : "-"
+                      : '-'
                   }
                 />
 
@@ -240,13 +240,13 @@ export function SingleTenant({ id }: { id?: string }) {
                   value={
                     tenant.subscription.next_billing_date
                       ? formatDate(tenant.subscription.next_billing_date)
-                      : "-"
+                      : '-'
                   }
                 />
 
                 <InfoRow
                   label="Auto Renew"
-                  value={tenant.subscription.auto_renew ? "Yes" : "No"}
+                  value={tenant.subscription.auto_renew ? 'Yes' : 'No'}
                 />
 
                 <InfoRow
@@ -256,7 +256,7 @@ export function SingleTenant({ id }: { id?: string }) {
 
                 <InfoRow
                   label="Notes"
-                  value={tenant.subscription.notes || "-"}
+                  value={tenant.subscription.notes || '-'}
                 />
               </>
             ) : (
@@ -297,7 +297,7 @@ function InfoCard({
   return (
     <Card shadow="xs" withBorder radius="md" p="lg">
       <Stack gap="md">
-        <Inline align={"center"} justify={"space-between"}>
+        <Inline align={'center'} justify={'space-between'}>
           <Text fw={600} fz="lg">
             {title}
           </Text>
@@ -317,7 +317,7 @@ function InfoRow({ label, value }: { label: string; value?: React.ReactNode }) {
       <Text c="dimmed">{label}</Text>
 
       <Text fw={500} ta="right">
-        {value || "-"}
+        {value || '-'}
       </Text>
     </Group>
   );
@@ -352,7 +352,7 @@ export function AddAdmin({
       >
         {({ handleSubmit }) => (
           <form onSubmit={handleSubmit}>
-            <Stack gap={"md"}>
+            <Stack gap={'md'}>
               <TextInputField
                 name="name"
                 label="Admin Name"
@@ -369,10 +369,10 @@ export function AddAdmin({
                 label="Admin Password"
                 placeholder="*******"
               />
-              <Alert color="orange" fw={"bold"}>
+              <Alert color="orange" fw={'bold'}>
                 Review details carefully this is one time process
               </Alert>
-              <Inline gap={"md"} justify={"end"}>
+              <Inline gap={'md'} justify={'end'}>
                 <Button type="submit">Add Admin</Button>
                 <Button variant="default" onClick={() => close()}>
                   Cancel

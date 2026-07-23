@@ -1,4 +1,4 @@
-import useSWR, { mutate } from "swr";
+import useSWR, { mutate } from 'swr';
 import {
   Button,
   Stack,
@@ -9,15 +9,15 @@ import {
   Loader,
   Center,
   Switch,
-} from "@mantine/core";
-import { Form } from "react-final-form";
-import { IconTrash } from "@tabler/icons-react";
-import { Table } from "../../libs/basic/Table";
-import { TextInputField } from "../../libs/form/Input";
-import { api } from "../../libs/XHR/xhr";
-import type { IPeriodSlot } from "./store";
+} from '@mantine/core';
+import { Form } from 'react-final-form';
+import { IconTrash } from '@tabler/icons-react';
+import { Table } from '../../libs/basic/Table';
+import { TextInputField } from '../../libs/form/Input';
+import { api } from '../../libs/XHR/xhr';
+import type { IPeriodSlot } from './store';
 
-const KEY = "/timetable/period-slots";
+const KEY = '/timetable/period-slots';
 
 interface ISlotFormValues {
   periodNumber?: string;
@@ -31,7 +31,7 @@ interface ISlotFormValues {
 // Har section ka timetable inhi slots pe align hota hai.
 export function ManagePeriodSlots() {
   const { data, isLoading } = useSWR(KEY, async () =>
-    api.get<{ data: IPeriodSlot[] }>(KEY)
+    api.get<{ data: IPeriodSlot[] }>(KEY),
   );
 
   const refresh = () => mutate(KEY);
@@ -88,7 +88,7 @@ export function ManagePeriodSlots() {
                 label="Break"
                 checked={!!values.isBreak}
                 onChange={(e) =>
-                  form.change("isBreak", e.currentTarget.checked)
+                  form.change('isBreak', e.currentTarget.checked)
                 }
                 mb={8}
               />
@@ -112,15 +112,15 @@ export function ManagePeriodSlots() {
         </Text>
       ) : (
         <Table
-          headers={["#", "Label", "Time", "Type", "Actions"]}
+          headers={['#', 'Label', 'Time', 'Type', 'Actions']}
           rows={slots.map((s) => [
             <Text fw="bold">{s.periodNumber}</Text>,
-            <Text>{s.label || "-"}</Text>,
+            <Text>{s.label || '-'}</Text>,
             <Text>
               {s.startTime} - {s.endTime}
             </Text>,
-            <Badge variant="light" color={s.isBreak ? "orange" : "blue"}>
-              {s.isBreak ? "Break" : "Class"}
+            <Badge variant="light" color={s.isBreak ? 'orange' : 'blue'}>
+              {s.isBreak ? 'Break' : 'Class'}
             </Badge>,
             <Button
               variant="subtle"

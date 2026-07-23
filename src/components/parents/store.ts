@@ -1,9 +1,9 @@
-import type { IUser } from "../Auth/store";
-import type { ITenant } from "../tenants/store";
-import type { IClass } from "../classes/store";
-import type { IPeriodSlot } from "../timetable/store";
-import type { ISubject } from "../subjects/store";
-import type { IStudent } from "../students/store";
+import type { IUser } from '../Auth/store';
+import type { ITenant } from '../tenants/store';
+import type { IClass } from '../classes/store';
+import type { IPeriodSlot } from '../timetable/store';
+import type { ISubject } from '../subjects/store';
+import type { IStudent } from '../students/store';
 
 // listParents ka ek row — user + linked children populated aate hain.
 export interface IParent {
@@ -43,11 +43,7 @@ export interface IChildTimetableEntry {
 
 // Backend ke ATTENDANCE_STATUSES ke saath in-sync.
 export type AttendanceStatus =
-  | "present"
-  | "absent"
-  | "late"
-  | "excused"
-  | "half_day";
+  'present' | 'absent' | 'late' | 'excused' | 'half_day';
 
 export interface IChildAttendance {
   total: number;
@@ -61,11 +57,11 @@ export const STATUS_META: Record<
   AttendanceStatus,
   { label: string; color: string }
 > = {
-  present: { label: "Present", color: "green" },
-  absent: { label: "Absent", color: "red" },
-  late: { label: "Late", color: "yellow" },
-  excused: { label: "Excused", color: "blue" },
-  half_day: { label: "Half Day", color: "grape" },
+  present: { label: 'Present', color: 'green' },
+  absent: { label: 'Absent', color: 'red' },
+  late: { label: 'Late', color: 'yellow' },
+  excused: { label: 'Excused', color: 'blue' },
+  half_day: { label: 'Half Day', color: 'grape' },
 };
 
 // getChildFees ka shape — fee rows + summary.
@@ -76,7 +72,7 @@ export interface IChildFeeRow {
   discount: number;
   fine: number;
   dueDate: string;
-  status: "paid" | "pending" | "partial";
+  status: 'paid' | 'pending' | 'partial';
   feeStructure?: { _id: string; name: string; dueDate?: string };
 }
 
@@ -86,7 +82,7 @@ export interface IChildFees {
 }
 
 export const FEE_STATUS_COLOR: Record<string, string> = {
-  paid: "green",
-  partial: "yellow",
-  pending: "red",
+  paid: 'green',
+  partial: 'yellow',
+  pending: 'red',
 };

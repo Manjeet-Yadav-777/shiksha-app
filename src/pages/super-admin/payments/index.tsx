@@ -1,5 +1,5 @@
-import { PaymentList } from "../../../components/payments/List";
+import { PaymentList } from '../../../components/payments/List';
 
-export default function Payments(){
-    return <PaymentList/>
+export default function Payments() {
+  return <PaymentList />;
 }

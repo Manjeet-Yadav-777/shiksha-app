@@ -1,12 +1,12 @@
-import { Alert, Button, Checkbox, Stack } from "@mantine/core";
-import { Form } from "react-final-form";
-import { Dialog } from "../../libs/basic/Dialog";
-import { BillingCycle, SubscriptionStatus, type ISubscription } from "./store";
-import { Inline } from "../../libs/basic/Layout";
-import { SelectInputField } from "../../libs/form/SelectInputField";
-import { TextInputField } from "../../libs/form/Input";
-import { DatenputField } from "../../libs/form/DateInputField";
-import dayjs from "dayjs";
+import { Alert, Button, Checkbox, Stack } from '@mantine/core';
+import { Form } from 'react-final-form';
+import { Dialog } from '../../libs/basic/Dialog';
+import { BillingCycle, SubscriptionStatus, type ISubscription } from './store';
+import { Inline } from '../../libs/basic/Layout';
+import { SelectInputField } from '../../libs/form/SelectInputField';
+import { TextInputField } from '../../libs/form/Input';
+import { DatenputField } from '../../libs/form/DateInputField';
+import dayjs from 'dayjs';
 
 interface IAddSubscriptionFormValues {
   amount?: number;
@@ -42,7 +42,7 @@ export function AddSubscription({
         status: propInitialValues.status,
       }
     : {
-        currency: "INR",
+        currency: 'INR',
         billing_cycle: BillingCycle.MONTHLY,
         auto_renew: false,
         status: SubscriptionStatus.ACTIVE,
@@ -81,22 +81,22 @@ export function AddSubscription({
                 data={[
                   {
                     value: BillingCycle.MONTHLY,
-                    label: "Monthly",
+                    label: 'Monthly',
                   },
                   {
                     value: BillingCycle.YEARLY,
-                    label: "Yearly",
+                    label: 'Yearly',
                   },
                   {
                     value: BillingCycle.LIFETIME,
-                    label: "Lifetime",
+                    label: 'Lifetime',
                   },
                 ]}
               />
 
               <DatenputField
-                minDate={dayjs().format("YYYY-MM-DD")}
-                maxDate={dayjs().add(1, "month").format("YYYY-MM-DD")}
+                minDate={dayjs().format('YYYY-MM-DD')}
+                maxDate={dayjs().add(1, 'month').format('YYYY-MM-DD')}
                 name="start_date"
                 label="Start Date"
               />
@@ -107,19 +107,19 @@ export function AddSubscription({
                 data={[
                   {
                     value: SubscriptionStatus.ACTIVE,
-                    label: "Active",
+                    label: 'Active',
                   },
                   {
                     value: SubscriptionStatus.TRIAL,
-                    label: "Trial",
+                    label: 'Trial',
                   },
                   {
                     value: SubscriptionStatus.EXPIRED,
-                    label: "Expired",
+                    label: 'Expired',
                   },
                   {
                     value: SubscriptionStatus.CANCELLED,
-                    label: "Cancelled",
+                    label: 'Cancelled',
                   },
                 ]}
               />

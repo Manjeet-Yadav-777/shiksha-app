@@ -1,8 +1,8 @@
-import { ActionIcon, Card, Stack, Text, Tooltip } from "@mantine/core";
-import { IconArrowRight } from "@tabler/icons-react";
-import type React from "react";
-import { useNavigate } from "react-router-dom";
-import { Inline } from "./Layout";
+import { ActionIcon, Card, Stack, Text, Tooltip } from '@mantine/core';
+import { IconArrowRight } from '@tabler/icons-react';
+import type React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Inline } from './Layout';
 
 interface StatCardProps {
   label: string;
@@ -17,7 +17,14 @@ interface StatCardProps {
 // A single KPI tile. Kept intentionally plain so a dashboard can lay several
 // out in a grid without extra wrapping. When `to` is given the header shows a
 // nav button that takes the user straight to the stat's detail page.
-export function StatCard({ label, value, hint, icon, color, to }: StatCardProps) {
+export function StatCard({
+  label,
+  value,
+  hint,
+  icon,
+  color,
+  to,
+}: StatCardProps) {
   const navigate = useNavigate();
 
   return (

@@ -1,30 +1,26 @@
-import { useEffect, useState } from "react";
-import { Button, Stack, Text, Badge } from "@mantine/core";
-import { Form } from "react-final-form";
-import { mutate } from "swr";
-import {
-  IconDotsVertical,
-  IconPencil,
-  IconTrash,
-} from "@tabler/icons-react";
-import { Search } from "../../libs/search/Search";
-import { useLocationQuery, useSearch } from "../../utils/filterQuery";
-import { ListView } from "../../libs/List/List";
-import { Table } from "../../libs/basic/Table";
-import { Dialog, useDialog } from "../../libs/basic/Dialog";
-import { Inline } from "../../libs/basic/Layout";
-import { DropdownMenu } from "../../libs/basic/DropDown";
-import { TextInputField } from "../../libs/form/Input";
-import { SelectInputField } from "../../libs/form/SelectInputField";
-import { api } from "../../libs/XHR/xhr";
-import { formatDate } from "../../helpers/Date";
-import { capitalize } from "../../helpers/Wording";
+import { useEffect, useState } from 'react';
+import { Button, Stack, Text, Badge } from '@mantine/core';
+import { Form } from 'react-final-form';
+import { mutate } from 'swr';
+import { IconDotsVertical, IconPencil, IconTrash } from '@tabler/icons-react';
+import { Search } from '../../libs/search/Search';
+import { useLocationQuery, useSearch } from '../../utils/filterQuery';
+import { ListView } from '../../libs/List/List';
+import { Table } from '../../libs/basic/Table';
+import { Dialog, useDialog } from '../../libs/basic/Dialog';
+import { Inline } from '../../libs/basic/Layout';
+import { DropdownMenu } from '../../libs/basic/DropDown';
+import { TextInputField } from '../../libs/form/Input';
+import { SelectInputField } from '../../libs/form/SelectInputField';
+import { api } from '../../libs/XHR/xhr';
+import { formatDate } from '../../helpers/Date';
+import { capitalize } from '../../helpers/Wording';
 import {
   SubjectType,
   SUBJECT_TYPE_OPTIONS,
   getSubjectTypeColor,
   type ISubject,
-} from "./store";
+} from './store';
 
 interface ISubjectFormValues {
   name?: string;
@@ -32,7 +28,7 @@ interface ISubjectFormValues {
   type: SubjectType;
 }
 
-const SWR_KEY = "/academic/subjects";
+const SWR_KEY = '/academic/subjects';
 
 export function SubjectList() {
   const [query, setQuery] = useLocationQuery();
@@ -58,7 +54,7 @@ export function SubjectList() {
             close={addDialog.close}
             title="Add Subject"
             onSubmit={async (values) => {
-              await api.post("/academic/subjects", values);
+              await api.post('/academic/subjects', values);
               mutate([SWR_KEY, params]);
               addDialog.close();
             }}
@@ -76,14 +72,11 @@ export function SubjectList() {
           {(items) => (
             <>
               <Table
-                headers={["Name", "Code", "Type", "Created At", "Actions"]}
+                headers={['Name', 'Code', 'Type', 'Created At', 'Actions']}
                 rows={items.map((s) => [
                   <Text fw="bold">{s.name}</Text>,
                   <Text>{s.code?.toUpperCase()}</Text>,
-                  <Badge
-                    color={getSubjectTypeColor(s.type)}
-                    variant="light"
-                  >
+                  <Badge color={getSubjectTypeColor(s.type)} variant="light">
                     {capitalize(s.type)}
                   </Badge>,
                   <Text>{formatDate(s.createdAt)}</Text>,

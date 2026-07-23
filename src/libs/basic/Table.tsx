@@ -1,6 +1,6 @@
-import { Table as MaintineTable } from "@mantine/core";
-import type React from "react";
-import type { TSizes } from "../types";
+import { Table as MaintineTable } from '@mantine/core';
+import type React from 'react';
+import type { TSizes } from '../types';
 interface TableProp {
   headers: React.ReactNode[];
   rows: React.ReactNode[][];
@@ -19,7 +19,7 @@ export function Table({
   tableBorder = true,
   rowBorder = true,
   colBorder,
-  highlightOnHover =true,
+  highlightOnHover = true,
   striped,
 }: TableProp) {
   return (

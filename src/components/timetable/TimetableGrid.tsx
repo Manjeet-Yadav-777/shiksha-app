@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import useSWR, { mutate } from "swr";
+import { useEffect, useMemo, useState } from 'react';
+import useSWR, { mutate } from 'swr';
 import {
   Button,
   Stack,
@@ -11,21 +11,21 @@ import {
   Table as MantineTable,
   ActionIcon,
   Tooltip,
-} from "@mantine/core";
-import { Form, Field, useForm, useFormState } from "react-final-form";
-import { IconPlus, IconTrash, IconPencil } from "@tabler/icons-react";
-import { Select } from "@mantine/core";
-import { Dialog, useDialog } from "../../libs/basic/Dialog";
-import { Inline } from "../../libs/basic/Layout";
-import { SelectInputField } from "../../libs/form/SelectInputField";
-import { TextInputField } from "../../libs/form/Input";
-import { api } from "../../libs/XHR/xhr";
-import type { IListResponse } from "../../libs/XHR/xhr";
-import { notifications } from "@mantine/notifications";
-import type { IPeriodSlot, ITimetableEntry } from "./store";
-import { DAYS } from "./store";
-import type { ISubject } from "../subjects/store";
-import type { ITeacher } from "../teachers/store";
+} from '@mantine/core';
+import { Form, Field, useForm, useFormState } from 'react-final-form';
+import { IconPlus, IconTrash, IconPencil } from '@tabler/icons-react';
+import { Select } from '@mantine/core';
+import { Dialog, useDialog } from '../../libs/basic/Dialog';
+import { Inline } from '../../libs/basic/Layout';
+import { SelectInputField } from '../../libs/form/SelectInputField';
+import { TextInputField } from '../../libs/form/Input';
+import { api } from '../../libs/XHR/xhr';
+import type { IListResponse } from '../../libs/XHR/xhr';
+import { notifications } from '@mantine/notifications';
+import type { IPeriodSlot, ITimetableEntry } from './store';
+import { DAYS } from './store';
+import type { ISubject } from '../subjects/store';
+import type { ITeacher } from '../teachers/store';
 
 interface Props {
   sectionId: string;
@@ -41,8 +41,8 @@ interface IEntryFormValues {
 // Ek section ka poora weekly timetable — rows = periods, columns = din.
 // Har cell click karke us din+period pe class assign/edit hoti hai.
 export function TimetableGrid({ sectionId, academicSession }: Props) {
-  const entriesKey = ["/timetable/section", sectionId, academicSession];
-  const slotsKey = "/timetable/period-slots";
+  const entriesKey = ['/timetable/section', sectionId, academicSession];
+  const slotsKey = '/timetable/period-slots';
 
   const { data: entriesRes, isLoading: entriesLoading } = useSWR(
     entriesKey,
@@ -51,7 +51,7 @@ export function TimetableGrid({ sectionId, academicSession }: Props) {
         params: { academicSession },
       }),
   );
-  console.log(entriesRes, "Hello");
+  console.log(entriesRes, 'Hello');
 
   const { data: slotsRes, isLoading: slotsLoading } = useSWR(
     slotsKey,
@@ -59,8 +59,8 @@ export function TimetableGrid({ sectionId, academicSession }: Props) {
   );
 
   // Dropdowns: tenant-wide subjects + teachers.
-  const { data: subjectsRes } = useSWR("/academic/subjects/all", async () =>
-    api.get<IListResponse<ISubject>>("/academic/subjects", {
+  const { data: subjectsRes } = useSWR('/academic/subjects/all', async () =>
+    api.get<IListResponse<ISubject>>('/academic/subjects', {
       params: { limit: 200 },
     }),
   );
@@ -85,7 +85,7 @@ export function TimetableGrid({ sectionId, academicSession }: Props) {
     const map = new Map<string, ITimetableEntry>();
     for (const e of entries) {
       const slotId =
-        typeof e.periodSlot === "string" ? e.periodSlot : e.periodSlot._id;
+        typeof e.periodSlot === 'string' ? e.periodSlot : e.periodSlot._id;
       map.set(`${e.dayOfWeek}-${slotId}`, e);
     }
     return map;
@@ -123,7 +123,7 @@ export function TimetableGrid({ sectionId, academicSession }: Props) {
       if (active.entry) {
         await api.put(`/timetable/entries/${active.entry._id}`, payload);
       } else {
-        await api.post("/timetable/entries", payload);
+        await api.post('/timetable/entries', payload);
       }
       dialog.close();
       setActive(null);
@@ -131,9 +131,9 @@ export function TimetableGrid({ sectionId, academicSession }: Props) {
     } catch (err: any) {
       // Clash (409) ka message backend se aata hai — user ko dikhao.
       notifications.show({
-        color: "red",
-        title: "Could not save",
-        message: err?.response?.data?.error ?? "Something went wrong",
+        color: 'red',
+        title: 'Could not save',
+        message: err?.response?.data?.error ?? 'Something went wrong',
       });
     }
   };
@@ -160,9 +160,9 @@ export function TimetableGrid({ sectionId, academicSession }: Props) {
   }
 
   const subjName = (e: ITimetableEntry) =>
-    typeof e.subject === "string" ? "" : e.subject.name;
+    typeof e.subject === 'string' ? '' : e.subject.name;
   const teacherName = (e: ITimetableEntry) =>
-    typeof e.teacher === "string" ? "" : (e.teacher.user?.name ?? "");
+    typeof e.teacher === 'string' ? '' : (e.teacher.user?.name ?? '');
 
   return (
     <Stack gap="md">
@@ -194,7 +194,7 @@ export function TimetableGrid({ sectionId, academicSession }: Props) {
                   return (
                     <MantineTable.Td key={d.value} bg="#fff7ed" ta="center">
                       <Badge variant="light" color="orange" size="sm">
-                        {slot.label || "Break"}
+                        {slot.label || 'Break'}
                       </Badge>
                     </MantineTable.Td>
                   );
@@ -267,10 +267,10 @@ export function TimetableGrid({ sectionId, academicSession }: Props) {
         }}
         title={
           active
-            ? `${active.entry ? "Edit" : "Add"} class — ${
+            ? `${active.entry ? 'Edit' : 'Add'} class — ${
                 DAYS.find((d) => d.value === active.day)?.label
               }, ${active.slot.label || `Period ${active.slot.periodNumber}`}`
-            : ""
+            : ''
         }
       >
         <Form<IEntryFormValues>
@@ -278,11 +278,11 @@ export function TimetableGrid({ sectionId, academicSession }: Props) {
             active?.entry
               ? {
                   subjectId:
-                    typeof active.entry.subject === "string"
+                    typeof active.entry.subject === 'string'
                       ? active.entry.subject
                       : active.entry.subject._id,
                   teacherId:
-                    typeof active.entry.teacher === "string"
+                    typeof active.entry.teacher === 'string'
                       ? active.entry.teacher
                       : active.entry.teacher._id,
                   room: active.entry.room,
@@ -309,7 +309,7 @@ export function TimetableGrid({ sectionId, academicSession }: Props) {
                 />
                 <Inline justify="end" gap="md">
                   <Button type="submit" disabled={submitting}>
-                    {active?.entry ? "Update" : "Add"} class
+                    {active?.entry ? 'Update' : 'Add'} class
                   </Button>
                   <Button
                     variant="default"
@@ -340,9 +340,9 @@ function EligibleTeacherField({ sectionId }: { sectionId: string }) {
   const subjectId = values.subjectId;
 
   const { data, isLoading } = useSWR(
-    subjectId ? ["/timetable/eligible-teachers", sectionId, subjectId] : null,
+    subjectId ? ['/timetable/eligible-teachers', sectionId, subjectId] : null,
     async () =>
-      api.get<{ data: ITeacher[] }>("/timetable/eligible-teachers", {
+      api.get<{ data: ITeacher[] }>('/timetable/eligible-teachers', {
         params: { sectionId, subjectId },
       }),
   );
@@ -350,7 +350,7 @@ function EligibleTeacherField({ sectionId }: { sectionId: string }) {
   const teachers = data?.data ?? [];
   const options = teachers.map((t) => ({
     value: t._id,
-    label: `${t.user?.name ?? "Teacher"} (${t.employeeId})`,
+    label: `${t.user?.name ?? 'Teacher'} (${t.employeeId})`,
   }));
 
   // Subject badla aur current teacher ab eligible nahi -> reset.
@@ -359,7 +359,7 @@ function EligibleTeacherField({ sectionId }: { sectionId: string }) {
     if (isLoading) return;
     const current = values.teacherId;
     if (current && !teachers.some((t) => t._id === current)) {
-      form.change("teacherId", undefined);
+      form.change('teacherId', undefined);
     }
   }, [subjectId, isLoading, teachers, values.teacherId, form]);
 
@@ -370,12 +370,12 @@ function EligibleTeacherField({ sectionId }: { sectionId: string }) {
           label="Teacher"
           placeholder={
             !subjectId
-              ? "Select a subject first"
+              ? 'Select a subject first'
               : isLoading
-                ? "Loading teachers..."
+                ? 'Loading teachers...'
                 : options.length
-                  ? "Select teacher"
-                  : "No teacher assigned to this subject"
+                  ? 'Select teacher'
+                  : 'No teacher assigned to this subject'
           }
           data={options}
           value={input.value || null}

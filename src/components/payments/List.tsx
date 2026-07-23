@@ -1,31 +1,31 @@
-import { useEffect, useState } from "react";
-import { useDialog } from "../../libs/basic/Dialog";
-import { Search, type TSearchParams } from "../../libs/search/Search";
-import { useLocationQuery, useSearch } from "../../utils/filterQuery";
-import { Badge, Button, Text } from "@mantine/core";
-import { ListView } from "../../libs/List/List";
-import { Table } from "../../libs/basic/Table";
-import { NavLink } from "../../utils/Link";
-import { api } from "../../libs/XHR/xhr";
-import type { IInstallment } from "./store";
-import { Inline } from "../../libs/basic/Layout";
+import { useEffect, useState } from 'react';
+import { useDialog } from '../../libs/basic/Dialog';
+import { Search, type TSearchParams } from '../../libs/search/Search';
+import { useLocationQuery, useSearch } from '../../utils/filterQuery';
+import { Badge, Button, Text } from '@mantine/core';
+import { ListView } from '../../libs/List/List';
+import { Table } from '../../libs/basic/Table';
+import { NavLink } from '../../utils/Link';
+import { api } from '../../libs/XHR/xhr';
+import type { IInstallment } from './store';
+import { Inline } from '../../libs/basic/Layout';
 
-import { capitalize } from "../../helpers/Wording";
-import { formatDate } from "../../helpers/Date";
-import { LogPayment } from "./LogPayment";
-import { SelectInputField } from "../../libs/form/SelectInputField";
-import { downloadPdf } from "../../libs/XHR/downloadPdf";
+import { capitalize } from '../../helpers/Wording';
+import { formatDate } from '../../helpers/Date';
+import { LogPayment } from './LogPayment';
+import { SelectInputField } from '../../libs/form/SelectInputField';
+import { downloadPdf } from '../../libs/XHR/downloadPdf';
 
 interface TFilters extends TSearchParams {
-  status?: "pending" | "success" | "all";
+  status?: 'pending' | 'success' | 'all';
 }
 
 interface TLocationQuery extends TSearchParams {
-  status?: "pending" | "success" | "all";
+  status?: 'pending' | 'success' | 'all';
 }
 
 function paramsToQuery(filters: TFilters): TLocationQuery {
-  const { q, page, status = "pending" } = filters;
+  const { q, page, status = 'pending' } = filters;
   const query: TLocationQuery = {};
   if (q) {
     query.q = q;
@@ -42,7 +42,7 @@ function paramsToQuery(filters: TFilters): TLocationQuery {
 }
 
 function queryToFilter(query: TLocationQuery): TFilters {
-  const { q, page, status = "pending" } = query;
+  const { q, page, status = 'pending' } = query;
   const params: TFilters = {};
 
   if (q) {
@@ -81,25 +81,25 @@ export function PaymentList() {
         <ListView<IInstallment>
           params={params}
           onParamsChange={(newParams) => {
-            console.log("Parent:", newParams);
+            console.log('Parent:', newParams);
             setSearchParams(newParams);
           }}
-          swrKey={"/installment/getall"}
+          swrKey={'/installment/getall'}
           fetchFn={async () => {
-            return await api.get("/installment/getall", { params: params });
+            return await api.get('/installment/getall', { params: params });
           }}
         >
           {(items) => (
             <>
               <Table
                 headers={[
-                  "Tenant",
-                  "Amount",
-                  "Paid",
-                  "Due",
-                  "Due Date",
-                  "Status",
-                  "Actions",
+                  'Tenant',
+                  'Amount',
+                  'Paid',
+                  'Due',
+                  'Due Date',
+                  'Status',
+                  'Actions',
                 ]}
                 rows={items.map((i) => [
                   <NavLink
@@ -118,14 +118,14 @@ export function PaymentList() {
                     {i.subscription.currency} {i.paid_amount.toLocaleString()}
                   </Text>,
 
-                  <Text c={i.amount >= 0 ? "red" : "green"}>
+                  <Text c={i.amount >= 0 ? 'red' : 'green'}>
                     {i.subscription.currency} {Number(i.amount - i.paid_amount)}
                   </Text>,
 
-                  <Text>{i.due_date ? formatDate(i.due_date) : "-"}</Text>,
+                  <Text>{i.due_date ? formatDate(i.due_date) : '-'}</Text>,
 
                   <Badge
-                    color={i.paid_amount ? "green" : "red"}
+                    color={i.paid_amount ? 'green' : 'red'}
                     variant="light"
                   >
                     {capitalize(i.status)}
@@ -135,11 +135,11 @@ export function PaymentList() {
                   i.paid_amount ? (
                     <Button
                       variant="default"
-                      c={"green"}
+                      c={'green'}
                       onClick={async () => {
                         await downloadPdf(
                           `/installment/${i._id}/invoice`,
-                          "invoice.pdf",
+                          'invoice.pdf',
                         );
                       }}
                     >
@@ -153,7 +153,7 @@ export function PaymentList() {
                         logDialog.open();
                       }}
                     >
-                      <Inline align={"center"} gap={"sm"}>
+                      <Inline align={'center'} gap={'sm'}>
                         Log Payment
                       </Inline>
                     </Button>
@@ -180,9 +180,9 @@ export function Filters() {
     <SelectInputField
       name="status"
       data={[
-        { label: "All", value: "all" },
-        { label: "Pending", value: "pending" },
-        { label: "Success", value: "success" },
+        { label: 'All', value: 'all' },
+        { label: 'Pending', value: 'pending' },
+        { label: 'Success', value: 'success' },
       ]}
     />
   );

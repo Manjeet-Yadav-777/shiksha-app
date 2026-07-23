@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import useSWR from "swr";
+import { useEffect, useState } from 'react';
+import useSWR from 'swr';
 import {
   Stack,
   Group,
@@ -11,12 +11,12 @@ import {
   ActionIcon,
   Loader,
   Center,
-} from "@mantine/core";
-import { IconTrash, IconPlus } from "@tabler/icons-react";
-import { api } from "../../libs/XHR/xhr";
-import type { IListResponse } from "../../libs/XHR/xhr";
-import type { IStudent } from "../students/store";
-import type { IParent } from "./store";
+} from '@mantine/core';
+import { IconTrash, IconPlus } from '@tabler/icons-react';
+import { api } from '../../libs/XHR/xhr';
+import type { IListResponse } from '../../libs/XHR/xhr';
+import type { IStudent } from '../students/store';
+import type { IParent } from './store';
 
 // Admin ek parent ke bachche link/unlink karta hai. Student picker `/students`
 // (paginated + ?q search) se aata hai; link/unlink ke baad parent list refresh.
@@ -28,7 +28,7 @@ export function ManageChildren({
   onChanged: () => void;
 }) {
   const [studentId, setStudentId] = useState<string | null>(null);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [busy, setBusy] = useState(false);
   // Local copy taaki dialog band kiye bina turant updated list dikhe.
   const [children, setChildren] = useState<IStudent[]>(parent.students ?? []);
@@ -40,9 +40,9 @@ export function ManageChildren({
   // Student search — debounce ki zarurat nahi, Select searchable onSearchChange
   // pe SWR key badalti hai aur keepPreviousData flicker rokta hai.
   const { data: studentsRes, isLoading } = useSWR(
-    ["/students", search],
+    ['/students', search],
     async () =>
-      api.get<IListResponse<IStudent>>("/students", {
+      api.get<IListResponse<IStudent>>('/students', {
         params: { q: search, limit: 20 },
       }),
     { keepPreviousData: true },
@@ -56,7 +56,7 @@ export function ManageChildren({
       .map((s) => ({
         value: s._id,
         label:
-          `${s.user?.name ?? "Student"} (${s.rollNumber}) - ${s.class?.name ?? ""} ${s.section?.name ?? ""}`.trim(),
+          `${s.user?.name ?? 'Student'} (${s.rollNumber}) - ${s.class?.name ?? ''} ${s.section?.name ?? ''}`.trim(),
       })) ?? [];
 
   const link = async () => {
@@ -96,12 +96,14 @@ export function ManageChildren({
             placeholder="Type name to search..."
             data={options}
             value={studentId}
-            onChange={(value) => setStudentId(typeof value === "string" ? value : null)}
+            onChange={(value) =>
+              setStudentId(typeof value === 'string' ? value : null)
+            }
             searchable
             searchValue={search}
             onSearchChange={setSearch}
             nothingFoundMessage={
-              isLoading ? "Searching..." : "No students found"
+              isLoading ? 'Searching...' : 'No students found'
             }
             rightSection={isLoading ? <Loader size="xs" /> : undefined}
           />
@@ -134,14 +136,14 @@ export function ManageChildren({
             {children.map((c) => (
               <Group key={c._id} justify="space-between" wrap="nowrap">
                 <Group gap="sm" wrap="nowrap">
-                  <Text fw={500}>{c.user?.name ?? "Student"}</Text>
+                  <Text fw={500}>{c.user?.name ?? 'Student'}</Text>
                   <Badge variant="light" size="sm">
                     {c.rollNumber}
                   </Badge>
                   <Text fz="sm" c="dimmed">
                     {[c.class?.name, c.section?.name]
                       .filter(Boolean)
-                      .join(" - ")}
+                      .join(' - ')}
                   </Text>
                 </Group>
                 <ActionIcon

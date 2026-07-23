@@ -9,15 +9,15 @@ import {
   Stack,
   Text,
   Title,
-} from "@mantine/core";
-import { IconLock } from "@tabler/icons-react";
-import { useAuthUser } from "../../hooks/auth";
-import { TextInputField } from "../../libs/form/Input";
-import { Form } from "react-final-form";
-import { Dialog, useDialog } from "../../libs/basic/Dialog";
-import { Inline } from "../../libs/basic/Layout";
-import { xhr } from "../../libs/XHR/xhr";
-import { getRole } from "./store";
+} from '@mantine/core';
+import { IconLock } from '@tabler/icons-react';
+import { useAuthUser } from '../../hooks/auth';
+import { TextInputField } from '../../libs/form/Input';
+import { Form } from 'react-final-form';
+import { Dialog, useDialog } from '../../libs/basic/Dialog';
+import { Inline } from '../../libs/basic/Layout';
+import { xhr } from '../../libs/XHR/xhr';
+import { getRole } from './store';
 
 function Row({ label, value }: { label: string; value: React.ReactNode }) {
   return (
@@ -149,14 +149,14 @@ export function EditPassword({
     <Dialog title="Edit Password" isOpened={isOpen} close={close}>
       <Form
         onSubmit={async (values) => {
-          await xhr.post("/auth/change-password", values);
+          await xhr.post('/auth/change-password', values);
           onSuccess();
         }}
       >
         {({ handleSubmit, submitting }) => (
           <form onSubmit={handleSubmit}>
-            <Stack gap={"md"}>
-              <Stack gap={"lg"}>
+            <Stack gap={'md'}>
+              <Stack gap={'lg'}>
                 <TextInputField
                   type="password"
                   name="password"
@@ -168,7 +168,7 @@ export function EditPassword({
                   label="New Password"
                 />
               </Stack>
-              <Inline gap={"lg"}>
+              <Inline gap={'lg'}>
                 <Button
                   loading={submitting}
                   disabled={submitting}

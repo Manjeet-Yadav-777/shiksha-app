@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { Tabs } from "@mantine/core";
-import { FeeStructureList } from "../../components/fees/FeeStructureList";
-import { StudentFeeList } from "../../components/fees/StudentFeeList";
+import { useState } from 'react';
+import { Tabs } from '@mantine/core';
+import { FeeStructureList } from '../../components/fees/FeeStructureList';
+import { StudentFeeList } from '../../components/fees/StudentFeeList';
 
 export default function Fees() {
-  const [tab, setTab] = useState<string | null>("structures");
+  const [tab, setTab] = useState<string | null>('structures');
 
   return (
     <Tabs value={tab} onChange={setTab} keepMounted={false}>

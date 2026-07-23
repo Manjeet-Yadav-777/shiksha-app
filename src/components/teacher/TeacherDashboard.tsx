@@ -1,5 +1,5 @@
-import { useState } from "react";
-import useSWR from "swr";
+import { useState } from 'react';
+import useSWR from 'swr';
 import {
   Stack,
   Text,
@@ -10,15 +10,15 @@ import {
   Center,
   Table as MantineTable,
   Divider,
-} from "@mantine/core";
-import { IconCalendarEvent, IconClock } from "@tabler/icons-react";
-import { Heading } from "../../libs/basic/Layout";
-import { api } from "../../libs/XHR/xhr";
-import { useAuthUser } from "../../hooks/auth";
-import type { IPeriodSlot } from "../timetable/store";
-import { DAYS } from "../timetable/store";
-import type { ISubject } from "../subjects/store";
-import type { IClass } from "../classes/store";
+} from '@mantine/core';
+import { IconCalendarEvent, IconClock } from '@tabler/icons-react';
+import { Heading } from '../../libs/basic/Layout';
+import { api } from '../../libs/XHR/xhr';
+import { useAuthUser } from '../../hooks/auth';
+import type { IPeriodSlot } from '../timetable/store';
+import { DAYS } from '../timetable/store';
+import type { ISubject } from '../subjects/store';
+import type { IClass } from '../classes/store';
 
 // getTeacherTimetable populated shape — section me class bhi populated aata hai.
 interface ITeacherEntry {
@@ -40,23 +40,23 @@ function currentSession(): string {
 }
 
 const SUBJECT_COLOR: Record<string, string> = {
-  core: "blue",
-  elective: "grape",
-  activity: "teal",
+  core: 'blue',
+  elective: 'grape',
+  activity: 'teal',
 };
 
 function subjectName(s?: ISubject): string {
-  return s?.name ?? "—";
+  return s?.name ?? '—';
 }
 
 function sectionLabel(e: ITeacherEntry): string {
-  const cls = e.section?.class?.name ?? "";
-  const sec = e.section?.name ?? "";
-  return [cls, sec].filter(Boolean).join(" - ") || "—";
+  const cls = e.section?.class?.name ?? '';
+  const sec = e.section?.name ?? '';
+  return [cls, sec].filter(Boolean).join(' - ') || '—';
 }
 
 function timeRange(slot?: IPeriodSlot): string {
-  if (!slot) return "";
+  if (!slot) return '';
   return `${slot.startTime} - ${slot.endTime}`;
 }
 
@@ -66,7 +66,7 @@ export function TeacherDashboard() {
   const teacherId = user?.teacherProfile;
 
   const { data, isLoading } = useSWR(
-    teacherId ? ["/timetable/teacher", teacherId, session] : null,
+    teacherId ? ['/timetable/teacher', teacherId, session] : null,
     async () =>
       api.get<{ data: ITeacherEntry[] }>(`/timetable/teacher/${teacherId}`, {
         params: { academicSession: session },
@@ -144,7 +144,7 @@ export function TeacherDashboard() {
                   wrap="nowrap"
                   p="xs"
                   style={{
-                    borderLeft: "3px solid var(--mantine-color-blue-5)",
+                    borderLeft: '3px solid var(--mantine-color-blue-5)',
                   }}
                 >
                   <Group gap="sm" wrap="nowrap">
@@ -153,7 +153,7 @@ export function TeacherDashboard() {
                       {timeRange(e.periodSlot)}
                     </Text>
                     <Badge
-                      color={SUBJECT_COLOR[e.subject?.type ?? ""] ?? "gray"}
+                      color={SUBJECT_COLOR[e.subject?.type ?? ''] ?? 'gray'}
                       variant="light"
                     >
                       {subjectName(e.subject)}
@@ -193,7 +193,7 @@ export function TeacherDashboard() {
                 <Stack key={day.value} gap="xs">
                   <Text
                     fw={600}
-                    c={day.value === todayDow ? "blue" : undefined}
+                    c={day.value === todayDow ? 'blue' : undefined}
                   >
                     {day.label}
                   </Text>
@@ -220,7 +220,7 @@ export function TeacherDashboard() {
                             <MantineTable.Td>
                               <Badge
                                 color={
-                                  SUBJECT_COLOR[e.subject?.type ?? ""] ?? "gray"
+                                  SUBJECT_COLOR[e.subject?.type ?? ''] ?? 'gray'
                                 }
                                 variant="light"
                               >
@@ -229,7 +229,7 @@ export function TeacherDashboard() {
                             </MantineTable.Td>
                             <MantineTable.Td>{sectionLabel(e)}</MantineTable.Td>
                             <MantineTable.Td>
-                              {e.room || e.section?.roomNumber || "—"}
+                              {e.room || e.section?.roomNumber || '—'}
                             </MantineTable.Td>
                           </MantineTable.Tr>
                         ))}

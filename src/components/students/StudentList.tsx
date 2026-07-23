@@ -1,23 +1,23 @@
-import { useEffect, useRef, useState } from "react";
-import useSWR, { mutate } from "swr";
-import { Button, Stack, Text } from "@mantine/core";
-import { Form, useForm, useFormState } from "react-final-form";
-import { IconDotsVertical, IconPencil, IconTrash } from "@tabler/icons-react";
-import { Search, type TSearchParams } from "../../libs/search/Search";
-import { useLocationQuery, useSearch } from "../../utils/filterQuery";
-import { ListView } from "../../libs/List/List";
-import { Table } from "../../libs/basic/Table";
-import { Dialog, useDialog } from "../../libs/basic/Dialog";
-import { Inline } from "../../libs/basic/Layout";
-import { DropdownMenu } from "../../libs/basic/DropDown";
-import { TextInputField } from "../../libs/form/Input";
-import { SelectInputField } from "../../libs/form/SelectInputField";
-import { DatenputField } from "../../libs/form/DateInputField";
-import { api } from "../../libs/XHR/xhr";
-import type { IListResponse } from "../../libs/XHR/xhr";
-import { formatDate } from "../../helpers/Date";
-import type { IClass, ISection } from "../classes/store";
-import type { IStudent } from "./store";
+import { useEffect, useRef, useState } from 'react';
+import useSWR, { mutate } from 'swr';
+import { Button, Stack, Text } from '@mantine/core';
+import { Form, useForm, useFormState } from 'react-final-form';
+import { IconDotsVertical, IconPencil, IconTrash } from '@tabler/icons-react';
+import { Search, type TSearchParams } from '../../libs/search/Search';
+import { useLocationQuery, useSearch } from '../../utils/filterQuery';
+import { ListView } from '../../libs/List/List';
+import { Table } from '../../libs/basic/Table';
+import { Dialog, useDialog } from '../../libs/basic/Dialog';
+import { Inline } from '../../libs/basic/Layout';
+import { DropdownMenu } from '../../libs/basic/DropDown';
+import { TextInputField } from '../../libs/form/Input';
+import { SelectInputField } from '../../libs/form/SelectInputField';
+import { DatenputField } from '../../libs/form/DateInputField';
+import { api } from '../../libs/XHR/xhr';
+import type { IListResponse } from '../../libs/XHR/xhr';
+import { formatDate } from '../../helpers/Date';
+import type { IClass, ISection } from '../classes/store';
+import type { IStudent } from './store';
 
 interface IStudentFormValues {
   name?: string;
@@ -78,7 +78,7 @@ function queryToFilter(query: TLocationQuery): TFilters {
   return filters;
 }
 
-const SWR_KEY = "/students";
+const SWR_KEY = '/students';
 
 export function StudentList() {
   const [query, setQuery] = useLocationQuery({
@@ -109,7 +109,7 @@ export function StudentList() {
             isOpened={addDialog.isOpened}
             close={addDialog.close}
             onSubmit={async (values) => {
-              await api.post("/students", values);
+              await api.post('/students', values);
               mutate([SWR_KEY, params]);
               addDialog.close();
             }}
@@ -128,24 +128,24 @@ export function StudentList() {
             <>
               <Table
                 headers={[
-                  "Name",
-                  "Email",
-                  "Roll No",
-                  "Admission No",
-                  "Class",
-                  "Section",
-                  "Admitted",
-                  "Actions",
+                  'Name',
+                  'Email',
+                  'Roll No',
+                  'Admission No',
+                  'Class',
+                  'Section',
+                  'Admitted',
+                  'Actions',
                 ]}
                 rows={items.map((s) => [
                   <Text fw="bold">{s.user?.name}</Text>,
                   <Text>{s.user?.email}</Text>,
                   <Text>{s.rollNumber}</Text>,
                   <Text>{s.admissionNumber}</Text>,
-                  <Text>{s.class?.name ?? "-"}</Text>,
-                  <Text>{s.section?.name ?? "-"}</Text>,
+                  <Text>{s.class?.name ?? '-'}</Text>,
+                  <Text>{s.section?.name ?? '-'}</Text>,
                   <Text>
-                    {s.admissionDate ? formatDate(s.admissionDate) : "-"}
+                    {s.admissionDate ? formatDate(s.admissionDate) : '-'}
                   </Text>,
                   <DropdownMenu
                     trigger="hover"
@@ -166,18 +166,18 @@ export function StudentList() {
                       {
                         label: (
                           <Inline
-                            c={s.deletedAt ? "orange" : "red"}
+                            c={s.deletedAt ? 'orange' : 'red'}
                             gap="xs"
                             align="center"
                           >
                             <IconTrash size={16} />
-                            {s.deletedAt ? "Restore" : "Disable"}
+                            {s.deletedAt ? 'Restore' : 'Disable'}
                           </Inline>
                         ),
                         onClick: async () => {
-                          const reqType = s.deletedAt ? "patch" : "delete";
+                          const reqType = s.deletedAt ? 'patch' : 'delete';
 
-                          if (reqType === "patch") {
+                          if (reqType === 'patch') {
                             await api.patch(`/students/${s._id}/restore`);
                           } else {
                             await api.delete(`/students/${s._id}`);
@@ -242,8 +242,8 @@ function StudentForm({
   isEdit?: boolean;
 }) {
   // Class catalog for the picker.
-  const { data: classes } = useSWR("/academic/classes/all", async () =>
-    api.get<IListResponse<IClass>>("/academic/classes", {
+  const { data: classes } = useSWR('/academic/classes/all', async () =>
+    api.get<IListResponse<IClass>>('/academic/classes', {
       params: { limit: 200 },
     }),
   );
@@ -306,10 +306,10 @@ function StudentForm({
               <Inline justify="end" gap="md">
                 <Button type="submit" disabled={submitting}>
                   {submitting
-                    ? "Saving..."
+                    ? 'Saving...'
                     : isEdit
-                      ? "Save Changes"
-                      : "Add Student"}
+                      ? 'Save Changes'
+                      : 'Add Student'}
                 </Button>
                 <Button variant="default" onClick={close}>
                   Cancel
@@ -342,15 +342,15 @@ function ClassSectionFields({
   const prevClassId = useRef(classId);
   useEffect(() => {
     if (prevClassId.current !== undefined && prevClassId.current !== classId) {
-      form.change("sectionId", undefined);
+      form.change('sectionId', undefined);
     }
     prevClassId.current = classId;
   }, [classId, form]);
 
   const { data: sections } = useSWR(
-    classId ? ["/academic/sections", classId] : null,
+    classId ? ['/academic/sections', classId] : null,
     async () =>
-      api.get<{ data: ISection[] }>("/academic/sections", {
+      api.get<{ data: ISection[] }>('/academic/sections', {
         params: { classId },
       }),
   );
@@ -372,7 +372,7 @@ function ClassSectionFields({
         w="50%"
         name="sectionId"
         label="Section"
-        placeholder={classId ? "Select section" : "Pick a class first"}
+        placeholder={classId ? 'Select section' : 'Pick a class first'}
         data={sectionOptions}
         disabled={!classId}
       />
@@ -385,8 +385,8 @@ function Filters() {
     <SelectInputField
       name="archived"
       data={[
-        { label: "All", value: "" },
-        { label: "Archived", value: "true" },
+        { label: 'All', value: '' },
+        { label: 'Archived', value: 'true' },
       ]}
     />
   );

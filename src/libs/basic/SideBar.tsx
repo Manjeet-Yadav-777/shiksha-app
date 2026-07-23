@@ -1,6 +1,6 @@
-import React, { cloneElement } from "react";
-import { Drawer, type DrawerProps } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import React, { cloneElement } from 'react';
+import { Drawer, type DrawerProps } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 
 interface SideBarProps extends Partial<DrawerProps> {
   action: React.ReactElement<{
@@ -8,14 +8,14 @@ interface SideBarProps extends Partial<DrawerProps> {
   }>;
   title: string | React.ReactNode;
   children: React.ReactNode;
-  position?: "right" | "left" | "top" | "bottom";
+  position?: 'right' | 'left' | 'top' | 'bottom';
 }
 
 export function SideBar({
   action,
   title,
   children,
-  position = "right",
+  position = 'right',
   ...props
 }: SideBarProps) {
   const [opened, { open, close }] = useDisclosure(false);
@@ -32,9 +32,9 @@ export function SideBar({
       >
         <hr
           style={{
-            backgroundColor: "#E5E7EB",
-            height: "1px",
-            marginBottom: "10px",
+            backgroundColor: '#E5E7EB',
+            height: '1px',
+            marginBottom: '10px',
           }}
         />
         {children}

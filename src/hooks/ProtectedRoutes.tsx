@@ -1,10 +1,10 @@
-import { Navigate, Outlet } from "react-router-dom";
-import { Center, Loader } from "@mantine/core";
-import { useAuthUser } from "./auth";
-import type { IUser } from "../components/Auth/store";
+import { Navigate, Outlet } from 'react-router-dom';
+import { Center, Loader } from '@mantine/core';
+import { useAuthUser } from './auth';
+import type { IUser } from '../components/Auth/store';
 
 type Props = {
-  allowedRoles?: Array<IUser["role"]>;
+  allowedRoles?: Array<IUser['role']>;
 };
 
 export function ProtectedRoutes({ allowedRoles }: Props) {

@@ -57,10 +57,10 @@ import axios, {
   type AxiosInstance,
   type AxiosError,
   type AxiosRequestConfig,
-} from "axios";
-import { notifications } from "@mantine/notifications";
-import "@mantine/core/styles.css";
-import "@mantine/notifications/styles.css";
+} from 'axios';
+import { notifications } from '@mantine/notifications';
+import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 
 export interface IListResponse<Item> {
   data: Array<Item>;
@@ -106,7 +106,6 @@ export type XHRInstance = AxiosInstance;
  * Login ke baad set karna hai.
  */
 
-
 export const api = {
   get: async <T>(url: string, config?: AxiosRequestConfig): Promise<T> => {
     return xhr.get(url, config);
@@ -115,7 +114,7 @@ export const api = {
   post: async <T, B = unknown>(
     url: string,
     body?: B,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ): Promise<T> => {
     return xhr.post(url, body, config);
   },
@@ -123,7 +122,7 @@ export const api = {
   put: async <T, B = unknown>(
     url: string,
     body?: B,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ): Promise<T> => {
     return xhr.put(url, body, config);
   },
@@ -131,15 +130,12 @@ export const api = {
   patch: async <T, B = unknown>(
     url: string,
     body?: B,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ): Promise<T> => {
     return xhr.patch(url, body, config);
   },
 
-  delete: async <T>(
-    url: string,
-    config?: AxiosRequestConfig
-  ): Promise<T> => {
+  delete: async <T>(url: string, config?: AxiosRequestConfig): Promise<T> => {
     return xhr.delete(url, config);
   },
 };
@@ -155,33 +151,33 @@ export const xhr = axios.create({
 
 xhr.interceptors.response.use(
   (response) => {
-    console.log(response)
+    console.log(response);
     if (response.data.message) {
       notifications.show({
-        title: "Success",
+        title: 'Success',
         message: response.data.message,
-        color: "green",
+        color: 'green',
         withCloseButton: true,
         autoClose: 3000,
-        position: "top-right",
+        position: 'top-right',
       });
     }
     return response.data;
   },
   (error: AxiosError<{ message?: string; error?: string }>) => {
     const data = error.response?.data;
-    console.log(error)
+    console.log(error);
 
     const errorMessage =
-      data?.error || data?.message || error.message || "Something went wrong";
+      data?.error || data?.message || error.message || 'Something went wrong';
 
     notifications.show({
-      title: "Error",
+      title: 'Error',
       message: errorMessage,
-      color: "red",
+      color: 'red',
       withCloseButton: true,
       autoClose: 3000,
-      position: "top-right",
+      position: 'top-right',
     });
 
     return Promise.reject(error);

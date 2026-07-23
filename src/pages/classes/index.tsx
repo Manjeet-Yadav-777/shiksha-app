@@ -1,5 +1,5 @@
-import { ClassList } from "../../components/classes/ClassList";
+import { ClassList } from '../../components/classes/ClassList';
 
-export default function Classes(){
-    return <ClassList/>
+export default function Classes() {
+  return <ClassList />;
 }

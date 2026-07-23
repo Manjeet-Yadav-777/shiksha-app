@@ -1,5 +1,5 @@
-import { Field } from "react-final-form";
-import { DateInput, type DateInputProps } from "@mantine/dates";
+import { Field } from 'react-final-form';
+import { DateInput, type DateInputProps } from '@mantine/dates';
 
 type SelectInputFieldProps = DateInputProps & {
   name: string;

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import useSWR from "swr";
+import { useState } from 'react';
+import useSWR from 'swr';
 import {
   Stack,
   Text,
@@ -13,25 +13,25 @@ import {
   Progress,
   SimpleGrid,
   RingProgress,
-} from "@mantine/core";
+} from '@mantine/core';
 import {
   IconCalendarEvent,
   IconClock,
   IconChartBar,
-} from "@tabler/icons-react";
-import { Heading } from "../../libs/basic/Layout";
-import { api } from "../../libs/XHR/xhr";
-import { useAuthUser } from "../../hooks/auth";
-import type { IPeriodSlot } from "../timetable/store";
-import { DAYS } from "../timetable/store";
-import type { ISubject } from "../subjects/store";
+} from '@tabler/icons-react';
+import { Heading } from '../../libs/basic/Layout';
+import { api } from '../../libs/XHR/xhr';
+import { useAuthUser } from '../../hooks/auth';
+import type { IPeriodSlot } from '../timetable/store';
+import { DAYS } from '../timetable/store';
+import type { ISubject } from '../subjects/store';
 import type {
   AttendanceStatus,
   IMyAttendance,
   IMyProfile,
   IMyTimetableEntry,
-} from "./store";
-import { STATUS_META } from "./store";
+} from './store';
+import { STATUS_META } from './store';
 
 // Current academic session — "2025-2026". School July me naya session shuru
 // karti hai (TeacherDashboard/backend ke jaisa hi rule).
@@ -42,29 +42,29 @@ function currentSession(): string {
 }
 
 const SUBJECT_COLOR: Record<string, string> = {
-  core: "blue",
-  elective: "grape",
-  activity: "teal",
+  core: 'blue',
+  elective: 'grape',
+  activity: 'teal',
 };
 
 function subjectName(s?: ISubject): string {
-  return s?.name ?? "—";
+  return s?.name ?? '—';
 }
 
 function timeRange(slot?: IPeriodSlot): string {
-  if (!slot) return "";
+  if (!slot) return '';
   return `${slot.startTime} - ${slot.endTime}`;
 }
 
 function teacherName(e: IMyTimetableEntry): string {
-  return e.teacher?.user?.name ?? "—";
+  return e.teacher?.user?.name ?? '—';
 }
 
 // 75%+ green, 60-75% yellow, neeche red — attendance % ki health.
 function attendanceColor(pct: number): string {
-  if (pct >= 75) return "green";
-  if (pct >= 60) return "yellow";
-  return "red";
+  if (pct >= 75) return 'green';
+  if (pct >= 60) return 'yellow';
+  return 'red';
 }
 
 export function StudentDashboard() {
@@ -72,17 +72,20 @@ export function StudentDashboard() {
   const [session] = useState(currentSession());
 
   // 1. Apna profile — class/section/roll. Iske bina "no student linked" state.
-  const { data: profileRes, isLoading: loadingProfile, error: profileError } =
-    useSWR("/students/me", async () =>
-      api.get<{ data: IMyProfile }>("/students/me"),
-    );
+  const {
+    data: profileRes,
+    isLoading: loadingProfile,
+    error: profileError,
+  } = useSWR('/students/me', async () =>
+    api.get<{ data: IMyProfile }>('/students/me'),
+  );
   const profile = profileRes?.data;
 
   // 2. Apni section ka weekly timetable.
   const { data: ttRes, isLoading: loadingTt } = useSWR(
-    profile ? ["/students/me/timetable", session] : null,
+    profile ? ['/students/me/timetable', session] : null,
     async () =>
-      api.get<{ data: IMyTimetableEntry[] }>("/students/me/timetable", {
+      api.get<{ data: IMyTimetableEntry[] }>('/students/me/timetable', {
         params: { academicSession: session },
       }),
   );
@@ -90,9 +93,9 @@ export function StudentDashboard() {
 
   // 3. Apni attendance summary.
   const { data: attRes, isLoading: loadingAtt } = useSWR(
-    profile ? ["/students/me/attendance", session] : null,
+    profile ? ['/students/me/attendance', session] : null,
     async () =>
-      api.get<{ data: IMyAttendance }>("/students/me/attendance", {
+      api.get<{ data: IMyAttendance }>('/students/me/attendance', {
         params: { academicSession: session },
       }),
   );
@@ -135,7 +138,7 @@ export function StudentDashboard() {
 
   const classSection = [profile.class?.name, profile.section?.name]
     .filter(Boolean)
-    .join(" - ");
+    .join(' - ');
 
   return (
     <Stack p="lg" gap="lg">
@@ -259,7 +262,7 @@ export function StudentDashboard() {
                   wrap="nowrap"
                   p="xs"
                   style={{
-                    borderLeft: "3px solid var(--mantine-color-blue-5)",
+                    borderLeft: '3px solid var(--mantine-color-blue-5)',
                   }}
                 >
                   <Group gap="sm" wrap="nowrap">
@@ -268,7 +271,7 @@ export function StudentDashboard() {
                       {timeRange(e.periodSlot)}
                     </Text>
                     <Badge
-                      color={SUBJECT_COLOR[e.subject?.type ?? ""] ?? "gray"}
+                      color={SUBJECT_COLOR[e.subject?.type ?? ''] ?? 'gray'}
                       variant="light"
                     >
                       {subjectName(e.subject)}
@@ -308,7 +311,7 @@ export function StudentDashboard() {
                 <Stack key={day.value} gap="xs">
                   <Text
                     fw={600}
-                    c={day.value === todayDow ? "blue" : undefined}
+                    c={day.value === todayDow ? 'blue' : undefined}
                   >
                     {day.label}
                   </Text>
@@ -334,7 +337,7 @@ export function StudentDashboard() {
                             <MantineTable.Td>
                               <Badge
                                 color={
-                                  SUBJECT_COLOR[e.subject?.type ?? ""] ?? "gray"
+                                  SUBJECT_COLOR[e.subject?.type ?? ''] ?? 'gray'
                                 }
                                 variant="light"
                               >

@@ -1,35 +1,35 @@
-import { useEffect, useState } from "react";
-import { Search, type TSearchParams } from "../../libs/search/Search";
-import { useLocationQuery, useSearch } from "../../utils/filterQuery";
-import { Button, Divider, Stack, Text } from "@mantine/core";
-import { Dialog, useDialog } from "../../libs/basic/Dialog";
-import { Inline } from "../../libs/basic/Layout";
-import { TextInputField } from "../../libs/form/Input";
-import { Form } from "react-final-form";
-import { api } from "../../libs/XHR/xhr";
-import { ListView } from "../../libs/List/List";
-import type { ITenant } from "./store";
-import { Table } from "../../libs/basic/Table";
-import { mutate } from "swr";
-import { formatDate } from "../../helpers/Date";
-import { DropdownMenu } from "../../libs/basic/DropDown";
-import { IconBan, IconDotsVertical, IconPencil } from "@tabler/icons-react";
-import { downloadFile } from "../../libs/XHR/downloadFile";
-import { capitalize } from "../../helpers/Wording";
-import { SelectInputField } from "../../libs/form/SelectInputField";
-import { NavLink } from "../../utils/Link";
-import { useAuthUser } from "../../hooks/auth";
+import { useEffect, useState } from 'react';
+import { Search, type TSearchParams } from '../../libs/search/Search';
+import { useLocationQuery, useSearch } from '../../utils/filterQuery';
+import { Button, Divider, Stack, Text } from '@mantine/core';
+import { Dialog, useDialog } from '../../libs/basic/Dialog';
+import { Inline } from '../../libs/basic/Layout';
+import { TextInputField } from '../../libs/form/Input';
+import { Form } from 'react-final-form';
+import { api } from '../../libs/XHR/xhr';
+import { ListView } from '../../libs/List/List';
+import type { ITenant } from './store';
+import { Table } from '../../libs/basic/Table';
+import { mutate } from 'swr';
+import { formatDate } from '../../helpers/Date';
+import { DropdownMenu } from '../../libs/basic/DropDown';
+import { IconBan, IconDotsVertical, IconPencil } from '@tabler/icons-react';
+import { downloadFile } from '../../libs/XHR/downloadFile';
+import { capitalize } from '../../helpers/Wording';
+import { SelectInputField } from '../../libs/form/SelectInputField';
+import { NavLink } from '../../utils/Link';
+import { useAuthUser } from '../../hooks/auth';
 
 interface TFilters extends TSearchParams {
-  status?: "active" | "suspended" | "all";
+  status?: 'active' | 'suspended' | 'all';
 }
 
 interface TLocationQuery extends TSearchParams {
-  status?: "active" | "suspended" | "all";
+  status?: 'active' | 'suspended' | 'all';
 }
 
 function paramsToQuery(filters: TFilters): TLocationQuery {
-  const { q, page, status = "active" } = filters;
+  const { q, page, status = 'active' } = filters;
   const query: TLocationQuery = {};
   if (q) {
     query.q = q;
@@ -45,7 +45,7 @@ function paramsToQuery(filters: TFilters): TLocationQuery {
 }
 
 function queryToFilter(query: TLocationQuery): TFilters {
-  const { q, page, status = "active" } = query;
+  const { q, page, status = 'active' } = query;
   const params: TFilters = {};
 
   if (q) {
@@ -92,8 +92,8 @@ export function TenantList() {
             title="Add Tenant"
             params={params}
             onSubmit={async (values) => {
-              await api.post("/tenant/add", values);
-              mutate(["/tenants", params]);
+              await api.post('/tenant/add', values);
+              mutate(['/tenants', params]);
               close();
             }}
           />
@@ -104,22 +104,20 @@ export function TenantList() {
         <ListView<ITenant>
           params={params}
           onParamsChange={(newParams) => {
-            console.log("Parent:", newParams);
+            console.log('Parent:', newParams);
             setSearchParams(newParams);
           }}
-          swrKey={"/tenants"}
+          swrKey={'/tenants'}
           fetchFn={async () => {
-            return await api.get("/tenant/getall", { params: params });
+            return await api.get('/tenant/getall', { params: params });
           }}
           actions={
             <Button
               variant="default"
               onClick={async () => {
-                await downloadFile(
-                  "/tenant/export",
-                  "tenants.xlsx",
-                  { filters: params },
-                );
+                await downloadFile('/tenant/export', 'tenants.xlsx', {
+                  filters: params,
+                });
               }}
             >
               Export Tenants
@@ -129,7 +127,7 @@ export function TenantList() {
           {(items) => (
             <>
               <Table
-                headers={["Name", "Slug", "Created At", "Status", "Actions"]}
+                headers={['Name', 'Slug', 'Created At', 'Status', 'Actions']}
                 rows={items.map((i) => [
                   <NavLink
                     fw="bold"
@@ -140,7 +138,7 @@ export function TenantList() {
                   </NavLink>,
                   <Text>{i.slug.toUpperCase()}</Text>,
                   <Text>{formatDate(i.createdAt)}</Text>,
-                  <Text c={i.status === "suspended" ? "red" : ""}>
+                  <Text c={i.status === 'suspended' ? 'red' : ''}>
                     {capitalize(i.status)}
                   </Text>,
                   <>
@@ -150,7 +148,7 @@ export function TenantList() {
                       items={[
                         {
                           label: (
-                            <Inline gap="xs" align={"center"}>
+                            <Inline gap="xs" align={'center'}>
                               <IconPencil size={16} />
                               Edit
                             </Inline>
@@ -162,29 +160,29 @@ export function TenantList() {
                         },
                         {
                           label:
-                            i.status === "active" ? (
-                              <Inline c={"red"} gap="xs" align={"center"}>
+                            i.status === 'active' ? (
+                              <Inline c={'red'} gap="xs" align={'center'}>
                                 <IconBan size={16} />
                                 Suspend
                               </Inline>
                             ) : (
-                              <Inline c={"yellow"} gap="xs" align={"center"}>
+                              <Inline c={'yellow'} gap="xs" align={'center'}>
                                 <IconBan size={16} />
                                 Activate
                               </Inline>
                             ),
                           onClick: async () => {
                             let status =
-                              i.status === "active" ? "suspended" : "active";
+                              i.status === 'active' ? 'suspended' : 'active';
                             await api.patch(`/tenant/${i._id}/status`, {
                               status,
                             });
-                            mutate(["/tenants", params]);
+                            mutate(['/tenants', params]);
                           },
                         },
                       ]}
                     >
-                      <IconDotsVertical cursor={"pointer"} size={18} />
+                      <IconDotsVertical cursor={'pointer'} size={18} />
                     </DropdownMenu>
                   </>,
                 ])}
@@ -196,7 +194,7 @@ export function TenantList() {
                 title="Edit Tenant"
                 onSubmit={async (values) => {
                   await api.put(`/tenant/${selectedTenant?._id}`, values);
-                  mutate(["/tenants", params]);
+                  mutate(['/tenants', params]);
                   tenantUpdateDialog.close();
                 }}
               />
@@ -235,30 +233,30 @@ export function Addtenant({
       >
         {({ handleSubmit, submitting }) => (
           <form onSubmit={handleSubmit}>
-            <Stack gap={"xl"}>
-              <Inline gap={"lg"}>
+            <Stack gap={'xl'}>
+              <Inline gap={'lg'}>
                 <TextInputField
                   placeholder="Sanjay public school"
-                  w={"50%"}
+                  w={'50%'}
                   name="name"
                   label="Name"
                 />
                 <TextInputField
-                  w={"50%"}
+                  w={'50%'}
                   name="slug"
                   label="Slug"
                   placeholder="SPSS"
                 />
               </Inline>
-              <Inline gap={"lg"}>
+              <Inline gap={'lg'}>
                 <TextInputField
                   placeholder="+91**********"
-                  w={"50%"}
+                  w={'50%'}
                   name="contactPhone"
                   label="Phone"
                 />
                 <TextInputField
-                  w={"50%"}
+                  w={'50%'}
                   name="contactEmail"
                   label="Email"
                   placeholder="spss@gmail.com"
@@ -271,9 +269,9 @@ export function Addtenant({
                 placeholder="PN.12 Shivpuri Ext Shyam Ngar "
               />
               <Divider />
-              <Inline gap={"lg"} justify={"end"}>
+              <Inline gap={'lg'} justify={'end'}>
                 <Button type="submit" disabled={submitting}>
-                  {submitting ? "Adding..." : "Add tenant"}
+                  {submitting ? 'Adding...' : 'Add tenant'}
                 </Button>
                 <Button variant="default" onClick={() => close()}>
                   Cancel
@@ -320,9 +318,9 @@ export function Filters() {
       name="status"
       label="Status"
       data={[
-        { value: "active", label: "Active" },
-        { value: "suspended", label: "Suspended" },
-        { value: "all", label: "All" },
+        { value: 'active', label: 'Active' },
+        { value: 'suspended', label: 'Suspended' },
+        { value: 'all', label: 'All' },
       ]}
     />
   );

@@ -1,7 +1,7 @@
-import type { IUser } from "../Auth/store";
-import type { ITenant } from "../tenants/store";
-import type { ISection, ISubject } from "../subjects/store";
-import type { IClass } from "../classes/store";
+import type { IUser } from '../Auth/store';
+import type { ITenant } from '../tenants/store';
+import type { ISection, ISubject } from '../subjects/store';
+import type { IClass } from '../classes/store';
 
 export interface ITeacher {
   _id: string;
