@@ -34,7 +34,7 @@ export function ParentList() {
   const [params, setParams] = useSearch(query);
   const addDialog = useDialog();
   const childrenDialog = useDialog();
-  const [selected, setSelected] = useState<IParent>();
+  const [selectedParentId, setSelectedParentId] = useState<string | null>(null);
 
   useEffect(() => {
     setQuery(params);
@@ -69,7 +69,10 @@ export function ParentList() {
           swrKey={SWR_KEY}
           fetchFn={async () => await api.get(SWR_KEY, { params })}
         >
-          {(items) => (
+          {(items) => {
+            const selected = items.find((p) => p._id === selectedParentId);
+
+            return (
             <>
               <Table
                 headers={[
@@ -108,7 +111,7 @@ export function ParentList() {
                           </Inline>
                         ),
                         onClick: () => {
-                          setSelected(p);
+                          setSelectedParentId(p._id);
                           childrenDialog.open();
                         },
                       },
@@ -158,7 +161,8 @@ export function ParentList() {
                 )}
               </Dialog>
             </>
-          )}
+            );
+          }}
         </ListView>
       )}
     </Search>

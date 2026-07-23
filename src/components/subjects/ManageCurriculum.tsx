@@ -17,7 +17,11 @@ import { Inline } from "../../libs/basic/Layout";
 import { api } from "../../libs/XHR/xhr";
 import type { IListResponse } from "../../libs/XHR/xhr";
 import { capitalize } from "../../helpers/Wording";
-import type { IClassSubject, ISubject } from "./store";
+import {
+  getSubjectTypeColor,
+  type IClassSubject,
+  type ISubject,
+} from "./store";
 import type { IClass } from "../classes/store";
 
 // Attach subjects to a class curriculum. Subjects are the tenant-wide catalog;
@@ -102,7 +106,7 @@ export function ManageCurriculum({ classItem }: { classItem: IClass }) {
             <Text>{cs.subject.code?.toUpperCase()}</Text>,
             <Badge
               variant="light"
-              color={cs.subject.type === "practical" ? "grape" : "blue"}
+              color={getSubjectTypeColor(cs.subject.type)}
             >
               {capitalize(cs.subject.type)}
             </Badge>,

@@ -25,6 +25,14 @@ export const STATUS_META: Record<
   half_day: { label: "Half Day", color: "grape" },
 };
 
+export const STATUS_SHORT_LABEL: Record<AttendanceStatus, string> = {
+  present: "P",
+  absent: "A",
+  late: "L",
+  excused: "E",
+  half_day: "H",
+};
+
 // getMySections / classTeacher populated section.
 export interface IMySection {
   _id: string;

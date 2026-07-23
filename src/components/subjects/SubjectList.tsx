@@ -19,7 +19,12 @@ import { SelectInputField } from "../../libs/form/SelectInputField";
 import { api } from "../../libs/XHR/xhr";
 import { formatDate } from "../../helpers/Date";
 import { capitalize } from "../../helpers/Wording";
-import { SubjectType, type ISubject } from "./store";
+import {
+  SubjectType,
+  SUBJECT_TYPE_OPTIONS,
+  getSubjectTypeColor,
+  type ISubject,
+} from "./store";
 
 interface ISubjectFormValues {
   name?: string;
@@ -76,7 +81,7 @@ export function SubjectList() {
                   <Text fw="bold">{s.name}</Text>,
                   <Text>{s.code?.toUpperCase()}</Text>,
                   <Badge
-                    color={s.type === SubjectType.PRACTICAL ? "grape" : "blue"}
+                    color={getSubjectTypeColor(s.type)}
                     variant="light"
                   >
                     {capitalize(s.type)}
@@ -180,10 +185,7 @@ function SubjectForm({
               <SelectInputField
                 name="type"
                 label="Type"
-                data={[
-                  { value: SubjectType.THEORY, label: "Theory" },
-                  { value: SubjectType.PRACTICAL, label: "Practical" },
-                ]}
+                data={SUBJECT_TYPE_OPTIONS}
               />
               <Inline justify="end" gap="md">
                 <Button type="submit" disabled={submitting}>

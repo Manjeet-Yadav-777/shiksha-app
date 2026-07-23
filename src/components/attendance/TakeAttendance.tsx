@@ -32,7 +32,7 @@ import type {
   IMySection,
   IRosterStudent,
 } from "./store";
-import { ATTENDANCE_STATUSES, STATUS_META } from "./store";
+import { ATTENDANCE_STATUSES, STATUS_META, STATUS_SHORT_LABEL } from "./store";
 
 // Current academic session — "2025-2026" jaisa. School July me naya session
 // shuru karti hai (TeacherDashboard/TimetableManager jaisa hi rule).
@@ -68,7 +68,8 @@ export function TakeAttendance() {
   const [sectionId, setSectionId] = useState<string | null>(null);
   const [date, setDate] = useState<Date>(new Date());
   const [draft, setDraft] = useState<Record<string, DraftEntry>>({});
-  const [saving, setSaving] = useState(false);
+  const [savingAttendance, setSavingAttendance] = useState(false);
+  const [finalizingAttendance, setFinalizingAttendance] = useState(false);
 
   const dateKey = toDateKey(date);
 
@@ -167,7 +168,7 @@ export function TakeAttendance() {
 
   const save = async () => {
     if (!sectionId) return;
-    setSaving(true);
+    setSavingAttendance(true);
     try {
       const body: IMarkAttendanceBody = {
         sectionId,
@@ -183,18 +184,18 @@ export function TakeAttendance() {
       // Register refresh — counts/finalize state dobara load.
       await mutate(attendanceKey);
     } finally {
-      setSaving(false);
+      setSavingAttendance(false);
     }
   };
 
   const finalize = async () => {
     if (!existingSession) return;
-    setSaving(true);
+    setFinalizingAttendance(true);
     try {
       await api.patch(`/attendance/session/${existingSession._id}/finalize`);
       await mutate(attendanceKey);
     } finally {
-      setSaving(false);
+      setFinalizingAttendance(false);
     }
   };
 
@@ -236,7 +237,7 @@ export function TakeAttendance() {
               placeholder="Select section"
               data={sectionOptions}
               value={sectionId}
-              onChange={setSectionId}
+              onChange={(value) => setSectionId(typeof value === "string" ? value : null)}
               searchable
               w={260}
             />
@@ -297,24 +298,42 @@ export function TakeAttendance() {
                 rows={roster.map((stu) => [
                   stu.rollNumber,
                   studentName(stu),
-                  <Group gap={4} wrap="nowrap" key={`s-${stu._id}`}>
-                    {ATTENDANCE_STATUSES.map((st) => {
-                      const active = draft[stu._id]?.status === st;
-                      return (
-                        <Tooltip label={STATUS_META[st].label} key={st} withArrow>
-                          <Button
-                            size="compact-xs"
-                            variant={active ? "filled" : "light"}
-                            color={STATUS_META[st].color}
-                            disabled={isFinalized}
-                            onClick={() => setStatus(stu._id, st)}
-                          >
-                            {STATUS_META[st].label[0]}
-                          </Button>
+                  isFinalized ? (
+                    (() => {
+                      const status = draft[stu._id]?.status;
+                      const meta = status ? STATUS_META[status] : null;
+
+                      return meta ? (
+                        <Tooltip label={meta.label} withArrow>
+                          <Badge color={meta.color} variant="light">
+                            {meta.label}
+                          </Badge>
                         </Tooltip>
+                      ) : (
+                        <Badge variant="light" color="gray">
+                          —
+                        </Badge>
                       );
-                    })}
-                  </Group>,
+                    })()
+                  ) : (
+                    <Group gap={4} wrap="nowrap" key={`s-${stu._id}`}>
+                      {ATTENDANCE_STATUSES.map((st) => {
+                        const active = draft[stu._id]?.status === st;
+                        return (
+                          <Tooltip label={STATUS_META[st].label} key={st} withArrow>
+                            <Button
+                              size="compact-xs"
+                              variant={active ? "filled" : "light"}
+                              color={STATUS_META[st].color}
+                              onClick={() => setStatus(stu._id, st)}
+                            >
+                              {STATUS_SHORT_LABEL[st]}
+                            </Button>
+                          </Tooltip>
+                        );
+                      })}
+                    </Group>
+                  ),
                   <TextInput
                     key={`r-${stu._id}`}
                     placeholder="—"
@@ -330,7 +349,7 @@ export function TakeAttendance() {
             {!isFinalized && roster.length > 0 && (
               <Group justify="end" gap="md">
                 <Button
-                  loading={saving}
+                  loading={savingAttendance}
                   leftSection={<IconCircleCheck size={16} />}
                   onClick={save}
                 >
@@ -344,7 +363,7 @@ export function TakeAttendance() {
                     <Button
                       variant="light"
                       color="red"
-                      loading={saving}
+                      loading={finalizingAttendance}
                       leftSection={<IconLock size={16} />}
                       onClick={finalize}
                     >

@@ -18,7 +18,7 @@ import { api } from "../../libs/XHR/xhr";
 import type { IListResponse } from "../../libs/XHR/xhr";
 import type { ITeacher, ITeacherAssignment } from "./store";
 import type { IClass, ISection } from "../classes/store";
-import type { IClassSubject } from "../subjects/store";
+import { getSubjectTypeColor, type IClassSubject } from "../subjects/store";
 
 // Assign a teacher to teach a subject to a specific class/section for a session.
 // Selects cascade: pick a class -> its sections + curriculum subjects load.
@@ -67,13 +67,6 @@ export function ManageAssignments({ teacher }: { teacher: ITeacher }) {
     setSubjectId(null);
   };
 
-  const handleClassChange = (value: string | null) => {
-    setClassId(value);
-    // section + subject depend on the class, so clear them when class changes
-    setSectionId(null);
-    setSubjectId(null);
-  };
-
   const handleAssign = async () => {
     if (!classId || !subjectId || !academicSession) return;
     setSaving(true);
@@ -102,7 +95,7 @@ export function ManageAssignments({ teacher }: { teacher: ITeacher }) {
             classes?.data.map((c) => ({ value: c._id, label: c.name })) ?? []
           }
           value={classId}
-          onChange={handleClassChange}
+          onChange={(value) => setClassId(typeof value === "string" ? value : null)}
           searchable
         />
         <Select
@@ -115,7 +108,7 @@ export function ManageAssignments({ teacher }: { teacher: ITeacher }) {
             })) ?? []
           }
           value={sectionId}
-          onChange={setSectionId}
+          onChange={(value) => setSectionId(typeof value === "string" ? value : null)}
           disabled={!classId}
           clearable
         />
@@ -135,7 +128,7 @@ export function ManageAssignments({ teacher }: { teacher: ITeacher }) {
             })) ?? []
           }
           value={subjectId}
-          onChange={setSubjectId}
+          onChange={(value) => setSubjectId(typeof value === "string" ? value : null)}
           disabled={!classId || !curriculum?.data.length}
           searchable
         />
@@ -144,7 +137,7 @@ export function ManageAssignments({ teacher }: { teacher: ITeacher }) {
           placeholder="e.g. 2025-2026"
           data={sessionOptions()}
           value={academicSession}
-          onChange={setAcademicSession}
+          onChange={(value) => setAcademicSession(typeof value === "string" ? value : null)}
         />
         <Button
           onClick={handleAssign}
@@ -172,7 +165,7 @@ export function ManageAssignments({ teacher }: { teacher: ITeacher }) {
             <Text>{a.section?.name ?? "Whole class"}</Text>,
             <Badge
               variant="light"
-              color={a.subject?.type === "practical" ? "grape" : "blue"}
+              color={a.subject ? getSubjectTypeColor(a.subject.type) : "blue"}
             >
               {a.subject?.name}
             </Badge>,

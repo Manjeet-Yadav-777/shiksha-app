@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
 import {
   Stack,
@@ -32,6 +32,10 @@ export function ManageChildren({
   const [busy, setBusy] = useState(false);
   // Local copy taaki dialog band kiye bina turant updated list dikhe.
   const [children, setChildren] = useState<IStudent[]>(parent.students ?? []);
+
+  useEffect(() => {
+    setChildren(parent.students ?? []);
+  }, [parent._id, parent.students]);
 
   // Student search — debounce ki zarurat nahi, Select searchable onSearchChange
   // pe SWR key badalti hai aur keepPreviousData flicker rokta hai.
@@ -92,7 +96,7 @@ export function ManageChildren({
             placeholder="Type name to search..."
             data={options}
             value={studentId}
-            onChange={setStudentId}
+            onChange={(value) => setStudentId(typeof value === "string" ? value : null)}
             searchable
             searchValue={search}
             onSearchChange={setSearch}
