@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+
+commit_msg_file="$1"
+commit_msg="$(sed -n '1p' "$commit_msg_file")"
+
+printf '\n💬 Commit message captured: %s\n' "$commit_msg"
+
+if [ "${#commit_msg}" -gt 100 ]; then
+  printf '❌ Error: Commit message is too long (maximum is 100 characters, yours is %d).\n' "${#commit_msg}"
+  exit 1
+elif [ "${#commit_msg}" -lt 12 ]; then
+  printf '✨ Tip: Provide a clear and descriptive message. We recommend using prefixes like feat:, fix:, or chore: (e.g., "fix: resolve attendance sync issue").\n'
+else
+  printf '🚀 Looks good — thanks for keeping the history clean.\n'
+fi
+
+printf '\n'
