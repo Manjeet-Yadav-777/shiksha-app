@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import useSWR from 'swr';
 import {
   Stack,
@@ -24,17 +24,17 @@ import {
 import { Heading } from '../../libs/basic/Layout';
 import { api } from '../../libs/XHR/xhr';
 import { useAuthUser } from '../../hooks/auth';
-import { DAYS } from '../timetable/store';
-import type { IPeriodSlot } from '../timetable/store';
+import { type IPeriodSlot, DAYS } from '../timetable/store';
 import type { ISubject } from '../subjects/store';
-import type {
-  AttendanceStatus,
-  IChild,
-  IChildAttendance,
-  IChildFees,
-  IChildTimetableEntry,
+import {
+  type AttendanceStatus,
+  type IChild,
+  type IChildAttendance,
+  type IChildFees,
+  type IChildTimetableEntry,
+  STATUS_META,
+  FEE_STATUS_COLOR,
 } from './store';
-import { STATUS_META, FEE_STATUS_COLOR } from './store';
 
 // Session rule backend/dashboards jaisa hi — July+ me naya session.
 function currentSession(): string {
@@ -77,7 +77,9 @@ export function ParentPortal() {
   } = useSWR(`/parents/me/children/${user?._id}`, async () =>
     api.get<{ data: IChild[] }>('/parents/me/children'),
   );
-  const children = childrenRes?.data ?? [];
+  const children = useMemo(() => {
+    return childrenRes?.data ?? [];
+  }, [childrenRes?.data]);
 
   // Pehla bachcha default select.
   useEffect(() => {

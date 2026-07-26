@@ -1,8 +1,6 @@
-import { useEffect } from 'react';
-import { mutate } from 'swr';
+import useSWR, { mutate } from 'swr';
 import { Button, Stack, Text, Badge } from '@mantine/core';
 import { Form } from 'react-final-form';
-import useSWR from 'swr';
 import {
   IconDotsVertical,
   IconPencil,
@@ -19,11 +17,10 @@ import { DropdownMenu } from '../../libs/basic/DropDown';
 import { TextInputField } from '../../libs/form/Input';
 import { SelectInputField } from '../../libs/form/SelectInputField';
 import { DatenputField } from '../../libs/form/DateInputField';
-import { api } from '../../libs/XHR/xhr';
-import type { IListResponse } from '../../libs/XHR/xhr';
+import { type IListResponse, api } from '../../libs/XHR/xhr';
 import { formatDate } from '../../helpers/Date';
 import type { IClass } from '../classes/store';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   FREQUENCY_OPTIONS,
   sessionOptions,

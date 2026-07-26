@@ -53,7 +53,6 @@ export function AddSubscription({
       <Form<IAddSubscriptionFormValues>
         initialValues={initialValues}
         onSubmit={async (values) => {
-          console.log(values);
           onSubmit(values);
         }}
       >

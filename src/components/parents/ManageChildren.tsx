@@ -13,8 +13,7 @@ import {
   Center,
 } from '@mantine/core';
 import { IconTrash, IconPlus } from '@tabler/icons-react';
-import { api } from '../../libs/XHR/xhr';
-import type { IListResponse } from '../../libs/XHR/xhr';
+import { type IListResponse, api } from '../../libs/XHR/xhr';
 import type { IStudent } from '../students/store';
 import type { IParent } from './store';
 

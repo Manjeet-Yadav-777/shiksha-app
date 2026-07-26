@@ -344,7 +344,6 @@ export function AddAdmin({
     <Dialog isOpened={isOpened} close={close} title={title}>
       <Form<IAddAdminFormValues>
         onSubmit={async (values) => {
-          console.log(values);
           await api.post(`/tenant/${tenantId}/admin`, values);
           mutate(`/tenant/${tenantId}`);
           close();

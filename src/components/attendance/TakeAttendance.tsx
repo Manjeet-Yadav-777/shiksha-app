@@ -24,15 +24,17 @@ import {
 import { Heading } from '../../libs/basic/Layout';
 import { Table } from '../../libs/basic/Table';
 import { api } from '../../libs/XHR/xhr';
-import type {
-  AttendanceStatus,
-  IAttendanceRecord,
-  IAttendanceSession,
-  IMarkAttendanceBody,
-  IMySection,
-  IRosterStudent,
+import {
+  type AttendanceStatus,
+  type IAttendanceRecord,
+  type IAttendanceSession,
+  type IMarkAttendanceBody,
+  type IMySection,
+  type IRosterStudent,
+  ATTENDANCE_STATUSES,
+  STATUS_META,
+  STATUS_SHORT_LABEL,
 } from './store';
-import { ATTENDANCE_STATUSES, STATUS_META, STATUS_SHORT_LABEL } from './store';
 
 // Current academic session — "2025-2026" jaisa. School July me naya session
 // shuru karti hai (TeacherDashboard/TimetableManager jaisa hi rule).

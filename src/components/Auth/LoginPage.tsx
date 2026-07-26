@@ -28,7 +28,7 @@ export function LoginPage() {
           <Form
             validate={LoginSchema}
             onSubmit={async (values) => {
-              const res = await xhr.post<any>('/auth/login', values);
+              const res = await xhr.post('/auth/login', values);
               // Seed the /auth/me SWR cache with the logged-in user so
               // ProtectedRoutes reads the fresh user immediately instead of the
               // stale "unauthenticated" entry from before login. Without this the

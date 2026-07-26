@@ -1,9 +1,8 @@
 import { Box, Button, Stack } from '@mantine/core';
 import { Heading, Inline } from '../basic/Layout';
 import { IconAdjustmentsHorizontal, IconSearch } from '@tabler/icons-react';
-import type React from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import { Form, FormSpy, useForm, useFormState } from 'react-final-form';
-import { useEffect, useRef } from 'react';
 import { SideBar } from '../basic/SideBar';
 import { TextInputField } from '../form/Input';
 import { useTimeout } from '../../utils/react-hooks';
@@ -20,13 +19,13 @@ const defaultInitialParams: TSearchParams = {
   q: '',
 };
 
-interface SerachProps<T extends TSearchParams = TSearchParams> {
+interface SearchProps<T extends TSearchParams = TSearchParams> {
   title: string;
-  actions?: React.ReactNode;
+  actions?: ReactNode;
   initialParams?: T;
-  filters?: () => React.ReactNode;
+  filters?: () => ReactNode;
   onSearch: (params: T) => void;
-  children?: React.ReactNode | ((props: ChildrenProps<T>) => React.ReactNode);
+  children?: ReactNode | ((props: ChildrenProps<T>) => ReactNode);
   placeHolder?: string;
 }
 
@@ -44,11 +43,10 @@ export function Search<T extends TSearchParams = TSearchParams>({
   onSearch,
   children,
   placeHolder = 'Search...',
-}: SerachProps<T>) {
+}: SearchProps<T>) {
   return (
     <Form initialValues={initialParams} onSubmit={onSearch}>
-      {({ handleSubmit, values }) => {
-        console.log({ values }, 'form');
+      {({ handleSubmit }) => {
         return (
           <form onSubmit={handleSubmit}>
             <Inline
