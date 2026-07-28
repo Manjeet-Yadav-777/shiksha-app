@@ -3,6 +3,7 @@ import { Suspense, lazy } from 'react';
 import { Center, Loader } from '@mantine/core';
 import { ProtectedRoutes } from './hooks/ProtectedRoutes';
 import { RootRedirect } from './hooks/RootRedirect';
+import { StudentFee } from './pages/fees/StudentFee';
 
 // Route-level code splitting: har page apne alag chunk me jaata hai, taaki pehli
 // load pe pura app (849KB) ek saath download na ho. Login sabse chhota entry hai.
@@ -66,6 +67,7 @@ export function AppRoutes() {
           <Route path="/admin/classes" element={<Classes />} />
           <Route path="/admin/teachers" element={<Teachers />} />
           <Route path="/admin/fees" element={<Fees />} />
+          <Route path="/admin/student-fees" element={<StudentFee />} />
           <Route path="/admin/timetable" element={<Timetable />} />
           <Route path="/admin/parents" element={<Parents />} />
         </Route>

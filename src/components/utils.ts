@@ -1,4 +1,23 @@
-export const navigation = {
+export type NavItem =
+  | {
+      label: string;
+      to: string;
+    }
+  | {
+      label: string;
+      children: {
+        label: string;
+        to: string;
+      }[];
+    };
+
+export const navigation: Record<
+  string,
+  {
+    left: NavItem[];
+    right: NavItem[];
+  }
+> = {
   super_admin: {
     left: [
       { label: 'Tenants', to: '/super-admin/tenants' },
@@ -10,15 +29,57 @@ export const navigation = {
   school_admin: {
     left: [
       { label: 'Dashboard', to: '/school_admin/dashboard' },
-      { label: 'Students', to: '/admin/students' },
-      { label: 'Teachers', to: '/admin/teachers' },
-      { label: 'Parents', to: '/admin/parents' },
+
+      {
+        label: 'Users',
+        children: [
+          {
+            label: 'Students',
+            to: '/admin/students',
+          },
+          {
+            label: 'Teachers',
+            to: '/admin/teachers',
+          },
+          {
+            label: 'Parents',
+            to: '/admin/parents',
+          },
+        ],
+      },
     ],
 
     right: [
-      { label: 'Fees', to: '/admin/fees' },
-      { label: 'Time Table', to: '/admin/timetable' },
-      { label: 'Reports', to: '/admin/reports' },
+      {
+        label: 'Finance',
+        children: [
+          {
+            label: 'Fees Structure',
+            to: '/admin/fees',
+          },
+          {
+            label: 'Student Fees',
+            to: '/admin/student-fees',
+          },
+        ],
+      },
+      {
+        label: 'Academics',
+        children: [
+          {
+            label: 'Classes',
+            to: '/admin/classes',
+          },
+          {
+            label: 'Subjects',
+            to: '/admin/subjects',
+          },
+          {
+            label: 'Time Table',
+            to: '/admin/timetable',
+          },
+        ],
+      },
     ],
   },
 
