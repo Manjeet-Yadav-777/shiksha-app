@@ -15,8 +15,7 @@ import { IconCalendarEvent, IconClock } from '@tabler/icons-react';
 import { Heading } from '../../libs/basic/Layout';
 import { api } from '../../libs/XHR/xhr';
 import { useAuthUser } from '../../hooks/auth';
-import type { IPeriodSlot } from '../timetable/store';
-import { DAYS } from '../timetable/store';
+import { type IPeriodSlot, DAYS } from '../timetable/store';
 import type { ISubject } from '../subjects/store';
 import type { IClass } from '../classes/store';
 

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { mutate } from 'swr';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import { Button, Stack, Text, Badge, Group, Divider } from '@mantine/core';
 import { Form } from 'react-final-form';
 import { IconCash, IconHistory } from '@tabler/icons-react';

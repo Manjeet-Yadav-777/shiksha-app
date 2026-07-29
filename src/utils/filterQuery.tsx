@@ -60,13 +60,14 @@ export function useLocationQuery<
     });
     const locationSearch = location?.search;
     if (newQuery !== locationSearch) {
-      navigate &&
+      if (navigate) {
         navigate(newQuery, {
           replace: true,
           state:
             (location?.state as undefined | Record<string, unknown>) ||
             undefined,
         });
+      }
     }
   }, [query, location?.search, location?.state, navigate]);
   const params = useMemo(() => fromQuery(query), [query, fromQuery]);

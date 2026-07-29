@@ -1,6 +1,10 @@
 import type { NavigateFunction } from 'react-router-dom';
+import type { IRole } from '../helpers/Wording';
 
-export function redirectFromLogin(res: any, navigate: NavigateFunction) {
+export function redirectFromLogin(
+  res: { data: { role: IRole } },
+  navigate: NavigateFunction,
+) {
   const role = res.data.role;
   if (role === 'super_admin') {
     navigate('/super_admin/dashboard');

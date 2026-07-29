@@ -19,9 +19,8 @@ export function LogPayment({
   close: () => void;
   title: string;
   installment?: IInstallment;
-  params: any;
+  params: unknown;
 }) {
-  console.log(installment);
   return (
     <Dialog isOpened={isOpen} close={close} title={title}>
       <Form

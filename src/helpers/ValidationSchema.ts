@@ -1,17 +1,15 @@
-import { ValidationError } from 'yup';
-import type { AnyObjectSchema } from 'yup';
+import { type AnyObjectSchema, ValidationError } from 'yup';
 
-type FormErrors = {
-  [key: string]: any;
-};
+type FormErrors = Record<string, unknown>;
 
 export const ValidateSchema =
-  (schema: AnyObjectSchema) =>
-  async (values: any): Promise<FormErrors> => {
+  <T extends object>(schema: AnyObjectSchema) =>
+  async (values: T): Promise<FormErrors> => {
     try {
       await schema.validate(values, {
         abortEarly: false,
       });
+
       return {};
     } catch (err) {
       const errors: FormErrors = {};
@@ -28,17 +26,27 @@ export const ValidateSchema =
     }
   };
 
-// 👇 nested object support (like user.email etc)
-const setIn = (obj: any, path: string, value: any) => {
+const setIn = (
+  obj: Record<string, unknown>,
+  path: string,
+  value: string,
+): void => {
   const keys = path.split('.');
-  let current = obj;
+  let current: Record<string, unknown> = obj;
 
   keys.forEach((key, index) => {
     if (index === keys.length - 1) {
       current[key] = value;
     } else {
-      current[key] = current[key] || {};
-      current = current[key];
+      if (
+        typeof current[key] !== 'object' ||
+        current[key] === null ||
+        Array.isArray(current[key])
+      ) {
+        current[key] = {};
+      }
+
+      current = current[key] as Record<string, unknown>;
     }
   });
 };

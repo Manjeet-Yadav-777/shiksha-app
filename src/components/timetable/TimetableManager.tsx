@@ -14,8 +14,7 @@ import {
 } from '@mantine/core';
 import { IconClockHour4, IconUserStar } from '@tabler/icons-react';
 import { Dialog, useDialog } from '../../libs/basic/Dialog';
-import { api } from '../../libs/XHR/xhr';
-import type { IListResponse } from '../../libs/XHR/xhr';
+import { type IListResponse, api } from '../../libs/XHR/xhr';
 import type { IClass } from '../classes/store';
 import type { ISection } from '../subjects/store';
 import type { ITeacher } from '../teachers/store';

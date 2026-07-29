@@ -81,7 +81,6 @@ export function PaymentList() {
         <ListView<IInstallment>
           params={params}
           onParamsChange={(newParams) => {
-            console.log('Parent:', newParams);
             setSearchParams(newParams);
           }}
           swrKey={'/installment/getall'}

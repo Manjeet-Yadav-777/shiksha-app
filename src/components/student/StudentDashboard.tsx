@@ -22,16 +22,15 @@ import {
 import { Heading } from '../../libs/basic/Layout';
 import { api } from '../../libs/XHR/xhr';
 import { useAuthUser } from '../../hooks/auth';
-import type { IPeriodSlot } from '../timetable/store';
-import { DAYS } from '../timetable/store';
+import { type IPeriodSlot, DAYS } from '../timetable/store';
 import type { ISubject } from '../subjects/store';
-import type {
-  AttendanceStatus,
-  IMyAttendance,
-  IMyProfile,
-  IMyTimetableEntry,
+import {
+  type AttendanceStatus,
+  type IMyAttendance,
+  type IMyProfile,
+  type IMyTimetableEntry,
+  STATUS_META,
 } from './store';
-import { STATUS_META } from './store';
 
 // Current academic session — "2025-2026". School July me naya session shuru
 // karti hai (TeacherDashboard/backend ke jaisa hi rule).

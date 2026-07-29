@@ -11,19 +11,17 @@ import {
   Table as MantineTable,
   ActionIcon,
   Tooltip,
+  Select,
 } from '@mantine/core';
 import { Form, Field, useForm, useFormState } from 'react-final-form';
 import { IconPlus, IconTrash, IconPencil } from '@tabler/icons-react';
-import { Select } from '@mantine/core';
 import { Dialog, useDialog } from '../../libs/basic/Dialog';
 import { Inline } from '../../libs/basic/Layout';
 import { SelectInputField } from '../../libs/form/SelectInputField';
 import { TextInputField } from '../../libs/form/Input';
-import { api } from '../../libs/XHR/xhr';
-import type { IListResponse } from '../../libs/XHR/xhr';
+import { type IListResponse, api } from '../../libs/XHR/xhr';
 import { notifications } from '@mantine/notifications';
-import type { IPeriodSlot, ITimetableEntry } from './store';
-import { DAYS } from './store';
+import { type IPeriodSlot, type ITimetableEntry, DAYS } from './store';
 import type { ISubject } from '../subjects/store';
 import type { ITeacher } from '../teachers/store';
 
@@ -51,7 +49,6 @@ export function TimetableGrid({ sectionId, academicSession }: Props) {
         params: { academicSession },
       }),
   );
-  console.log(entriesRes, 'Hello');
 
   const { data: slotsRes, isLoading: slotsLoading } = useSWR(
     slotsKey,
@@ -78,7 +75,7 @@ export function TimetableGrid({ sectionId, academicSession }: Props) {
         .sort((a, b) => a.periodNumber - b.periodNumber),
     [slotsRes],
   );
-  const entries = entriesRes?.data ?? [];
+  const entries = useMemo(() => entriesRes?.data ?? [], [entriesRes?.data]);
 
   // (day, periodSlotId) -> entry, taaki har cell ko O(1) me resolve kar saken.
   const cellMap = useMemo(() => {
@@ -128,12 +125,19 @@ export function TimetableGrid({ sectionId, academicSession }: Props) {
       dialog.close();
       setActive(null);
       refresh();
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const error = err as {
+        response?: {
+          data?: {
+            error?: string;
+          };
+        };
+      };
       // Clash (409) ka message backend se aata hai — user ko dikhao.
       notifications.show({
         color: 'red',
         title: 'Could not save',
-        message: err?.response?.data?.error ?? 'Something went wrong',
+        message: error?.response?.data?.error ?? 'Something went wrong',
       });
     }
   };
@@ -347,7 +351,7 @@ function EligibleTeacherField({ sectionId }: { sectionId: string }) {
       }),
   );
 
-  const teachers = data?.data ?? [];
+  const teachers = useMemo(() => data?.data ?? [], [data?.data]);
   const options = teachers.map((t) => ({
     value: t._id,
     label: `${t.user?.name ?? 'Teacher'} (${t.employeeId})`,

@@ -14,8 +14,7 @@ import { useState } from 'react';
 import { IconTrash } from '@tabler/icons-react';
 import { Table } from '../../libs/basic/Table';
 import { Inline } from '../../libs/basic/Layout';
-import { api } from '../../libs/XHR/xhr';
-import type { IListResponse } from '../../libs/XHR/xhr';
+import { type IListResponse, api } from '../../libs/XHR/xhr';
 import { capitalize } from '../../helpers/Wording';
 import {
   getSubjectTypeColor,

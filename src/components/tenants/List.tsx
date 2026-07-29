@@ -18,7 +18,6 @@ import { downloadFile } from '../../libs/XHR/downloadFile';
 import { capitalize } from '../../helpers/Wording';
 import { SelectInputField } from '../../libs/form/SelectInputField';
 import { NavLink } from '../../utils/Link';
-import { useAuthUser } from '../../hooks/auth';
 
 interface TFilters extends TSearchParams {
   status?: 'active' | 'suspended' | 'all';
@@ -67,8 +66,6 @@ export function TenantList() {
     toQuery: paramsToQuery,
     fromQuery: queryToFilter,
   });
-  const user = useAuthUser();
-  console.log(user);
   const [params, setparams] = useSearch(query);
   const tenantAddDialog = useDialog();
   useEffect(() => {
@@ -104,7 +101,6 @@ export function TenantList() {
         <ListView<ITenant>
           params={params}
           onParamsChange={(newParams) => {
-            console.log('Parent:', newParams);
             setSearchParams(newParams);
           }}
           swrKey={'/tenants'}
@@ -172,7 +168,7 @@ export function TenantList() {
                               </Inline>
                             ),
                           onClick: async () => {
-                            let status =
+                            const status =
                               i.status === 'active' ? 'suspended' : 'active';
                             await api.patch(`/tenant/${i._id}/status`, {
                               status,
@@ -222,7 +218,6 @@ export function Addtenant({
   initialValues,
   onSubmit,
 }: ITennatAddEditPorps) {
-  console.log(isOpen);
   return (
     <Dialog sizes="55rem" title={title} isOpened={isOpen} close={close}>
       <Form

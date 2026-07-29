@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import useSWR, { type SWRConfiguration } from 'swr';
 import React, { useState, type ReactNode } from 'react';
 import {
@@ -86,12 +87,11 @@ export function ListView<T>({
   if (error) {
     return <div className="p-4 text-red-500">Something went wrong</div>;
   }
-  console.log(data?.meta.current_page || 1 - 1, 'Hello');
 
-  let end = (data?.data?.length || 10) * (data?.meta?.current_page || 1);
-  let start =
+  const end = (data?.data?.length || 10) * (data?.meta?.current_page || 1);
+  const start =
     ((data?.meta.current_page || 1) - 1) * (data?.data?.length || 1) + 1;
-  let total = data?.meta.total;
+  const total = data?.meta.total;
   return (
     <Stack gap={10}>
       {!data?.data.length ? null : (
