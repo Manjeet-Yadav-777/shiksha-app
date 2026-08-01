@@ -198,7 +198,7 @@ export function SingleTenant({ id }: { id?: string }) {
 
                 <InfoRow
                   label="Billing Cycle"
-                  value={tenant.subscription.billing_cycle.toUpperCase()}
+                  value={tenant.subscription.billingCycle?.toUpperCase()}
                 />
 
                 <InfoRow
@@ -223,14 +223,14 @@ export function SingleTenant({ id }: { id?: string }) {
 
                 <InfoRow
                   label="Start Date"
-                  value={formatDate(tenant.subscription.start_date)}
+                  value={formatDate(tenant.subscription.startDate)}
                 />
 
                 <InfoRow
                   label="End Date"
                   value={
-                    tenant.subscription.end_date
-                      ? formatDate(tenant.subscription.end_date)
+                    tenant.subscription.endDate
+                      ? formatDate(tenant.subscription.endDate)
                       : '-'
                   }
                 />
@@ -238,15 +238,15 @@ export function SingleTenant({ id }: { id?: string }) {
                 <InfoRow
                   label="Next Billing"
                   value={
-                    tenant.subscription.next_billing_date
-                      ? formatDate(tenant.subscription.next_billing_date)
+                    tenant.subscription.nextBillingDate
+                      ? formatDate(tenant.subscription.nextBillingDate)
                       : '-'
                   }
                 />
 
                 <InfoRow
                   label="Auto Renew"
-                  value={tenant.subscription.auto_renew ? 'Yes' : 'No'}
+                  value={tenant.subscription.autoRenew ? 'Yes' : 'No'}
                 />
 
                 <InfoRow

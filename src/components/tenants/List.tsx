@@ -90,8 +90,8 @@ export function TenantList() {
             params={params}
             onSubmit={async (values) => {
               await api.post('/tenant/add', values);
-              mutate(['/tenants', params]);
-              close();
+              tenantAddDialog.close();
+              await mutate(['/tenants', params]);
             }}
           />
         </>

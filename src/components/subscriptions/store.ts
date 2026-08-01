@@ -26,13 +26,13 @@ export interface ISubscription {
   amount: number;
   currency: string;
 
-  billing_cycle: BillingCycle;
+  billingCycle: BillingCycle;
 
-  start_date: string;
-  end_date?: string | null;
-  next_billing_date?: string | null;
+  startDate: string;
+  endDate?: string | null;
+  nextBillingDate?: string | null;
 
-  auto_renew: boolean;
+  autoRenew: boolean;
 
   status: SubscriptionStatus;
 
