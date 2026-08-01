@@ -67,7 +67,7 @@ function attendanceColor(pct: number): string {
 export function ParentPortal() {
   const { user } = useAuthUser();
   const [session] = useState(currentSession());
-  const [childId, setChildId] = useState<string | null>(null);
+  const [childId, setChildId] = useState<number | null>(null);
 
   // 1. Apne bachche — child selector isi se banta hai.
   const {
@@ -167,11 +167,11 @@ export function ParentPortal() {
           <Select
             label="Child"
             data={children.map((c) => ({
-              value: c._id,
+              value: String(c._id),
               label: c.user?.name ?? 'Student',
             }))}
-            value={childId}
-            onChange={setChildId}
+            value={childId !== null ? String(childId) : null}
+            onChange={(value) => setChildId(value ? Number(value) : null)}
             allowDeselect={false}
             w={200}
           />

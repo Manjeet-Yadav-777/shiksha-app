@@ -26,7 +26,7 @@ export function ManageChildren({
   parent: IParent;
   onChanged: () => void;
 }) {
-  const [studentId, setStudentId] = useState<string | null>(null);
+  const [studentId, setStudentId] = useState<number | null>(null);
   const [search, setSearch] = useState('');
   const [busy, setBusy] = useState(false);
   // Local copy taaki dialog band kiye bina turant updated list dikhe.
@@ -53,7 +53,7 @@ export function ManageChildren({
     studentsRes?.data
       ?.filter((s) => !linkedIds.has(s._id))
       .map((s) => ({
-        value: s._id,
+        value: String(s._id),
         label:
           `${s.user?.name ?? 'Student'} (${s.rollNumber}) - ${s.class?.name ?? ''} ${s.section?.name ?? ''}`.trim(),
       })) ?? [];
@@ -72,7 +72,7 @@ export function ManageChildren({
     }
   };
 
-  const unlink = async (childId: string) => {
+  const unlink = async (childId: number) => {
     setBusy(true);
     try {
       await api.delete(`/parents/${parent._id}/students/${childId}`);
@@ -94,10 +94,8 @@ export function ManageChildren({
             label="Search student"
             placeholder="Type name to search..."
             data={options}
-            value={studentId}
-            onChange={(value) =>
-              setStudentId(typeof value === 'string' ? value : null)
-            }
+            value={studentId !== null ? String(studentId) : null}
+            onChange={(value) => setStudentId(value ? Number(value) : null)}
             searchable
             searchValue={search}
             onSearchChange={setSearch}

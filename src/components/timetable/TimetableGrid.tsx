@@ -26,7 +26,7 @@ import type { ISubject } from '../subjects/store';
 import type { ITeacher } from '../teachers/store';
 
 interface Props {
-  sectionId: string;
+  sectionId: number;
   academicSession: string;
 }
 
@@ -82,7 +82,7 @@ export function TimetableGrid({ sectionId, academicSession }: Props) {
     const map = new Map<string, ITimetableEntry>();
     for (const e of entries) {
       const slotId =
-        typeof e.periodSlot === 'string' ? e.periodSlot : e.periodSlot._id;
+        typeof e.periodSlot === 'number' ? e.periodSlot : e.periodSlot._id;
       map.set(`${e.dayOfWeek}-${slotId}`, e);
     }
     return map;
@@ -90,7 +90,7 @@ export function TimetableGrid({ sectionId, academicSession }: Props) {
 
   const subjectOptions =
     subjectsRes?.data.map((s) => ({
-      value: s._id,
+      value: String(s._id),
       label: `${s.name} (${s.code})`,
     })) ?? [];
 
@@ -111,8 +111,8 @@ export function TimetableGrid({ sectionId, academicSession }: Props) {
       sectionId,
       dayOfWeek: active.day,
       periodSlotId: active.slot._id,
-      subjectId: values.subjectId,
-      teacherId: values.teacherId,
+      subjectId: values.subjectId ? Number(values.subjectId) : undefined,
+      teacherId: values.teacherId ? Number(values.teacherId) : undefined,
       academicSession,
       room: values.room,
     };
@@ -164,9 +164,9 @@ export function TimetableGrid({ sectionId, academicSession }: Props) {
   }
 
   const subjName = (e: ITimetableEntry) =>
-    typeof e.subject === 'string' ? '' : e.subject.name;
+    typeof e.subject === 'number' ? '' : e.subject.name;
   const teacherName = (e: ITimetableEntry) =>
-    typeof e.teacher === 'string' ? '' : (e.teacher.user?.name ?? '');
+    typeof e.teacher === 'number' ? '' : (e.teacher.user?.name ?? '');
 
   return (
     <Stack gap="md">
@@ -282,13 +282,13 @@ export function TimetableGrid({ sectionId, academicSession }: Props) {
             active?.entry
               ? {
                   subjectId:
-                    typeof active.entry.subject === 'string'
-                      ? active.entry.subject
-                      : active.entry.subject._id,
+                    typeof active.entry.subject === 'number'
+                      ? String(active.entry.subject)
+                      : String(active.entry.subject._id),
                   teacherId:
-                    typeof active.entry.teacher === 'string'
-                      ? active.entry.teacher
-                      : active.entry.teacher._id,
+                    typeof active.entry.teacher === 'number'
+                      ? String(active.entry.teacher)
+                      : String(active.entry.teacher._id),
                   room: active.entry.room,
                 }
               : {}
@@ -338,7 +338,7 @@ export function TimetableGrid({ sectionId, academicSession }: Props) {
 // dikhta hai jinhe wo subject is section/class me assign hai. Subject change hone
 // pe, agar pehle se select teacher nayi list me nahi hai to selection clear ho
 // jaati hai (warna galat pairing submit ho jaati).
-function EligibleTeacherField({ sectionId }: { sectionId: string }) {
+function EligibleTeacherField({ sectionId }: { sectionId: number }) {
   const form = useForm();
   const { values } = useFormState<IEntryFormValues>();
   const subjectId = values.subjectId;
@@ -353,7 +353,7 @@ function EligibleTeacherField({ sectionId }: { sectionId: string }) {
 
   const teachers = useMemo(() => data?.data ?? [], [data?.data]);
   const options = teachers.map((t) => ({
-    value: t._id,
+    value: String(t._id),
     label: `${t.user?.name ?? 'Teacher'} (${t.employeeId})`,
   }));
 
@@ -362,7 +362,7 @@ function EligibleTeacherField({ sectionId }: { sectionId: string }) {
     if (!subjectId) return;
     if (isLoading) return;
     const current = values.teacherId;
-    if (current && !teachers.some((t) => t._id === current)) {
+    if (current && !teachers.some((t) => String(t._id) === current)) {
       form.change('teacherId', undefined);
     }
   }, [subjectId, isLoading, teachers, values.teacherId, form]);

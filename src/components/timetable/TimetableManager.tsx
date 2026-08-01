@@ -30,8 +30,8 @@ function currentSession(): string {
 }
 
 export function TimetableManager() {
-  const [classId, setClassId] = useState<string | null>(null);
-  const [sectionId, setSectionId] = useState<string | null>(null);
+  const [classId, setClassId] = useState<number | null>(null);
+  const [sectionId, setSectionId] = useState<number | null>(null);
   const [session] = useState(currentSession());
 
   const periodsDialog = useDialog();
@@ -53,9 +53,11 @@ export function TimetableManager() {
   );
 
   const classOptions =
-    classesRes?.data.map((c) => ({ value: c._id, label: c.name })) ?? [];
+    classesRes?.data.map((c) => ({ value: String(c._id), label: c.name })) ??
+    [];
   const sectionOptions =
-    sectionsRes?.data.map((s) => ({ value: s._id, label: s.name })) ?? [];
+    sectionsRes?.data.map((s) => ({ value: String(s._id), label: s.name })) ??
+    [];
 
   const selectedSection = sectionsRes?.data.find((s) => s._id === sectionId);
   const classTeacher =
@@ -87,9 +89,9 @@ export function TimetableManager() {
             label="Class"
             placeholder="Select class"
             data={classOptions}
-            value={classId}
+            value={classId !== null ? String(classId) : null}
             onChange={(v) => {
-              setClassId(v);
+              setClassId(v ? Number(v) : null);
               setSectionId(null); // class badla to section reset
             }}
             searchable
@@ -99,8 +101,8 @@ export function TimetableManager() {
             label="Section"
             placeholder={classId ? 'Select section' : 'Pick a class first'}
             data={sectionOptions}
-            value={sectionId}
-            onChange={setSectionId}
+            value={sectionId !== null ? String(sectionId) : null}
+            onChange={(v) => setSectionId(v ? Number(v) : null)}
             disabled={!classId}
             searchable
             w={220}
@@ -184,8 +186,8 @@ function ClassTeacherForm({
   onDone,
   onSaved,
 }: {
-  sectionId: string;
-  currentTeacherId: string | null;
+  sectionId: number;
+  currentTeacherId: number | null;
   onDone: () => void;
   onSaved: () => void;
 }) {
@@ -193,12 +195,12 @@ function ClassTeacherForm({
     api.get<IListResponse<ITeacher>>('/teachers', { params: { limit: 200 } }),
   );
   // Current class teacher pre-selected — user ko dikhe abhi kaun set hai.
-  const [teacherId, setTeacherId] = useState<string | null>(currentTeacherId);
+  const [teacherId, setTeacherId] = useState<number | null>(currentTeacherId);
   const [saving, setSaving] = useState(false);
 
   const options =
     teachersRes?.data.map((t) => ({
-      value: t._id,
+      value: String(t._id),
       label: `${t.user?.name ?? 'Teacher'} (${t.employeeId})`,
     })) ?? [];
 
@@ -229,8 +231,8 @@ function ClassTeacherForm({
         label="Class Teacher"
         placeholder="Select a teacher"
         data={options}
-        value={teacherId}
-        onChange={setTeacherId}
+        value={teacherId !== null ? String(teacherId) : null}
+        onChange={(value) => setTeacherId(value ? Number(value) : null)}
         searchable
         clearable
       />

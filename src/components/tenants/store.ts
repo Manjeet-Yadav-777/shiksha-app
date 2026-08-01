@@ -3,7 +3,7 @@ import type { ISubscription } from '../subscriptions/store';
 
 export interface ITenant {
   name: string;
-  _id: string;
+  _id: number;
   slug: string;
   address: string;
   contactPhone: string;

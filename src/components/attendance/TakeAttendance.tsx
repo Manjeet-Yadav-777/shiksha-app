@@ -67,7 +67,7 @@ type DraftEntry = { status: AttendanceStatus; remark: string };
 
 export function TakeAttendance() {
   const [session] = useState(currentSession());
-  const [sectionId, setSectionId] = useState<string | null>(null);
+  const [sectionId, setSectionId] = useState<number | null>(null);
   const [date, setDate] = useState<Date>(new Date());
   const [draft, setDraft] = useState<Record<string, DraftEntry>>({});
   const [savingAttendance, setSavingAttendance] = useState(false);
@@ -124,7 +124,7 @@ export function TakeAttendance() {
 
     const byStudent: Record<string, IAttendanceRecord> = {};
     for (const r of existingRecords) {
-      const sid = typeof r.student === 'string' ? r.student : r.student?._id;
+      const sid = typeof r.student === 'number' ? r.student : r.student?._id;
       if (sid) byStudent[sid] = r;
     }
 
@@ -139,10 +139,10 @@ export function TakeAttendance() {
     setDraft(next);
   }, [roster, existingRecords]);
 
-  const setStatus = (studentId: string, status: AttendanceStatus) => {
+  const setStatus = (studentId: number, status: AttendanceStatus) => {
     setDraft((d) => ({ ...d, [studentId]: { ...d[studentId], status } }));
   };
-  const setRemark = (studentId: string, remark: string) => {
+  const setRemark = (studentId: number, remark: string) => {
     setDraft((d) => ({ ...d, [studentId]: { ...d[studentId], remark } }));
   };
 
@@ -206,7 +206,7 @@ export function TakeAttendance() {
   };
 
   const sectionOptions = sections.map((s) => ({
-    value: s._id,
+    value: String(s._id),
     label: sectionLabel(s),
   }));
 
@@ -242,10 +242,8 @@ export function TakeAttendance() {
               label="Your Class"
               placeholder="Select section"
               data={sectionOptions}
-              value={sectionId}
-              onChange={(value) =>
-                setSectionId(typeof value === 'string' ? value : null)
-              }
+              value={sectionId !== null ? String(sectionId) : null}
+              onChange={(value) => setSectionId(value ? Number(value) : null)}
               searchable
               w={260}
             />

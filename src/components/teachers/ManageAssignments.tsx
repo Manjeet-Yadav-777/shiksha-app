@@ -34,9 +34,9 @@ export function ManageAssignments({ teacher }: { teacher: ITeacher }) {
     }),
   );
 
-  const [classId, setClassId] = useState<string | null>(null);
-  const [sectionId, setSectionId] = useState<string | null>(null);
-  const [subjectId, setSubjectId] = useState<string | null>(null);
+  const [classId, setClassId] = useState<number | null>(null);
+  const [sectionId, setSectionId] = useState<number | null>(null);
+  const [subjectId, setSubjectId] = useState<number | null>(null);
   const [academicSession, setAcademicSession] = useState<string | null>(
     defaultSession(),
   );
@@ -93,12 +93,13 @@ export function ManageAssignments({ teacher }: { teacher: ITeacher }) {
           label="Class"
           placeholder="Select class"
           data={
-            classes?.data.map((c) => ({ value: c._id, label: c.name })) ?? []
+            classes?.data.map((c) => ({
+              value: String(c._id),
+              label: c.name,
+            })) ?? []
           }
-          value={classId}
-          onChange={(value) =>
-            setClassId(typeof value === 'string' ? value : null)
-          }
+          value={classId !== null ? String(classId) : null}
+          onChange={(value) => setClassId(value ? Number(value) : null)}
           searchable
         />
         <Select
@@ -106,14 +107,12 @@ export function ManageAssignments({ teacher }: { teacher: ITeacher }) {
           placeholder={classId ? 'Whole class' : 'Pick a class first'}
           data={
             sections?.data.map((s) => ({
-              value: s._id,
+              value: String(s._id),
               label: s.name,
             })) ?? []
           }
-          value={sectionId}
-          onChange={(value) =>
-            setSectionId(typeof value === 'string' ? value : null)
-          }
+          value={sectionId !== null ? String(sectionId) : null}
+          onChange={(value) => setSectionId(value ? Number(value) : null)}
           disabled={!classId}
           clearable
         />
@@ -128,14 +127,12 @@ export function ManageAssignments({ teacher }: { teacher: ITeacher }) {
           }
           data={
             curriculum?.data.map((cs) => ({
-              value: cs.subject._id,
+              value: String(cs.subject._id),
               label: `${cs.subject.name} (${cs.subject.code})`,
             })) ?? []
           }
-          value={subjectId}
-          onChange={(value) =>
-            setSubjectId(typeof value === 'string' ? value : null)
-          }
+          value={subjectId !== null ? String(subjectId) : null}
+          onChange={(value) => setSubjectId(value ? Number(value) : null)}
           disabled={!classId || !curriculum?.data.length}
           searchable
         />

@@ -7,8 +7,8 @@ export type StudentFeeStatus = 'paid' | 'pending' | 'partial';
 export type PaymentMethod = 'cash' | 'card' | 'bank_transfer' | 'online';
 
 export interface IFeeStructure {
-  _id: string;
-  tenant: string | ITenant;
+  _id: number;
+  tenant: number | ITenant;
   name: string;
   amount: number;
   dueDate: string;
@@ -20,8 +20,8 @@ export interface IFeeStructure {
 }
 
 export interface IStudentFee {
-  _id: string;
-  tenant: string | ITenant;
+  _id: number;
+  tenant: number | ITenant;
   student: IStudent;
   feeStructure: IFeeStructure;
   netAmount: number;
@@ -35,9 +35,9 @@ export interface IStudentFee {
 }
 
 export interface IFeePayment {
-  _id: string;
-  tenant: string | ITenant;
-  studentFee: string | IStudentFee;
+  _id: number;
+  tenant: number | ITenant;
+  studentFee: number | IStudentFee;
   amount: number;
   paymentMethod: PaymentMethod;
   paymentDate: string;

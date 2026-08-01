@@ -19,9 +19,9 @@ export type SubscriptionStatus =
   (typeof SubscriptionStatus)[keyof typeof SubscriptionStatus];
 
 export interface ISubscription {
-  _id: string;
+  _id: number;
 
-  tenant: string | ITenant;
+  tenant: number | ITenant;
 
   amount: number;
   currency: string;

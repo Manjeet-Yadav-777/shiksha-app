@@ -1,8 +1,8 @@
 import type { ITenant } from '../tenants/store';
 
 export interface IClass {
-  _id: string;
-  tenant: string | ITenant;
+  _id: number;
+  tenant: number | ITenant;
   name: string;
   code?: string;
   createdAt: string;
@@ -10,9 +10,9 @@ export interface IClass {
 }
 
 export interface ISection {
-  _id: string;
-  tenant: string | ITenant;
-  class: string | IClass;
+  _id: number;
+  tenant: number | ITenant;
+  class: number | IClass;
   name: string;
   roomNumber?: string;
   createdAt: string;

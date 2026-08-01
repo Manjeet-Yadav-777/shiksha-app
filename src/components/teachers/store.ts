@@ -4,8 +4,8 @@ import type { ISection, ISubject } from '../subjects/store';
 import type { IClass } from '../classes/store';
 
 export interface ITeacher {
-  _id: string;
-  tenant: string | ITenant;
+  _id: number;
+  tenant: number | ITenant;
   user: IUser;
   employeeId: string;
   joiningDate?: string;
@@ -15,9 +15,9 @@ export interface ITeacher {
 }
 
 export interface ITeacherAssignment {
-  _id: string;
-  tenant: string | ITenant;
-  teacher: string | ITeacher;
+  _id: number;
+  tenant: number | ITenant;
+  teacher: number | ITeacher;
   class: IClass;
   section?: ISection;
   subject: ISubject;
