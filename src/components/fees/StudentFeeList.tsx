@@ -211,7 +211,7 @@ function CollectPaymentForm({
   );
 }
 
-function PaymentHistory({ studentFeeId }: { studentFeeId: string }) {
+function PaymentHistory({ studentFeeId }: { studentFeeId: number }) {
   const { data, isLoading } = useSWR(
     ['/fees/student-fees/payments', studentFeeId],
     async () =>

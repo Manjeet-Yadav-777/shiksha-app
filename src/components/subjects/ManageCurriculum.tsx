@@ -52,14 +52,15 @@ export function ManageCurriculum({ classItem }: { classItem: IClass }) {
   const options =
     allSubjects?.data
       .filter((s) => !assignedIds.has(s._id))
-      .map((s) => ({ value: s._id, label: `${s.name} (${s.code})` })) ?? [];
+      .map((s) => ({ value: String(s._id), label: `${s.name} (${s.code})` })) ??
+    [];
 
   const handleAssign = async () => {
     if (!selectedIds.length) return;
     setSaving(true);
     try {
       await api.post(`/academic/classes/${classItem._id}/subjects`, {
-        subjectIds: selectedIds,
+        subjectIds: selectedIds.map(Number),
       });
       setSelectedIds([]);
       refresh();

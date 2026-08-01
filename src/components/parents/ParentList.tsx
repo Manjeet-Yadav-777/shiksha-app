@@ -34,7 +34,7 @@ export function ParentList() {
   const [params, setParams] = useSearch(query);
   const addDialog = useDialog();
   const childrenDialog = useDialog();
-  const [selectedParentId, setSelectedParentId] = useState<string | null>(null);
+  const [selectedParentId, setSelectedParentId] = useState<number | null>(null);
 
   useEffect(() => {
     setQuery(params);

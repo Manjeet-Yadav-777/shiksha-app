@@ -108,7 +108,13 @@ export function StudentList() {
             isOpened={addDialog.isOpened}
             close={addDialog.close}
             onSubmit={async (values) => {
-              await api.post('/students', values);
+              await api.post('/students', {
+                ...values,
+                classId: values.classId ? Number(values.classId) : undefined,
+                sectionId: values.sectionId
+                  ? Number(values.sectionId)
+                  : undefined,
+              });
               mutate([SWR_KEY, params]);
               addDialog.close();
             }}
@@ -202,8 +208,12 @@ export function StudentList() {
                     name: selected.user?.name,
                     email: selected.user?.email,
                     rollNumber: selected.rollNumber,
-                    classId: selected.class?._id,
-                    sectionId: selected.section?._id,
+                    classId: selected.class?._id
+                      ? String(selected.class._id)
+                      : undefined,
+                    sectionId: selected.section?._id
+                      ? String(selected.section._id)
+                      : undefined,
                     admissionNumber: selected.admissionNumber,
                     admissionDate: selected.admissionDate
                       ? new Date(selected.admissionDate)
@@ -212,7 +222,15 @@ export function StudentList() {
                 }
                 onSubmit={async (values) => {
                   if (!selected) return;
-                  await api.put(`/students/${selected._id}`, values);
+                  await api.put(`/students/${selected._id}`, {
+                    ...values,
+                    classId: values.classId
+                      ? Number(values.classId)
+                      : undefined,
+                    sectionId: values.sectionId
+                      ? Number(values.sectionId)
+                      : undefined,
+                  });
                   mutate([SWR_KEY, params]);
                   editDialog.close();
                 }}
@@ -248,7 +266,7 @@ function StudentForm({
   );
 
   const classOptions =
-    classes?.data.map((c) => ({ value: c._id, label: c.name })) ?? [];
+    classes?.data.map((c) => ({ value: String(c._id), label: c.name })) ?? [];
 
   return (
     <Dialog sizes="55rem" isOpened={isOpened} close={close} title={title}>
@@ -355,7 +373,7 @@ function ClassSectionFields({
   );
 
   const sectionOptions =
-    sections?.data.map((s) => ({ value: s._id, label: s.name })) ?? [];
+    sections?.data.map((s) => ({ value: String(s._id), label: s.name })) ?? [];
 
   return (
     <Inline gap="lg">

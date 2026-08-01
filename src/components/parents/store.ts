@@ -7,8 +7,8 @@ import type { IStudent } from '../students/store';
 
 // listParents ka ek row — user + linked children populated aate hain.
 export interface IParent {
-  _id: string;
-  tenant: string | ITenant;
+  _id: number;
+  tenant: number | ITenant;
   user: IUser;
   occupation?: string;
   students: IStudent[];
@@ -21,22 +21,22 @@ export interface IParent {
 
 // getMyChildren / getChildProfile ka shape — class/section populated.
 export interface IChild {
-  _id: string;
+  _id: number;
   rollNumber: string;
   admissionNumber: string;
   admissionDate?: string;
-  user?: { _id: string; name: string; email?: string };
+  user?: { _id: number; name: string; email?: string };
   class?: IClass;
-  section?: { _id: string; name: string; roomNumber?: string };
+  section?: { _id: number; name: string; roomNumber?: string };
 }
 
 // getChildTimetable ka ek entry.
 export interface IChildTimetableEntry {
-  _id: string;
+  _id: number;
   dayOfWeek: number; // 1=Mon .. 6=Sat
   periodSlot: IPeriodSlot;
   subject: ISubject;
-  teacher?: { _id: string; employeeId?: string; user?: { name?: string } };
+  teacher?: { _id: number; employeeId?: string; user?: { name?: string } };
   room?: string;
   academicSession: string;
 }
@@ -66,14 +66,14 @@ export const STATUS_META: Record<
 
 // getChildFees ka shape — fee rows + summary.
 export interface IChildFeeRow {
-  _id: string;
+  _id: number;
   netAmount: number;
   amountPaid: number;
   discount: number;
   fine: number;
   dueDate: string;
   status: 'paid' | 'pending' | 'partial';
-  feeStructure?: { _id: string; name: string; dueDate?: string };
+  feeStructure?: { _id: number; name: string; dueDate?: string };
 }
 
 export interface IChildFees {

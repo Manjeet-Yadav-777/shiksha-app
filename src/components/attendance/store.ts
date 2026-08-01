@@ -35,19 +35,19 @@ export const STATUS_SHORT_LABEL: Record<AttendanceStatus, string> = {
 
 // getMySections / classTeacher populated section.
 export interface IMySection {
-  _id: string;
+  _id: number;
   name: string;
   roomNumber?: string;
   class?: IClass;
-  classTeacher?: string;
-  tenant?: string | ITenant;
+  classTeacher?: number;
+  tenant?: number | ITenant;
 }
 
 // getSectionRoster ka ek student.
 export interface IRosterStudent {
-  _id: string;
+  _id: number;
   rollNumber: string;
-  user?: { _id: string; name: string };
+  user?: { _id: number; name: string };
 }
 
 export interface IAttendanceCounts {
@@ -61,12 +61,12 @@ export interface IAttendanceCounts {
 
 // getSectionAttendance session shape (counts + lock state).
 export interface IAttendanceSession {
-  _id: string;
-  section: string;
+  _id: number;
+  section: number;
   academicSession: string;
   date: string;
   dateKey: string;
-  periodSlot?: string | null;
+  periodSlot?: number | null;
   isFinalized: boolean;
   finalizedAt?: string | null;
   counts: IAttendanceCounts;
@@ -74,21 +74,21 @@ export interface IAttendanceSession {
 
 // getSectionAttendance ka ek record (student populated).
 export interface IAttendanceRecord {
-  _id: string;
-  student: IRosterStudent | string;
+  _id: number;
+  student: IRosterStudent | number;
   status: AttendanceStatus;
   remark?: string;
 }
 
 // markAttendance ka request body.
 export interface IMarkAttendanceBody {
-  sectionId: string;
+  sectionId: number;
   date: string; // "YYYY-MM-DD"
   academicSession: string;
-  periodSlotId?: string | null;
-  subjectId?: string | null;
+  periodSlotId?: number | null;
+  subjectId?: number | null;
   entries: Array<{
-    studentId: string;
+    studentId: number;
     status: AttendanceStatus;
     remark?: string;
   }>;

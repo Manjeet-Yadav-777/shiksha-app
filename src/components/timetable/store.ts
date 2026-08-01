@@ -4,8 +4,8 @@ import type { ITeacher } from '../teachers/store';
 import type { IClass } from '../classes/store';
 
 export interface IPeriodSlot {
-  _id: string;
-  tenant: string | ITenant;
+  _id: number;
+  tenant: number | ITenant;
   periodNumber: number;
   label?: string;
   startTime: string; // "HH:mm"
@@ -18,14 +18,14 @@ export interface IPeriodSlot {
 // teacher/subject/periodSlot/section aksar populated aate hain (grid views me),
 // isliye ref ya full object dono allow.
 export interface ITimetableEntry {
-  _id: string;
-  tenant: string | ITenant;
+  _id: number;
+  tenant: number | ITenant;
   section:
-    string | { _id: string; name: string; class?: IClass; roomNumber?: string };
+    number | { _id: number; name: string; class?: IClass; roomNumber?: string };
   dayOfWeek: number; // 1=Mon .. 6=Sat
-  periodSlot: string | IPeriodSlot;
-  subject: string | ISubject;
-  teacher: string | ITeacher;
+  periodSlot: number | IPeriodSlot;
+  subject: number | ISubject;
+  teacher: number | ITeacher;
   academicSession: string;
   room?: string;
   createdAt: string;

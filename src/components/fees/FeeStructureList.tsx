@@ -54,7 +54,7 @@ export function FeeStructureList() {
   );
 
   const classOptions =
-    classes?.data.map((c) => ({ value: c._id, label: c.name })) ?? [];
+    classes?.data.map((c) => ({ value: String(c._id), label: c.name })) ?? [];
 
   useEffect(() => {
     setQuery(params);
@@ -77,6 +77,7 @@ export function FeeStructureList() {
               await api.post('/fees/structures', {
                 ...values,
                 amount: Number(values.amount),
+                classId: values.classId ? Number(values.classId) : undefined,
               });
               mutate([SWR_KEY, params]);
               addDialog.close();
@@ -173,7 +174,9 @@ export function FeeStructureList() {
                     dueDate: selected.dueDate
                       ? new Date(selected.dueDate)
                       : undefined,
-                    classId: selected.class?._id,
+                    classId: selected.class?._id
+                      ? String(selected.class._id)
+                      : undefined,
                     frequency: selected.frequency,
                     academicSession: selected.academicSession,
                   }
@@ -183,6 +186,9 @@ export function FeeStructureList() {
                   await api.put(`/fees/structures/${selected._id}`, {
                     ...values,
                     amount: Number(values.amount),
+                    classId: values.classId
+                      ? Number(values.classId)
+                      : undefined,
                   });
                   mutate([SWR_KEY, params]);
                   editDialog.close();

@@ -21,11 +21,11 @@ import type { IClass } from '../classes/store';
 
 // getTeacherTimetable populated shape — section me class bhi populated aata hai.
 interface ITeacherEntry {
-  _id: string;
+  _id: number;
   dayOfWeek: number; // 1=Mon .. 6=Sat
   periodSlot: IPeriodSlot;
   subject: ISubject;
-  section?: { _id: string; name: string; class?: IClass; roomNumber?: string };
+  section?: { _id: number; name: string; class?: IClass; roomNumber?: string };
   room?: string;
   academicSession: string;
 }

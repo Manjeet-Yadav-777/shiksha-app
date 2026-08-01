@@ -2,18 +2,18 @@ import type { IClass } from '../classes/store';
 import type { ITenant } from '../tenants/store';
 
 export interface ISectionClassTeacher {
-  _id: string;
+  _id: number;
   employeeId: string;
   user?: { name?: string; email?: string };
 }
 
 export interface ISection {
-  _id: string;
-  tenant: string | ITenant;
-  class: string | IClass;
+  _id: number;
+  tenant: number | ITenant;
+  class: number | IClass;
   name: string;
   roomNumber?: string;
-  classTeacher?: ISectionClassTeacher | string | null;
+  classTeacher?: ISectionClassTeacher | number | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -44,8 +44,8 @@ export function getSubjectTypeColor(type: SubjectType) {
 }
 
 export interface ISubject {
-  _id: string;
-  tenant: string | ITenant;
+  _id: number;
+  tenant: number | ITenant;
   name: string;
   code: string;
   type: SubjectType;
@@ -54,9 +54,9 @@ export interface ISubject {
 }
 
 export interface IClassSubject {
-  _id: string;
-  tenant: string | ITenant;
-  class: string | IClass;
+  _id: number;
+  tenant: number | ITenant;
+  class: number | IClass;
   subject: ISubject;
   isOptional: boolean;
   createdAt: string;

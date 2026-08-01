@@ -12,7 +12,7 @@ export type InstallmentStatus =
   (typeof InstallmentStatus)[keyof typeof InstallmentStatus];
 
 export interface IInstallment {
-  _id: string;
+  _id: number;
   tenant: ITenant;
   subscription: ISubscription;
 
