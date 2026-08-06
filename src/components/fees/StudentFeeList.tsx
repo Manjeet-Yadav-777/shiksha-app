@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import useSWR, { mutate } from 'swr';
 import { Button, Stack, Text, Badge, Group, Divider } from '@mantine/core';
 import { Form } from 'react-final-form';
-import { IconCash, IconHistory } from '@tabler/icons-react';
+import { IconBrandWhatsapp, IconCash, IconHistory } from '@tabler/icons-react';
 import { Search } from '../../libs/search/Search';
 import { useLocationQuery, useSearch } from '../../utils/filterQuery';
 import { ListView } from '../../libs/List/List';
@@ -19,6 +19,8 @@ import {
   type IStudentFee,
   type IFeePayment,
 } from './store';
+import { ShareViaWhatsApp } from '../../libs/sharing/whatsapp/Whatsapp';
+import { OptionHeader } from '../../libs/sharing/OptionHeader';
 
 interface IPaymentFormValues {
   amount?: number;
@@ -33,6 +35,7 @@ export function StudentFeeList() {
   const [params, setParams] = useSearch(query);
   const collectDialog = useDialog();
   const historyDialog = useDialog();
+  const whatsappDialog = useDialog();
   const [selected, setSelected] = useState<IStudentFee>();
 
   useEffect(() => {
@@ -63,6 +66,7 @@ export function StudentFeeList() {
                   'Balance',
                   'Status',
                   'Due Date',
+                  'Fee Reminder',
                   'Actions',
                 ]}
                 rows={items.map((sf) => {
@@ -77,6 +81,21 @@ export function StudentFeeList() {
                       {sf.status}
                     </Badge>,
                     <Text>{sf.dueDate ? formatDate(sf.dueDate) : '-'}</Text>,
+                    <>
+                      <Button
+                        variant="filled"
+                        c={'white'}
+                        bg={'green'}
+                        size="compact-sm"
+                        leftSection={<IconBrandWhatsapp size={14} />}
+                        onClick={() => {
+                          setSelected(sf);
+                          whatsappDialog.open();
+                        }}
+                      >
+                        WA Reminder
+                      </Button>
+                    </>,
                     <Inline gap="xs">
                       <Button
                         variant="light"
@@ -131,6 +150,14 @@ export function StudentFeeList() {
                 title={`Payment History - ${selected?.student?.user?.name ?? ''}`}
               >
                 {selected && <PaymentHistory studentFeeId={selected._id} />}
+              </Dialog>
+              <Dialog
+                sizes="55rem"
+                isOpened={whatsappDialog.isOpened}
+                close={whatsappDialog.close}
+                title={`Whatsapp Reminder`}
+              >
+                {selected && <WhastappContent studentFee={selected} />}
               </Dialog>
             </>
           )}
@@ -262,4 +289,119 @@ function PaymentHistory({ studentFeeId }: { studentFeeId: number }) {
       )}
     </Stack>
   );
+}
+
+type TWhatsappContentState = {
+  switchHindi: boolean;
+};
+export function WhastappContent({ studentFee }: { studentFee: IStudentFee }) {
+  const [states, setStates] = useState<TWhatsappContentState>({
+    switchHindi: false,
+  });
+
+  const options = [
+    {
+      name: 'switchHindi',
+      label: 'Hindi Template',
+    },
+  ];
+
+  const { engContent, hindiContent } = getWAContentForFeeRemider(studentFee);
+
+  const content = states.switchHindi ? hindiContent : engContent;
+
+  return (
+    <Stack>
+      <OptionHeader options={options} states={states} setStates={setStates} />
+      <ShareViaWhatsApp phoneNumber="919166024500" contentToShare={content} />
+    </Stack>
+  );
+}
+
+function getWAContentForFeeRemider(sf: IStudentFee) {
+  const engContent = `### 🔔 Fee Payment Reminder
+
+&nbsp;
+
+Dear **Parent/Guardian**,  
+
+This is a friendly reminder that your child's school fee is pending.
+
+---
+
+**👨‍🎓 Student Details**
+
+**Student Name:** ${sf.student.user.name}  
+**Class:** ${sf.student.class?.name}-${sf.student.section?.name}  
+**Admission No.:** ${sf.student.admissionNumber}  
+
+---
+
+### 💰 Fee Details
+
+
+**Total Fee:** ₹${sf.netAmount.toLocaleString('en-In')}  
+**Amount Paid:** ₹${sf.amountPaid.toLocaleString('en-IN')}  
+**Pending Amount:** **₹${(sf.netAmount - sf.amountPaid).toLocaleString('en-IN')}**  
+**Due Date:** ${sf.dueDate ? formatDate(sf.dueDate) : '-'}  
+
+---
+
+**📢 Important Notice**
+
+Kindly pay the pending fee on or before the due date to avoid late payment charges.
+
+If you have already made the payment, please ignore this message or share the payment receipt with the school office.
+
+&nbsp;
+
+**📞 Contact**
+
+School Office`;
+
+  const hindiContent = `### 🔔 फीस जमा करने का रिमाइंडर
+
+&nbsp;
+
+नमस्ते **अभिभावक जी,**
+
+आपको याद दिलाना है कि आपके बच्चे की स्कूल फीस अभी जमा नहीं हुई है।
+
+---
+
+**👨‍🎓 बच्चे की जानकारी**
+
+**बच्चे का नाम:** ${sf.student.user.name}  
+**कक्षा:** ${sf.student.class?.name}-${sf.student.section?.name}  
+**एडमिशन नंबर:** ${sf.student.admissionNumber}  
+
+---
+
+### 💰 फीस की जानकारी
+
+&nbsp;
+
+**कुल फीस:** ₹${sf.netAmount.toLocaleString('en-In')}  
+**जमा की गई फीस:** ₹${sf.amountPaid.toLocaleString('en-In')}  
+**बाकी फीस:** **₹${(sf.netAmount - sf.amountPaid).toLocaleString('en-IN')}**  
+**फीस जमा करने की आखिरी तारीख:** ${sf.dueDate ? formatDate(sf.dueDate) : '-'}  
+
+---
+
+**📢 जरूरी सूचना**
+
+कृपया आखिरी तारीख से पहले बच्चे की बाकी फीस जमा कर दें, ताकि किसी भी तरह का लेट फीस चार्ज न लगे।
+
+अगर आपने फीस पहले ही जमा कर दी है, तो इस मैसेज को नजरअंदाज करें या फीस जमा करने की रसीद स्कूल में जमा कर दें।
+
+&nbsp;
+
+**📞 संपर्क करें**
+
+स्कूल कार्यालय`;
+
+  return {
+    engContent,
+    hindiContent,
+  };
 }

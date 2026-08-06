@@ -33,7 +33,9 @@ export function Table({
       <MaintineTable.Thead>
         <MaintineTable.Tr>
           {headers.map((header, i) => (
-            <MaintineTable.Th key={i}>{header}</MaintineTable.Th>
+            <MaintineTable.Th key={i} ta={'center'}>
+              {header}
+            </MaintineTable.Th>
           ))}
         </MaintineTable.Tr>
       </MaintineTable.Thead>
@@ -41,7 +43,9 @@ export function Table({
         {rows.map((row, i) => (
           <MaintineTable.Tr key={i}>
             {row.map((r, j) => (
-              <MaintineTable.Td key={j}>{r}</MaintineTable.Td>
+              <MaintineTable.Td key={j} ta={'center'}>
+                {r}
+              </MaintineTable.Td>
             ))}
           </MaintineTable.Tr>
         ))}
