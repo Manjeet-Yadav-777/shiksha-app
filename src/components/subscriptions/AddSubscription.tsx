@@ -36,9 +36,9 @@ export function AddSubscription({
         amount: propInitialValues.amount,
         currency: propInitialValues.currency,
         notes: propInitialValues.notes,
-        billing_cycle: propInitialValues.billing_cycle,
-        auto_renew: propInitialValues.auto_renew,
-        start_date: propInitialValues.start_date,
+        billing_cycle: propInitialValues.billingCycle,
+        auto_renew: propInitialValues.autoRenew,
+        start_date: propInitialValues.startDate,
         status: propInitialValues.status,
       }
     : {

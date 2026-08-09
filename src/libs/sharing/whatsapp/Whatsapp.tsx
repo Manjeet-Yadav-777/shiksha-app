@@ -42,8 +42,8 @@ export function ShareViaWhatsApp({
 
   return (
     <Container fluid px={'xl'}>
-      <Box px={'lg'} bg="#FAF7EB">
-        <Stack px="xl" py="lg">
+      <Box px={'lg'} py={'lg'} bg="#FAF7EB">
+        <Stack px="xl" py="xl">
           <Box bg="#DDF8C6" bdrs="md" px="xl" py="md" fz="sm">
             <Markdown>{content}</Markdown>
           </Box>
